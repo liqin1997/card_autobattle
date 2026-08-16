@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce54450aac69b0b4cbfedb935cd0a015, type: 3}
+  m_Name: CardVisualTheme
+  m_EditorClassIdentifier: 
+  levelOneFrame: {fileID: 21300000, guid: 7a3c4ff58fdacd742b6ef1fd18f62f12, type: 3}
+  levelTwoFrame: {fileID: 21300000, guid: 3680f67c22ee75f4f995c4a8e3c28a08, type: 3}
+  levelThreeFrame: {fileID: 21300000, guid: 7612f541efb0655478f725a90ccf3e32, type: 3}
+  cardArtwork:
+  - CardId: blade
+    Artwork: {fileID: 21300000, guid: 41d78c486bd05bb459e1548243cd67e4, type: 3}
+    Scale: 1.08
+    Offset: {x: 0, y: 0}
+  - CardId: dagger
+    Artwork: {fileID: 21300000, guid: 78f5f8d6c123cbe428be85c608c26c9c, type: 3}
+    Scale: 0.94
+    Offset: {x: 0, y: 0}
+  - CardId: hammer
+    Artwork: {fileID: 21300000, guid: df61e0e7d20e2ca4786a242250e13f6b, type: 3}
+    Scale: 1.02
+    Offset: {x: 0, y: 0}
+  - CardId: bow
+    Artwork: {fileID: 21300000, guid: 5980ad71bd8caca4aa825ee5279c3919, type: 3}
+    Scale: 0.94
+    Offset: {x: 0, y: 0}
+  - CardId: shield
+    Artwork: {fileID: 21300000, guid: c73f69ee5a0a7e046906bde503fe1f2c, type: 3}
+    Scale: 1.02
+    Offset: {x: 0, y: 0}
+  - CardId: armor
+    Artwork: {fileID: 21300000, guid: f7df49a2de1e8194a84855d85829a888, type: 3}
+    Scale: 1.12
+    Offset: {x: 0, y: 0}
+  - CardId: potion
+    Artwork: {fileID: 21300000, guid: fc2c67e3e03c7734896a71cd6ef867dd, type: 3}
+    Scale: 0.94
+    Offset: {x: 0, y: 0}
+  - CardId: herbs
+    Artwork: {fileID: 21300000, guid: 422789dd50e186b4892911556e13dd0a, type: 3}
+    Scale: 1.02
+    Offset: {x: 0, y: 0}
+  - CardId: fire
+    Artwork: {fileID: 21300000, guid: 3333e4cb0d22abe4cb77309dd3d400f9, type: 3}
+    Scale: 1.02
+    Offset: {x: 0, y: 0}
+  - CardId: poison
+    Artwork: {fileID: 21300000, guid: 66dd569863919dd44875ea40172eecf1, type: 3}
+    Scale: 0.96
+    Offset: {x: 0, y: 0}
+  - CardId: frost
+    Artwork: {fileID: 21300000, guid: b3f00157c19ea9e469c345e0be9576a3, type: 3}
+    Scale: 1.12
+    Offset: {x: 0, y: 0}
+  - CardId: drum
+    Artwork: {fileID: 21300000, guid: 0d4f3957686e46146be6637bab0d237b, type: 3}
+    Scale: 0.94
+    Offset: {x: 0, y: 0}
+  - CardId: hourglass
+    Artwork: {fileID: 21300000, guid: 57d150009b85ae047bc4bf726191d7fb, type: 3}
+    Scale: 0.96
+    Offset: {x: 0, y: 0}
+  - CardId: banner
+    Artwork: {fileID: 21300000, guid: a3417fe2225391f44ac8cbbbf6fb1c09, type: 3}
+    Scale: 1.04
+    Offset: {x: 0, y: 0}
+  - CardId: battery
+    Artwork: {fileID: 21300000, guid: c5d886fa87c69bb438837cb75a84256a, type: 3}
+    Scale: 0.94
+    Offset: {x: 0, y: 0}
+  - CardId: thorns
+    Artwork: {fileID: 21300000, guid: 52ff7199b01efb2469b730edc61f2c4b, type: 3}
+    Scale: 0.94
+    Offset: {x: 0, y: 0}
+  - CardId: vampire
+    Artwork: {fileID: 21300000, guid: 279ab68ba2e3e40468cedd39a2299150, type: 3}
+    Scale: 1.04
+    Offset: {x: 0, y: 0}
+  - CardId: spark
+    Artwork: {fileID: 21300000, guid: 78fc7665c7182494383c9319fbbb59ff, type: 3}
+    Scale: 0.92
+    Offset: {x: 0, y: 0}
+  - CardId: coin
+    Artwork: {fileID: 21300000, guid: a88e5f5471552674f8eed7c8c131f5b2, type: 3}
+    Scale: 1.02
+    Offset: {x: 0, y: 0}
+  - CardId: core
+    Artwork: {fileID: 21300000, guid: 233e8ff9acb17bd43ae97e2f1e8df508, type: 3}
+    Scale: 0.92
+    Offset: {x: 0, y: 0}

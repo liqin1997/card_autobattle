@@ -1,0 +1,176 @@
+cube_boss_spine.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+	scale: 0.9
+arm01
+	bounds: 289, 235, 48, 84
+	offsets: 1, 2, 50, 88
+	rotate: 90
+arm01_magic
+	bounds: 958, 935, 50, 88
+arm02
+	bounds: 1, 175, 171, 92
+	offsets: 0, 1, 176, 95
+	rotate: 180
+arm02_magic
+	bounds: 1, 200, 171, 95
+	offsets: 0, 0, 176, 95
+arm_cube_01
+	bounds: 315, 976, 48, 47
+arm_cube_01_magic
+	bounds: 1, 976, 48, 47
+arm_cube_02
+	bounds: 640, 649, 50, 44
+arm_cube_02_magic
+	bounds: 658, 979, 50, 44
+arm_cube_03
+	bounds: 917, 1000, 34, 23
+arm_cube_03_magic
+	bounds: 882, 1000, 34, 23
+arm_cube_04
+	bounds: 514, 644, 33, 23
+arm_cube_04_magic
+	bounds: 606, 650, 33, 23
+arm_cube_05
+	bounds: 741, 496, 27, 22
+arm_cube_05_magic
+	bounds: 647, 698, 27, 22
+ash01
+	bounds: 926, 384, 46, 38
+ash01_magic
+	bounds: 586, 412, 46, 38
+ash02
+	bounds: 988, 899, 35, 37
+ash02_magic
+	bounds: 1, 938, 35, 37
+ash03
+	bounds: 344, 694, 32, 35
+ash03_magic
+	bounds: 1, 902, 32, 35
+ash04
+	bounds: 1002, 696, 21, 20
+ash04_magic
+	bounds: 1001, 971, 21, 20
+ash05
+	bounds: 357, 730, 14, 19
+ash05_magic
+	bounds: 1009, 820, 14, 19
+ash06
+	bounds: 63, 1010, 12, 13
+ash06_magic
+	bounds: 50, 1010, 12, 13
+ash07
+	bounds: 996, 992, 24, 31
+ash08
+	bounds: 364, 1002, 20, 21
+ash09
+	bounds: 1, 720, 18, 17
+cube_01
+	bounds: 181, 215, 108, 96
+	offsets: 4, 1, 115, 100
+cube_01_magic
+	bounds: 900, 423, 115, 100
+cube_02
+	bounds: 1, 678, 41, 36
+	offsets: 1, 1, 42, 39
+cube_02_magic
+	bounds: 669, 942, 41, 36
+	offsets: 1, 1, 42, 39
+cube_03
+	bounds: 1, 312, 115, 117
+	rotate: 90
+cube_03_magic
+	bounds: 896, 524, 115, 117
+cube_04
+	bounds: 548, 631, 45, 41
+	offsets: 1, 1, 46, 43
+cube_04_magic
+	bounds: 978, 654, 45, 41
+	offsets: 1, 1, 46, 43
+cube_body
+	bounds: 233, 318, 367, 365
+	offsets: 2, 0, 369, 368
+	rotate: 90
+cube_body_magic
+	bounds: 656, 642, 367, 365
+	offsets: 2, 0, 369, 368
+cube_body_magic02
+	bounds: 330, 658, 367, 365
+	offsets: 2, 0, 369, 368
+	rotate: 180
+cube_body_magic03
+	bounds: 1, 658, 367, 365
+	offsets: 2, 0, 369, 368
+eye01
+	bounds: 952, 200, 71, 69
+	offsets: 1, 1, 73, 71
+eye01_magic
+	bounds: 119, 358, 71, 69
+	offsets: 1, 1, 73, 71
+eye02
+	bounds: 741, 519, 154, 122
+eye02_magic
+	bounds: 586, 520, 154, 122
+eye_down
+	bounds: 98, 263, 249, 112
+	offsets: 0, 0, 250, 179
+eye_down_magic
+	bounds: 501, 277, 247, 111
+	offsets: 0, 0, 250, 179
+eye_up
+	bounds: 635, 333, 284, 105
+eye_up_magic01
+	bounds: 630, 414, 284, 105
+finger01
+	bounds: 1, 844, 23, 57
+	offsets: 0, 1, 24, 59
+finger01_magic
+	bounds: 998, 839, 24, 59
+finger02
+	bounds: 321, 940, 40, 35
+	offsets: 1, 0, 41, 36
+finger02_magic
+	bounds: 863, 448, 40, 35
+	offsets: 1, 0, 41, 36
+finger03
+	bounds: 782, 1000, 80, 23
+	offsets: 2, 2, 83, 25
+finger03_magic
+	bounds: 709, 998, 82, 25
+	offsets: 0, 0, 83, 25
+finger04
+	bounds: 723, 307, 80, 50
+	offsets: 1, 2, 81, 55
+finger04_magic
+	bounds: 590, 449, 81, 55
+hand
+	bounds: 792, 196, 172, 119
+	offsets: 7, 1, 179, 120
+hand_magic
+	bounds: 844, 282, 179, 120
+ring
+	bounds: 1, 428, 230, 230
+shadow
+	bounds: 503, 215, 185, 68
+	offsets: 1, 0, 187, 70
+wings01
+	bounds: 595, 178, 253, 160
+	offsets: 3, 0, 256, 160
+wings01_magic
+	bounds: 286, 206, 253, 160
+	offsets: 3, 0, 256, 160
+
+cube_boss_spine_2.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+	scale: 0.9
+glow/light_fx
+	bounds: 463, 463, 230, 230
+glow/light_fx02
+	bounds: 463, 694, 230, 230
+glow/magicring01
+	bounds: 1, 1, 461, 461
+glow/magicring02
+	bounds: 1, 463, 461, 461
