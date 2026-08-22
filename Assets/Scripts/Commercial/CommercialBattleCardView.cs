@@ -12,6 +12,12 @@ namespace CardAutobattle.Commercial
         private static readonly int TriggerFlashId = Shader.PropertyToID("_TriggerFlash");
         private static readonly int FlashProgressId = Shader.PropertyToID("_FlashProgress");
         private static readonly int PhaseOffsetId = Shader.PropertyToID("_PhaseOffset");
+        private static readonly int EnergyColorId = Shader.PropertyToID("_EnergyColor");
+        private static readonly int EdgeColorId = Shader.PropertyToID("_EdgeColor");
+        private static readonly int ReadyColorId = Shader.PropertyToID("_ReadyColor");
+        private static readonly int CoreColorId = Shader.PropertyToID("_CoreColor");
+        private static readonly int GlowColorId = Shader.PropertyToID("_GlowColor");
+        private static readonly int FlowColorId = Shader.PropertyToID("_FlowColor");
         private Text nameLabel;
         private Text metaLabel;
         private Text healthLabel;
@@ -91,7 +97,7 @@ namespace CardAutobattle.Commercial
             ApplyIdentity(enemy?.DisplayName ?? "空位", enemy != null ? $"{enemy.AttackInterval:0.0}s" : string.Empty,
                 new Color(.34f, .10f, .14f, 1f));
             ConfigureHealth(enemy != null);
-            ConfigureCooldown(false);
+            ConfigureCooldown(enemy != null, true);
             gameObject.SetActive(enemy != null);
             CacheRestPosition();
         }
@@ -102,6 +108,17 @@ namespace CardAutobattle.Commercial
             if (card != null)
             {
                 var progress = card.Charge01;
+                if (cooldownFill) cooldownFill.fillAmount = progress;
+                if (surfaceMaterial) surfaceMaterial.SetFloat(ProgressId, progress);
+                if (sweepMaterial) sweepMaterial.SetFloat(ProgressId, progress);
+            }
+            else if (combatant?.Enemy == true)
+            {
+                var progress = combatant.ActionCharge01;
+                if (cooldownFill && cooldownFill.gameObject.activeSelf != combatant.Alive)
+                    cooldownFill.gameObject.SetActive(combatant.Alive);
+                if (cooldownSweep && cooldownSweep.gameObject.activeSelf != combatant.Alive)
+                    cooldownSweep.gameObject.SetActive(combatant.Alive);
                 if (cooldownFill) cooldownFill.fillAmount = progress;
                 if (surfaceMaterial) surfaceMaterial.SetFloat(ProgressId, progress);
                 if (sweepMaterial) sweepMaterial.SetFloat(ProgressId, progress);
@@ -227,7 +244,7 @@ namespace CardAutobattle.Commercial
             rect.offsetMin = rect.offsetMax = Vector2.zero;
         }
 
-        private void ConfigureCooldown(bool visible)
+        private void ConfigureCooldown(bool visible, bool hostile = false)
         {
             if (cooldownFill) cooldownFill.gameObject.SetActive(visible);
             if (cooldownSweep) cooldownSweep.gameObject.SetActive(visible);
@@ -241,6 +258,12 @@ namespace CardAutobattle.Commercial
                 surface.material = surfaceMaterial;
                 surfaceMaterial.SetFloat(ProgressId, 0f);
                 surfaceMaterial.SetFloat(TriggerFlashId, 0f);
+                if (hostile)
+                {
+                    surfaceMaterial.SetColor(EnergyColorId, new Color(1f, .18f, .08f, .22f));
+                    surfaceMaterial.SetColor(EdgeColorId, new Color(1f, .34f, .12f, 1f));
+                    surfaceMaterial.SetColor(ReadyColorId, new Color(1f, .68f, .20f, .95f));
+                }
             }
 
             var frontTemplate = Resources.Load<Material>("CardCooldownFrontAdditive");
@@ -253,6 +276,13 @@ namespace CardAutobattle.Commercial
             sweepMaterial.SetFloat(FlashProgressId, 1f);
             sweepMaterial.SetFloat(TriggerFlashId, 0f);
             sweepMaterial.SetFloat(PhaseOffsetId, Mathf.Repeat(Mathf.Abs(GetInstanceID()) * .6180339f, 1f));
+            if (hostile)
+            {
+                sweepMaterial.SetColor(CoreColorId, new Color(1f, .94f, .78f, 1f));
+                sweepMaterial.SetColor(GlowColorId, new Color(1f, .20f, .06f, .95f));
+                sweepMaterial.SetColor(FlowColorId, new Color(1f, .10f, .04f, .78f));
+                sweepMaterial.SetColor(ReadyColorId, new Color(1f, .72f, .24f, 1f));
+            }
         }
 
         private void Cache()

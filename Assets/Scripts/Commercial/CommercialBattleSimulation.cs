@@ -48,6 +48,8 @@ namespace CardAutobattle.Commercial
         public float Poison;
         public bool Alive => Health > 0f;
         public float Health01 => MaxHealth <= 0f ? 0f : Mathf.Clamp01(Health / MaxHealth);
+        public float ActionCharge01 => !Alive || AttackInterval <= 0f
+            ? 0f : Mathf.Clamp01(1f - NextAction / AttackInterval);
     }
 
     public sealed class CommercialCardRuntime
@@ -297,6 +299,8 @@ namespace CardAutobattle.Commercial
                 // naked difficulty unchanged, but let a complete defensive set
                 // materially reduce the pressure from a full 3x3 enemy board.
                 var mitigated = Mathf.Max(1f, enemy.Attack - equipmentDefenseSnapshot * .16f);
+                visualEvents.Enqueue(new BattleVisualEvent(BattleVisualEventKind.Action, enemy.Id,
+                    target.Id, mitigated, enemy.GridIndex, target.GridIndex));
                 LaunchProjectile(enemy, target, mitigated);
             }
 
