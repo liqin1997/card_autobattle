@@ -330,8 +330,8 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 270, y: 180}
-  m_Spacing: {x: 24, y: 24}
+  m_CellSize: {x: 260, y: 170}
+  m_Spacing: {x: 24, y: 8}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!1 &1370615313091852228
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 270, y: 180}
+  m_CellSize: {x: 260, y: 170}
   m_Spacing: {x: 24, y: 24}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -485,6 +485,7 @@ GameObject:
   - component: {fileID: 2101678463715666130}
   - component: {fileID: 6696060457249521369}
   - component: {fileID: 8992589948896965978}
+  - component: {fileID: 2840277987280550698}
   m_Layer: 0
   m_Name: SafeArea
   m_TagString: Untagged
@@ -574,6 +575,21 @@ MonoBehaviour:
   startingCoins: 16
   battleSpeed: 2.25
   battleTimeLimit: 45
+--- !u!114 &2840277987280550698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2382291771573693510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1588c142f1a6b6642a9b9cd074b5f14a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficulty: 1
+  baseMaxHealth: 118
+  victoryRepairRatio: 0.12
 --- !u!1 &2751179932048000172
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +1011,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 270, y: 180}
+  m_CellSize: {x: 260, y: 170}
   m_Spacing: {x: 24, y: 24}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -1128,9 +1144,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 650
+  m_MinHeight: 680
   m_PreferredWidth: -1
-  m_PreferredHeight: 650
+  m_PreferredHeight: 620
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2190,9 +2206,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 250
+  m_MinHeight: 264
   m_PreferredWidth: -1
-  m_PreferredHeight: 250
+  m_PreferredHeight: 242
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
@@ -2558,9 +2574,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 250
+  m_MinHeight: 264
   m_PreferredWidth: -1
-  m_PreferredHeight: 250
+  m_PreferredHeight: 242
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1

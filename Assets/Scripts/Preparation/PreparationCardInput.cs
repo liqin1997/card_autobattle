@@ -94,12 +94,19 @@ namespace CardAutobattle.Preparation
             shopOffer = false;
             purchasePrice = 0;
             visual?.BindCardData();
+            controller?.RefreshAllCardValues();
         }
 
         public void Upgrade()
         {
             level = Mathf.Min(3, level + 1);
             visual?.BindCardData();
+            controller?.RefreshAllCardValues();
+        }
+
+        public void SetEffectValues(ResolvedCardValues values)
+        {
+            visual?.SetEffectValues(values);
         }
 
         public void AssignSlot(PreparationSlotUI slot, bool instant)

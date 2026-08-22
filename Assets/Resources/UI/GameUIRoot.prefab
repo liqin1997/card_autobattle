@@ -409,6 +409,9 @@ MonoBehaviour:
   - Id: 10
     Prefab: {fileID: 6904445487098492163, guid: 1334d547cbd6700488e497675a3ea2b3, type: 3}
     KeepAlive: 1
+  - Id: 15
+    Prefab: {fileID: 3909972366250626103, guid: da39cd74b44d1564f919151fe296ab81, type: 3}
+    KeepAlive: 0
   - Id: 20
     Prefab: {fileID: 3735514479932718511, guid: 0ede239df820eec4d81d2cf1a22aa7c5, type: 3}
     KeepAlive: 1

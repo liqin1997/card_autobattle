@@ -103,8 +103,26 @@ namespace CardAutobattle.Prototype
                 icon.rectTransform.localScale = Vector3.one * (artEntry?.Scale ?? 1f);
             }
 
-            UpdateStatBadge(cardRoot, "atk", HasDamage(definition.Effect), GetDamageValue(definition, level));
-            UpdateStatBadge(cardRoot, "sheild", HasShield(definition.Effect), GetShieldValue(definition, level));
+            ApplyEffectValues(cardRoot, CardEffectValueResolver.ResolveDisplay(definition, level, 0));
+        }
+
+        public static void ApplyEffectValues(Transform cardRoot, ResolvedCardValues values)
+        {
+            if (!cardRoot)
+                return;
+
+            SetLegacyStatActive(cardRoot, "atk", false);
+            SetLegacyStatActive(cardRoot, "sheild", false);
+
+            var primary = FindDeep(cardRoot, "PrimaryValue");
+            var secondary = FindDeep(cardRoot, "SecondaryValue");
+            UpdateEffectValueBadge(primary, values.Primary);
+            UpdateEffectValueBadge(secondary, values.Secondary);
+
+            if (primary is RectTransform primaryRect)
+                primaryRect.anchoredPosition = new Vector2(values.VisibleCount > 1 ? -40f : 0f, -9f);
+            if (secondary is RectTransform secondaryRect)
+                secondaryRect.anchoredPosition = new Vector2(40f, -9f);
         }
 
         public static void SetMetadataVisibility(Transform cardRoot, bool showPrice, int price)
@@ -123,50 +141,56 @@ namespace CardAutobattle.Prototype
                 footer.text = showPrice ? $"{price} GOLD" : string.Empty;
         }
 
-        private static void UpdateStatBadge(Transform root, string objectName, bool visible, float value)
+        private static void SetLegacyStatActive(Transform root, string objectName, bool active)
         {
             var target = FindDeep(root, objectName);
+            if (target)
+                target.gameObject.SetActive(active);
+        }
+
+        private static void UpdateEffectValueBadge(Transform target, CardValueEntry entry)
+        {
             if (!target)
                 return;
-            target.gameObject.SetActive(visible);
-            if (!visible)
+            target.gameObject.SetActive(entry.Visible);
+            if (!entry.Visible)
                 return;
+
+            var background = target.GetComponent<Image>();
+            if (background)
+                background.color = GetValueColor(entry.Kind);
+
             var label = target.GetComponentInChildren<TMP_Text>(true);
             if (label)
-                label.text = Mathf.CeilToInt(value).ToString();
+                label.text = FormatValue(entry.Value);
             else
             {
                 var legacyLabel = target.GetComponentInChildren<Text>(true);
                 if (legacyLabel)
-                    legacyLabel.text = Mathf.CeilToInt(value).ToString();
+                    legacyLabel.text = FormatValue(entry.Value);
             }
         }
 
-        private static bool HasDamage(CardEffectKind effect)
+        private static string FormatValue(float value)
         {
-            return effect is CardEffectKind.Damage or CardEffectKind.DamageAndBurn or
-                CardEffectKind.DamageAndPoison or CardEffectKind.DamageAndSlow or
-                CardEffectKind.DamageAndHaste or CardEffectKind.ShieldAndDamage or
-                CardEffectKind.Drain or CardEffectKind.ChainDamage;
+            var rounded = Mathf.Round(value);
+            return Mathf.Abs(value - rounded) < .045f ? rounded.ToString("0") : value.ToString("0.#");
         }
 
-        private static bool HasShield(CardEffectKind effect)
+        private static Color GetValueColor(CardValueKind kind)
         {
-            return effect is CardEffectKind.Shield or CardEffectKind.ShieldAndDamage or
-                CardEffectKind.ShieldAndVictoryGold or CardEffectKind.ShieldAndHeal;
-        }
-
-        private static float GetDamageValue(CardDefinition definition, int level)
-        {
-            var baseValue = definition.Effect == CardEffectKind.ShieldAndDamage
-                ? definition.SecondaryPower
-                : definition.Power;
-            return baseValue * PrototypeCardCatalog.QualityMultiplier(level);
-        }
-
-        private static float GetShieldValue(CardDefinition definition, int level)
-        {
-            return definition.Power * PrototypeCardCatalog.QualityMultiplier(level);
+            return kind switch
+            {
+                CardValueKind.Damage => new Color(.91f, .10f, .16f, .97f),
+                CardValueKind.Shield => new Color(.20f, .68f, .94f, .97f),
+                CardValueKind.Burn => new Color(1f, .30f, .055f, .97f),
+                CardValueKind.Healing => new Color(.05f, .76f, .58f, .97f),
+                CardValueKind.Poison => new Color(.48f, .20f, .72f, .97f),
+                CardValueKind.Haste => new Color(.06f, .76f, .90f, .97f),
+                CardValueKind.Slow => new Color(.35f, .46f, .92f, .97f),
+                CardValueKind.Gold => new Color(.92f, .64f, .06f, .97f),
+                _ => Color.clear
+            };
         }
 
         private static Image FindImage(Transform root, string objectName, Transform excludedRoot = null)

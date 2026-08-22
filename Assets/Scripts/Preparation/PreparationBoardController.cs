@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using CardAutobattle.Prototype;
@@ -43,6 +44,7 @@ namespace CardAutobattle.Preparation
                 card.CurrentSlot.SetOccupant(card);
                 card.Initialize(this, card.CurrentSlot, visualCardPrefab, cardVisualLayer);
             }
+            RefreshAllCardValues();
         }
 
         public void Configure(RectTransform inputLayer, RectTransform visualLayer, GameObject cardPrefab, IEnumerable<PreparationSlotUI> allSlots)
@@ -62,6 +64,7 @@ namespace CardAutobattle.Preparation
 
             slot.SetOccupant(card);
             card.AssignSlot(slot, true);
+            RefreshAllCardValues();
         }
 
         public void BeginDrag(PreparationCardInput card)
@@ -116,12 +119,14 @@ namespace CardAutobattle.Preparation
             slot.SetOccupant(card);
             card.AssignSlot(slot, true);
             card.Initialize(this, slot, visualCardPrefab, cardVisualLayer);
+            RefreshAllCardValues();
             return card;
         }
 
         public void CommitMoveOrSwap(PreparationCardInput movingCard, PreparationSlotUI target)
         {
             MoveOrSwap(movingCard, target);
+            RefreshAllCardValues();
         }
 
         public void RemoveCard(PreparationCardInput card)
@@ -130,6 +135,43 @@ namespace CardAutobattle.Preparation
                 return;
             card.CurrentSlot?.SetOccupant(null);
             Destroy(card.gameObject);
+            RefreshAllCardValues();
+        }
+
+        public void RefreshAllCardValues()
+        {
+            var board = slots.Where(slot => slot && slot.Zone == PreparationZone.Board).ToArray();
+            foreach (var slot in slots)
+            {
+                var card = slot ? slot.Occupant : null;
+                if (!card)
+                    continue;
+
+                var adjacentCount = 0;
+                var auraMultiplier = gameFlow
+                    ? gameFlow.GetPlayerEffectMultiplier(card.Definition)
+                    : 1f;
+                if (slot.Zone == PreparationZone.Board)
+                {
+                    foreach (var other in board)
+                    {
+                        if (other == slot || !other.Occupant ||
+                            !CardEffectValueResolver.AreAdjacent(slot.Index, other.Index))
+                            continue;
+
+                        var requiredTag = card.Definition.AdjacentRequiredTag;
+                        if (requiredTag == CardTag.None || (other.Occupant.Definition.Tags & requiredTag) != 0)
+                            adjacentCount++;
+
+                        if (other.Occupant.Definition.Effect == CardEffectKind.PassivePowerAura)
+                            auraMultiplier *= 1f + other.Occupant.Definition.Power * other.Occupant.Level;
+                    }
+                }
+
+                var modifier = slot.Zone == PreparationZone.Board ? slot.Modifier : SlotModifierType.None;
+                card.SetEffectValues(CardEffectValueResolver.ResolveDisplay(
+                    card.Definition, card.Level, adjacentCount, auraMultiplier, modifier));
+            }
         }
 
         private PreparationSlotUI FindDropTarget(Vector2 screenPosition)

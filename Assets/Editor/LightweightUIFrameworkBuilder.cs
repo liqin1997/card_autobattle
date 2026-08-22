@@ -13,6 +13,7 @@ namespace CardAutobattle.EditorTools
         private const string RootFolder = "Assets/Resources/UI";
         private const string ScreenFolder = RootFolder + "/Screens";
         private const string MainHubPath = ScreenFolder + "/MainHubScreen.prefab";
+        private const string ScavengerDraftPath = ScreenFolder + "/ScavengerDraftScreen.prefab";
         private const string RootPath = RootFolder + "/GameUIRoot.prefab";
         private const string PreparationPath = "Assets/Prefab/UI/Preparation/PreparationCanvas.prefab";
 
@@ -32,11 +33,13 @@ namespace CardAutobattle.EditorTools
             EnsureFolder(ScreenFolder);
 
             var mainHub = BuildMainHub();
+            var scavengerDraft = BuildScavengerDraft();
             var preparation = ConfigurePreparationScreen();
-            BuildRoot(mainHub, preparation);
+            BuildRoot(mainHub, scavengerDraft, preparation);
 
             AssetDatabase.SaveAssets();
             AssetDatabase.ImportAsset(MainHubPath, ImportAssetOptions.ForceSynchronousImport);
+            AssetDatabase.ImportAsset(ScavengerDraftPath, ImportAssetOptions.ForceSynchronousImport);
             AssetDatabase.ImportAsset(PreparationPath, ImportAssetOptions.ForceSynchronousImport);
             AssetDatabase.ImportAsset(RootPath, ImportAssetOptions.ForceSynchronousImport);
             Debug.Log("[UIFramework] Built GameUIRoot, MainHubScreen and Preparation screen adapter.");
@@ -159,7 +162,7 @@ namespace CardAutobattle.EditorTools
             return AssetDatabase.LoadAssetAtPath<GameObject>(PreparationPath);
         }
 
-        private static void BuildRoot(GameObject mainHub, GameObject preparation)
+        private static void BuildRoot(GameObject mainHub, GameObject scavengerDraft, GameObject preparation)
         {
             var root = NewRect("GameUIRoot", null);
             Stretch(root);
@@ -201,6 +204,7 @@ namespace CardAutobattle.EditorTools
                 new List<UIScreenRegistration>
                 {
                     new() { Id = UIScreenId.MainHub, Prefab = mainHub, KeepAlive = true },
+                    new() { Id = UIScreenId.ScavengerDraft, Prefab = scavengerDraft, KeepAlive = false },
                     new() { Id = UIScreenId.Preparation, Prefab = preparation, KeepAlive = true }
                 });
 
@@ -211,6 +215,63 @@ namespace CardAutobattle.EditorTools
 
             PrefabUtility.SaveAsPrefabAsset(root.gameObject, RootPath);
             UnityEngine.Object.DestroyImmediate(root.gameObject);
+        }
+
+        private static GameObject BuildScavengerDraft()
+        {
+            var root = NewRect("ScavengerDraftScreen", null);
+            Stretch(root);
+            root.gameObject.AddComponent<CanvasGroup>();
+            var screen = root.gameObject.AddComponent<ScavengerDraftScreen>();
+            var background = AddImage("Background", root, Background);
+            Stretch(background.rectTransform);
+            var safeArea = NewRect("SafeArea", root);
+            Stretch(safeArea);
+            safeArea.gameObject.AddComponent<SafeAreaFitter>();
+
+            AddText("Title", safeArea, "选择拾荒者", 52, TextAnchor.MiddleLeft, PrimaryText,
+                new Vector2(.055f, .915f), new Vector2(.72f, .98f));
+            AddText("Subtitle", safeArea, "随机四维与成长 · 天赋槽2–6 · 6槽明确优于2槽", 25,
+                TextAnchor.MiddleLeft, SecondaryText, new Vector2(.055f, .865f), new Vector2(.94f, .92f));
+
+            var buttons = new Button[3];
+            var frames = new Image[3];
+            var names = new Text[3];
+            var stats = new Text[3];
+            var talents = new Text[3];
+            for (var i = 0; i < 3; i++)
+            {
+                var yMax = .84f - i * .235f;
+                var frame = AddImage($"Candidate_{i}", safeArea, PanelRaised);
+                frame.raycastTarget = true;
+                SetAnchors(frame.rectTransform, new Vector2(.055f, yMax - .205f),
+                    new Vector2(.945f, yMax), Vector2.zero, Vector2.zero);
+                var button = frame.gameObject.AddComponent<Button>();
+                button.targetGraphic = frame;
+                buttons[i] = button;
+                frames[i] = frame;
+                names[i] = AddText("Name", frame.transform, "拾荒者", 29, TextAnchor.MiddleLeft,
+                    PrimaryText, new Vector2(.035f, .72f), new Vector2(.96f, .95f));
+                stats[i] = AddText("Stats", frame.transform, "四维与成长", 21, TextAnchor.UpperLeft,
+                    PrimaryText, new Vector2(.035f, .08f), new Vector2(.42f, .72f));
+                talents[i] = AddText("Talents", frame.transform, "天赋", 20, TextAnchor.UpperLeft,
+                    SecondaryText, new Vector2(.43f, .08f), new Vector2(.965f, .72f));
+            }
+
+            var summary = AddText("SelectionSummary", safeArea, "请选择一个拾荒者", 23,
+                TextAnchor.MiddleCenter, Gold, new Vector2(.08f, .105f), new Vector2(.92f, .155f));
+            var back = AddButton("BackButton", safeArea, "返回地图", PanelRaised, out _, out _);
+            SetAnchors((RectTransform)back.transform, new Vector2(.055f, .025f), new Vector2(.34f, .095f),
+                Vector2.zero, Vector2.zero);
+            var confirm = AddButton("ConfirmButton", safeArea, "确认并进入探索", Accent, out _, out _);
+            SetAnchors((RectTransform)confirm.transform, new Vector2(.40f, .025f), new Vector2(.945f, .095f),
+                Vector2.zero, Vector2.zero);
+            confirm.interactable = false;
+            screen.EditorConfigure(buttons, frames, names, stats, talents, summary, confirm, back);
+
+            PrefabUtility.SaveAsPrefabAsset(root.gameObject, ScavengerDraftPath);
+            UnityEngine.Object.DestroyImmediate(root.gameObject);
+            return AssetDatabase.LoadAssetAtPath<GameObject>(ScavengerDraftPath);
         }
 
         private static GameObject BuildPage(RectTransform parent, string name, string title,
@@ -248,12 +309,21 @@ namespace CardAutobattle.EditorTools
             layout.spacing = new Vector2(22f, 22f);
             layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             layout.constraintCount = 3;
+            var cards = new GameObject[6];
+            var names = new Text[6];
+            var details = new Text[6];
             for (var i = 0; i < 6; i++)
             {
                 var card = AddImage($"Hero_{i:00}", grid, i == 0 ? Accent : PanelRaised);
-                AddText("Label", card.transform, i == 0 ? "已上阵" : $"英雄 {i + 1}", 24,
-                    TextAnchor.MiddleCenter, PrimaryText, new Vector2(.05f, .08f), new Vector2(.95f, .35f));
+                cards[i] = card.gameObject;
+                names[i] = AddText("Name", card.transform, i == 0 ? "暂无历练拾荒者" : "空位", 24,
+                    TextAnchor.MiddleCenter, PrimaryText, new Vector2(.05f, .54f), new Vector2(.95f, .94f));
+                details[i] = AddText("Details", card.transform,
+                    i == 0 ? "完成一次地图探索后显示" : string.Empty, 18,
+                    TextAnchor.UpperCenter, SecondaryText, new Vector2(.06f, .08f), new Vector2(.94f, .55f));
             }
+            var roster = grid.gameObject.AddComponent<ScavengerRosterView>();
+            roster.EditorConfigure(cards, names, details);
         }
 
         private static void BuildCityContent(Transform page)
@@ -279,9 +349,9 @@ namespace CardAutobattle.EditorTools
         {
             var map = AddImage("MapPreview", page, new Color(.07f, .18f, .13f, 1f));
             SetAnchors(map.rectTransform, new Vector2(.055f, .30f), new Vector2(.945f, .76f), Vector2.zero, Vector2.zero);
-            AddText("MapName", map.transform, "苍翠遗迹", 50, TextAnchor.MiddleCenter, PrimaryText,
+            AddText("MapName", map.transform, "灰烬边境 · 难度1", 50, TextAnchor.MiddleCenter, PrimaryText,
                 new Vector2(.05f, .52f), new Vector2(.95f, .78f));
-            AddText("MapInfo", map.transform, "推荐战力  120     预计 8 场战斗", 25,
+            AddText("MapInfo", map.transform, "7场战斗 · 3场精英 · 1名首领", 25,
                 TextAnchor.MiddleCenter, SecondaryText, new Vector2(.05f, .30f), new Vector2(.95f, .52f));
             AddText("FlowHint", page, "选择地图 → 战前购买与布阵 → 自动战斗", 25,
                 TextAnchor.MiddleCenter, SecondaryText, new Vector2(.08f, .20f), new Vector2(.92f, .28f));

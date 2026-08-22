@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using CardAutobattle.Prototype;
+using CardAutobattle.Exploration;
+using System.Collections;
 
 namespace CardAutobattle.UI
 {
@@ -15,6 +18,20 @@ namespace CardAutobattle.UI
         {
             if (backToHubButton)
                 backToHubButton.onClick.AddListener(BackToHub);
+        }
+
+        protected override void OnOpen(object args)
+        {
+            StartCoroutine(BeginRunIfNeeded(args as ScavengerRecord));
+        }
+
+        private IEnumerator BeginRunIfNeeded(ScavengerRecord requested)
+        {
+            yield return null;
+            var flow = GetComponentInChildren<PrototypeGameFlowController>(true);
+            if (flow && (flow.ExplorationCompleted ||
+                         requested != null && flow.CurrentScavengerId != requested.Id))
+                flow.BeginNewExploration();
         }
 
         private void LateUpdate()

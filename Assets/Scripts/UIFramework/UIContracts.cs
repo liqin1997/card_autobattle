@@ -7,6 +7,7 @@ namespace CardAutobattle.UI
     {
         None = 0,
         MainHub = 10,
+        ScavengerDraft = 15,
         Preparation = 20
     }
 

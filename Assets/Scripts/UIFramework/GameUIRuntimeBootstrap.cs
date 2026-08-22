@@ -10,6 +10,12 @@ namespace CardAutobattle.UI
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {
+            // The commercial vertical slice owns its complete UI hierarchy.  Do not
+            // inject the legacy five-tab framework over that scene.
+            if (Object.FindFirstObjectByType<CardAutobattle.Commercial.CommercialPrototypeController>(
+                    FindObjectsInactive.Include))
+                return;
+
             if (Object.FindFirstObjectByType<GameUIRoot>(FindObjectsInactive.Include))
                 return;
 

@@ -39,7 +39,7 @@ Material:
     - _UseUIAlphaClip: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _FrameInset: {r: 15, g: 12, b: 0, a: 0}
+    - _FrameInset: {r: 33.9, g: 19.3, b: 0, a: 0}
     - _RectSize: {r: 260, g: 170, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

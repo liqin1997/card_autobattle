@@ -64,11 +64,13 @@ namespace CardAutobattle.UI
                 if (i < tabLabels.Length && tabLabels[i])
                     tabLabels[i].color = selected ? SelectedText : NormalText;
             }
+            if (tab == MainTab.Heroes)
+                GetComponentInChildren<ScavengerRosterView>(true)?.Refresh();
         }
 
         private void EnterPreparation()
         {
-            UIRoot.Screens.Open(UIScreenId.Preparation);
+            UIRoot.Screens.Open(UIScreenId.ScavengerDraft);
         }
 
         public override bool HandleBack()

@@ -79,6 +79,11 @@ namespace CardAutobattle.Preparation
             }
         }
 
+        public void SetEffectValues(ResolvedCardValues values)
+        {
+            CardPresentationUtility.ApplyEffectValues(transform, values);
+        }
+
         private void LateUpdate()
         {
             if (!target)

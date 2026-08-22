@@ -38,6 +38,11 @@ namespace CardAutobattle.Prototype
             SetupCooldownMaterial(enemy);
         }
 
+        public void SetEffectValues(ResolvedCardValues values)
+        {
+            CardPresentationUtility.ApplyEffectValues(transform, values);
+        }
+
         public void SetCooldown(float normalizedProgress)
         {
             var progress = Mathf.Clamp01(normalizedProgress);

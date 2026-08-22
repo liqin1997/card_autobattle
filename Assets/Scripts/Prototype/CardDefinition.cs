@@ -33,6 +33,13 @@ namespace CardAutobattle.Prototype
         ShieldAndHeal
     }
 
+    public enum AdjacentScalingKind
+    {
+        None,
+        AddPerAdjacent,
+        MultiplyByAdjacentCount
+    }
+
     [Serializable]
     public sealed class CardDefinition
     {
@@ -45,9 +52,15 @@ namespace CardAutobattle.Prototype
         public float SecondaryPower;
         public CardTag Tags;
         public CardEffectKind Effect;
+        public AdjacentScalingKind AdjacentScaling;
+        public float AdjacentPowerBonus;
+        public CardTag AdjacentRequiredTag;
 
         public CardDefinition(string id, string name, string description, int cost, float cooldown,
-            float power, float secondaryPower, CardTag tags, CardEffectKind effect)
+            float power, float secondaryPower, CardTag tags, CardEffectKind effect,
+            AdjacentScalingKind adjacentScaling = AdjacentScalingKind.None,
+            float adjacentPowerBonus = 0f,
+            CardTag adjacentRequiredTag = CardTag.None)
         {
             Id = id;
             DisplayName = name;
@@ -58,6 +71,9 @@ namespace CardAutobattle.Prototype
             SecondaryPower = secondaryPower;
             Tags = tags;
             Effect = effect;
+            AdjacentScaling = adjacentScaling;
+            AdjacentPowerBonus = adjacentPowerBonus;
+            AdjacentRequiredTag = adjacentRequiredTag;
         }
     }
 
@@ -65,14 +81,17 @@ namespace CardAutobattle.Prototype
     {
         private static readonly List<CardDefinition> Cards = new()
         {
-            new("blade", "Iron Blade", "Deal 9 damage.", 4, 3.2f, 9, 0, CardTag.Weapon, CardEffectKind.Damage),
+            new("blade", "Iron Blade", "Deal 9 damage, +3 per adjacent card.", 4, 3.2f, 9, 0,
+                CardTag.Weapon, CardEffectKind.Damage, AdjacentScalingKind.AddPerAdjacent, 3),
             new("dagger", "Quick Dagger", "Deal 4 damage. Triggers quickly.", 3, 1.8f, 4, 0, CardTag.Weapon, CardEffectKind.Damage),
             new("hammer", "War Hammer", "Deal 18 damage.", 6, 5.2f, 18, 0, CardTag.Weapon, CardEffectKind.Damage),
-            new("bow", "Longbow", "Deal 8 damage, +3 per adjacent Weapon.", 5, 3.8f, 8, 3, CardTag.Weapon, CardEffectKind.ChainDamage),
+            new("bow", "Longbow", "Deal 8 damage, +3 per adjacent Weapon.", 5, 3.8f, 8, 3,
+                CardTag.Weapon, CardEffectKind.ChainDamage, AdjacentScalingKind.AddPerAdjacent, 3, CardTag.Weapon),
             new("shield", "Oak Shield", "Gain 11 shield.", 4, 4.0f, 11, 0, CardTag.Defense, CardEffectKind.Shield),
             new("armor", "Plate Armor", "Gain 18 shield.", 6, 6.0f, 18, 0, CardTag.Defense, CardEffectKind.Shield),
             new("potion", "Red Potion", "Heal 12 health.", 4, 5.5f, 12, 0, CardTag.Support, CardEffectKind.Heal),
-            new("herbs", "Healing Herbs", "Heal 7, +2 per adjacent Support.", 3, 4.2f, 7, 2, CardTag.Support, CardEffectKind.Heal),
+            new("herbs", "Healing Herbs", "Heal 7, +2 per adjacent Support.", 3, 4.2f, 7, 2,
+                CardTag.Support, CardEffectKind.Heal, AdjacentScalingKind.AddPerAdjacent, 2, CardTag.Support),
             new("fire", "Fire Flask", "Deal 7 damage and apply 3 Burn.", 5, 4.8f, 7, 3, CardTag.Magic, CardEffectKind.DamageAndBurn),
             new("poison", "Venom Vial", "Deal 2 damage and apply 4 Poison.", 5, 4.6f, 2, 4, CardTag.Magic, CardEffectKind.DamageAndPoison),
             new("frost", "Frost Rune", "Deal 5 damage and slow enemy cooldowns.", 5, 5.0f, 5, 1, CardTag.Magic, CardEffectKind.DamageAndSlow),
@@ -82,7 +101,8 @@ namespace CardAutobattle.Prototype
             new("battery", "Arc Battery", "Deal 6 damage and advance an ally.", 5, 4.5f, 6, .8f, CardTag.Magic | CardTag.Support, CardEffectKind.DamageAndHaste),
             new("thorns", "Thorn Mail", "Gain 9 shield and deal 4 damage.", 5, 5.4f, 9, 4, CardTag.Defense, CardEffectKind.ShieldAndDamage),
             new("vampire", "Blood Fang", "Deal 8 damage and heal 5.", 6, 4.0f, 8, 5, CardTag.Weapon | CardTag.Magic, CardEffectKind.Drain),
-            new("spark", "Chain Spark", "Deal 7 damage for each adjacent ally.", 7, 5.0f, 7, 0, CardTag.Magic, CardEffectKind.ChainDamage),
+            new("spark", "Chain Spark", "Deal 7 damage for each adjacent ally.", 7, 5.0f, 7, 0,
+                CardTag.Magic, CardEffectKind.ChainDamage, AdjacentScalingKind.MultiplyByAdjacentCount),
             new("coin", "Lucky Coin", "Gain 3 shield. Earn +1 gold on victory.", 3, 6.0f, 3, 1, CardTag.Economy | CardTag.Support, CardEffectKind.ShieldAndVictoryGold),
             new("core", "Guardian Core", "Gain 14 shield and heal 8.", 8, 7.5f, 14, 8, CardTag.Defense | CardTag.Support, CardEffectKind.ShieldAndHeal)
         };

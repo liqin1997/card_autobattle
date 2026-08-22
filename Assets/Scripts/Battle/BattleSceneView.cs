@@ -93,12 +93,8 @@ namespace CardAutobattle.Prototype
         {
             if (!playerBoard)
                 return;
-            for (var i = 0; i < playerBoard.childCount; i++)
-            {
-                var cell = playerBoard.GetChild(i);
-                for (var child = cell.childCount - 1; child >= 0; child--)
-                    Destroy(cell.GetChild(child).gameObject);
-            }
+            foreach (var card in playerBoard.GetComponentsInChildren<BattleCardView>(true))
+                Destroy(card.gameObject);
         }
 
         private static bool IsOffensive(CardEffectKind effect)
