@@ -152,7 +152,9 @@ Shader "UI/CardCooldownSweep"
                 float luminance = dot(source.rgb, float3(0.2126, 0.7152, 0.0722));
                 float3 unready = lerp(luminance.xxx, source.rgb, _UnreadySaturation);
                 unready *= _UnreadyBrightness;
-                unready = lerp(unready, unready * _DarkColor.rgb, _DarkColor.a * 0.34);
+                // The unswept portion is an actual dark mask, not a subtle multiplier.
+                // Once the sweep passes, the original card color remains at full brightness.
+                unready = lerp(unready, _DarkColor.rgb, _DarkColor.a);
 
                 float3 charged = source.rgb * _ChargedBrightness;
                 float energyAmount = _EnergyColor.a * flowEnergy * (0.42 + readyBoost * 0.52);
