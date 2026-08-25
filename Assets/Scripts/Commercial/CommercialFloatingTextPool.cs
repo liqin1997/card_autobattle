@@ -21,7 +21,7 @@ namespace CardAutobattle.Commercial
 
         public void Show(RectTransform target, string value, Color color)
         {
-            if (!target) return;
+            if (!target || !gameObject.activeInHierarchy) return;
             var text = available.Count > 0 ? available.Dequeue() : CreateText();
             if (!text) return;
             text.gameObject.SetActive(true);
@@ -31,8 +31,9 @@ namespace CardAutobattle.Commercial
             var targetKey = target.GetInstanceID();
             var lane = 0;
             foreach (var item in active) if (item.TargetKey == targetKey && item.Life > .42f) lane++;
-            rect.position = target.TransformPoint(new Vector3(0f, target.rect.height * .5f + 10f, 0f));
-            rect.anchoredPosition += new Vector2((lane % 2 == 0 ? -1f : 1f) * lane * 9f, lane * 24f);
+            var targetBounds = RectTransformUtility.CalculateRelativeRectTransformBounds(transform, target);
+            rect.anchoredPosition = targetBounds.center;
+            rect.anchoredPosition += new Vector2((lane % 2 == 0 ? -1f : 1f) * lane * 18f, lane * 48f);
             rect.localScale = Vector3.one * .82f;
             active.Add(new ActiveText
             {
@@ -51,7 +52,7 @@ namespace CardAutobattle.Commercial
                 item.Life -= Time.unscaledDeltaTime * 1.25f;
                 var progress = 1f - Mathf.Clamp01(item.Life);
                 var eased = 1f - (1f - progress) * (1f - progress);
-                item.Text.rectTransform.anchoredPosition = item.Start + Vector2.up * eased * 78f;
+                item.Text.rectTransform.anchoredPosition = item.Start + Vector2.up * eased * 156f;
                 item.Text.rectTransform.localScale = Vector3.one * Mathf.Lerp(.82f, 1.08f,
                     Mathf.Sin(Mathf.Min(1f, progress * 2f) * Mathf.PI * .5f));
                 var color = item.Text.color;
@@ -68,19 +69,32 @@ namespace CardAutobattle.Commercial
         {
             if (active.Count + available.Count >= capacity) return null;
             var go = new GameObject("DamageText", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+            go.layer = gameObject.layer;
             var rect = (RectTransform)go.transform;
             rect.SetParent(transform, false);
-            rect.sizeDelta = new Vector2(180f, 70f);
+            rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
+            rect.pivot = new Vector2(.5f, .5f);
+            rect.sizeDelta = new Vector2(360f, 140f);
             var text = go.GetComponent<Text>();
             text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = 30;
+            text.fontSize = 60;
             text.fontStyle = FontStyle.Bold;
             text.alignment = TextAnchor.MiddleCenter;
             text.raycastTarget = false;
             var outline = go.AddComponent<Outline>();
             outline.effectColor = new Color(0f, 0f, 0f, .82f);
-            outline.effectDistance = new Vector2(1.5f, -1.5f);
+            outline.effectDistance = new Vector2(3f, -3f);
             return text;
+        }
+
+        private void OnDisable()
+        {
+            for (var i = active.Count - 1; i >= 0; i--)
+            {
+                active[i].Text.gameObject.SetActive(false);
+                available.Enqueue(active[i].Text);
+            }
+            active.Clear();
         }
     }
 }

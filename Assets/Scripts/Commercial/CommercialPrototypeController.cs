@@ -34,6 +34,8 @@ namespace CardAutobattle.Commercial
         private CommercialProjectilePool projectilePool;
         private RectTransform formationDragLayer;
         private RectTransform battleDragLayer;
+        private GameObject battlePresentationRoot;
+        private Camera battleEventCamera;
         private ScreenTab currentTab = ScreenTab.Explore;
         private string pendingDeployCardId;
         private float nextBattleDelay;
@@ -55,7 +57,7 @@ namespace CardAutobattle.Commercial
         public RectTransform FormationDragLayer => formationDragLayer;
         public Camera FormationEventCamera => null;
         public RectTransform BattleDragLayer => battleDragLayer;
-        public Camera BattleEventCamera => null;
+        public Camera BattleEventCamera => battleEventCamera;
 
         private void Awake()
         {
@@ -146,6 +148,8 @@ namespace CardAutobattle.Commercial
                                  FindDeep(root, "PopupCanvas") as RectTransform;
             battleDragLayer = FindDeep(root, "BattleDragLayer") as RectTransform ??
                               FindDeep(root, "PopupCanvas") as RectTransform;
+            battlePresentationRoot = FindDeep(root, "BattlePresentationRoot")?.gameObject;
+            battleEventCamera = FindDeep(root, "BattleUICamera")?.GetComponent<Camera>();
             detailPopup = FindDeep(root, "CardDetailPopup")?.gameObject;
             detailTitle = FindDeep(detailPopup?.transform, "DetailTitle")?.GetComponent<Text>();
             detailBody = FindDeep(detailPopup?.transform, "DetailBody")?.GetComponent<Text>();
@@ -234,6 +238,7 @@ namespace CardAutobattle.Commercial
         {
             currentTab = tab;
             for (var i = 0; i < pages.Length; i++) if (pages[i]) pages[i].SetActive(i == (int)tab);
+            if (battlePresentationRoot) battlePresentationRoot.SetActive(tab == ScreenTab.Explore);
             for (var i = 0; i < navButtons.Length; i++)
             {
                 var selected = i == (int)tab;
@@ -645,7 +650,7 @@ namespace CardAutobattle.Commercial
             SetText("ResourceEnergy", state.Gems.ToString());
             SetText("ResourceGold", state.Gold.ToString());
             SetText("ResourcePremium", state.PremiumCurrency.ToString());
-            SetText("StageTitle", $"第 {state.Chapter} 章 · 关卡 {state.Stage:00} / 20");
+            SetText("LocationTitle", $"第 {state.Chapter} 章 · 关卡 {state.Stage:00} / 20");
             SetText("PlayerLevel", $"Lv.{state.PlayerLevel}  EXP {state.Experience}/{state.ExperienceToNextLevel}");
             SetText("MainQuestTitle", $"主线任务 · 通关 {state.Chapter}-{state.MainQuestTargetStage:00}");
             var progress = Mathf.Clamp(state.GlobalStage, 0, state.MainQuestTargetStage);

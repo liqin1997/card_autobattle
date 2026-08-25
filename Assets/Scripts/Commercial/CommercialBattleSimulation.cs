@@ -68,7 +68,7 @@ namespace CardAutobattle.Commercial
     public sealed class CommercialBattleSession
     {
         private const float FixedStep = .05f;
-        public const float ProjectileTravelDuration = .28f;
+        public const float ProjectileTravelDuration = .45f;
 
         private sealed class PendingImpact
         {

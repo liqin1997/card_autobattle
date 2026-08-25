@@ -312,10 +312,10 @@ namespace CardAutobattle.Commercial
             groupRect.offsetMin = groupRect.offsetMax = Vector2.zero;
             if (healthLabel)
             {
-                healthLabel.fontSize = 11;
+                healthLabel.fontSize = 22;
                 healthLabel.resizeTextForBestFit = true;
-                healthLabel.resizeTextMinSize = 8;
-                healthLabel.resizeTextMaxSize = 12;
+                healthLabel.resizeTextMinSize = 16;
+                healthLabel.resizeTextMaxSize = 24;
                 healthLabel.raycastTarget = false;
                 healthLabel.transform.SetAsLastSibling();
             }
@@ -367,8 +367,8 @@ namespace CardAutobattle.Commercial
             for (var elapsed = 0f; elapsed < duration; elapsed += Time.unscaledDeltaTime)
             {
                 var t = Mathf.Clamp01(elapsed / duration);
-                var kick = Mathf.Sin(t * Mathf.PI) * (1f - t) * 16f;
-                var shake = Mathf.Sin(t * Mathf.PI * 6f) * (1f - t) * 3f;
+                var kick = Mathf.Sin(t * Mathf.PI) * (1f - t) * 32f;
+                var shake = Mathf.Sin(t * Mathf.PI * 6f) * (1f - t) * 6f;
                 rect.localPosition = start + localDirection * kick + Vector3.right * shake;
                 if (surface) surface.color = Color.Lerp(Color.white, baseSurfaceColor, Mathf.SmoothStep(0f, 1f, t));
                 yield return null;

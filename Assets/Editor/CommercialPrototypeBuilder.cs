@@ -14,6 +14,8 @@ namespace CardAutobattle.EditorTools
         private const string RootFolder = "Assets/Resources/Commercial";
         private const string PrefabFolder = RootFolder + "/Prefabs";
         private const string ScenePath = "Assets/Scenes/CommercialVerticalSlice.unity";
+        private const float UiScale = 2f;
+        private static readonly Vector2 ReferenceResolution = new(1080f, 1920f);
         private static readonly Font Font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         private static readonly Color Background = new(.018f, .035f, .045f, 1f);
         private static readonly Color Panel = new(.035f, .071f, .088f, .96f);
@@ -36,15 +38,16 @@ namespace CardAutobattle.EditorTools
             CreateEventSystem(root.transform);
 
             var staticCanvas = CreateCanvas(root.transform, "StaticPageCanvas", 0);
-            AddFullImage(staticCanvas.transform, "Background", Background, false);
             CreateTopBar(staticCanvas.transform);
 
             var cardPrefab = CreateBattleCardPrefab();
+            var battlePresentation = CreateBattlePresentation(root.transform, cardPrefab);
+            PrefabUtility.SaveAsPrefabAsset(battlePresentation, $"{PrefabFolder}/PF_UI_BattlePresentation.prefab");
             var pages = new GameObject[6];
             pages[0] = CreatePlaceholderPage(staticCanvas.transform, "Page_Gacha", "抽奖商城", "卡包、每日商店与付费入口", "今日免费抽取  1 / 1");
             pages[1] = CreateFormationPage(staticCanvas.transform);
             pages[2] = CreatePlaceholderPage(staticCanvas.transform, "Page_City", "主城", "任务、活动与装备打造的外围玩法中心", "铁匠铺  ·  委托所  ·  营地");
-            pages[3] = CreateExplorePage(staticCanvas.transform, cardPrefab);
+            pages[3] = CreateExplorePage(staticCanvas.transform);
             pages[4] = CreateEquipmentPage(staticCanvas.transform);
             pages[5] = CreatePlaceholderPage(staticCanvas.transform, "Page_Activities", "活动", "常驻活动与限时玩法入口", "七日远征  ·  首领挑战  ·  赛季目标");
 
@@ -74,7 +77,7 @@ namespace CardAutobattle.EditorTools
 
         private static GameObject CreateBattleCardPrefab()
         {
-            var root = CreateRect(null, "PF_Card_Battle", new Vector2(146f, 74f));
+            var root = CreateRect(null, "PF_Card_Battle", new Vector2(144f, 92f));
             var surface = root.AddComponent<Image>();
             surface.color = new Color(.08f, .25f, .32f, 1f);
             surface.raycastTarget = true;
@@ -121,71 +124,79 @@ namespace CardAutobattle.EditorTools
             return AssetDatabase.LoadAssetAtPath<GameObject>($"{PrefabFolder}/PF_Card_Battle.prefab");
         }
 
-        private static GameObject CreateExplorePage(Transform parent, GameObject cardPrefab)
+        private static GameObject CreateExplorePage(Transform parent)
         {
             var page = CreatePage(parent, "Page_Explore");
-            var header = AddTopRect(page.transform, "ExploreHeader", 20f, 20f, 9f, 48f);
-            AddImage(header, new Color(.025f, .055f, .071f, .98f), false);
-            AddText(header.transform, "StageTitle", "第 1 章 · 关卡 01 / 20", 18, Color.white, TextAnchor.MiddleLeft,
-                new Vector2(.035f, .18f), new Vector2(.54f, .9f), FontStyle.Bold);
-            AddText(header.transform, "BattleStatus", "战斗中", 14, Cyan, TextAnchor.MiddleRight,
-                new Vector2(.58f, .18f), new Vector2(.96f, .9f), FontStyle.Bold);
-            var progressBg = AddPanel(header.transform, "StageProgress", new Color(.08f, .12f, .14f, 1f),
-                new Vector2(.04f, .04f), new Vector2(.96f, .13f));
-            var progress = AddFullImage(progressBg.transform, "StageProgressFill", Gold, false);
-            progress.type = Image.Type.Filled;
-            progress.sprite = FilledSprite();
-            progress.fillMethod = Image.FillMethod.Horizontal;
-            progress.fillAmount = .2f;
+            return page;
+        }
 
-            AddText(page.transform, "EnemyTitle", "敌方阵列", 16, Red, TextAnchor.MiddleLeft,
-                new Vector2(.075f, .895f), new Vector2(.55f, .932f), FontStyle.Bold);
-            AddText(page.transform, "LivingEnemyCount", "6 / 6", 12, Muted, TextAnchor.MiddleRight,
-                new Vector2(.56f, .895f), new Vector2(.925f, .932f));
-            var enemyGrid = AddTopRect(page.transform, "EnemyGrid", 38f, 38f, 87f, 242f);
+        private static void CreateBattleInfoLayer(Transform parent)
+        {
+            var timeline = AddTopRect(parent, "BattleTimeline", 20f, 190f, 357f, 130f);
+            AddImage(timeline, new Color(.035f, .07f, .085f, 1f), false);
+            AddText(timeline.transform, "LocationTitle", "第 1 章 · 关卡 01 / 20", 19, Color.white, TextAnchor.MiddleCenter,
+                new Vector2(.04f, .63f), new Vector2(.96f, .92f), FontStyle.Bold);
+            AddText(timeline.transform, "IdleExperience", "挂机经验  +18 / 分钟", 13, Cyan, TextAnchor.MiddleLeft,
+                new Vector2(.04f, .42f), new Vector2(.58f, .65f), FontStyle.Bold);
+            AddText(timeline.transform, "WeatherText", "天气：浓雾", 12, Muted, TextAnchor.MiddleLeft,
+                new Vector2(.04f, .25f), new Vector2(.42f, .44f));
+            AddText(timeline.transform, "NextAction", "下一次行动", 11, Muted, TextAnchor.MiddleRight,
+                new Vector2(.58f, .42f), new Vector2(.78f, .65f));
+            AddText(timeline.transform, "TimelineClock", "◷", 24, Gold, TextAnchor.MiddleCenter,
+                new Vector2(.78f, .40f), new Vector2(.86f, .66f), FontStyle.Bold);
+            AddText(timeline.transform, "BattleTimer", "00.0s", 12, Gold, TextAnchor.MiddleRight,
+                new Vector2(.86f, .43f), new Vector2(.97f, .65f), FontStyle.Bold);
+            AddButton(timeline.transform, "DamageStatsButton", "伤害统计", Panel2,
+                new Vector2(.04f, .05f), new Vector2(.31f, .26f));
+            AddButton(timeline.transform, "SpeedButton", "×2 倍速", Panel2,
+                new Vector2(.365f, .05f), new Vector2(.635f, .26f));
+            AddButton(timeline.transform, "WorldChatButton", "世界聊天", Panel2,
+                new Vector2(.69f, .05f), new Vector2(.96f, .26f));
+
+            var quest = AddTopRect(parent, "MainQuestPanel", 360f, 20f, 357f, 130f);
+            AddImage(quest, new Color(.045f, .08f, .095f, 1f), true);
+            AddText(quest.transform, "MainQuestTitle", "主线任务 · 通关 1-05", 15, Color.white,
+                TextAnchor.MiddleLeft, new Vector2(.07f, .58f), new Vector2(.93f, .92f), FontStyle.Bold);
+            AddText(quest.transform, "MainQuestProgress", "1 / 5   奖励：金币 ×160", 12, Muted,
+                TextAnchor.MiddleLeft, new Vector2(.07f, .32f), new Vector2(.93f, .60f));
+            AddText(quest.transform, "BattleResultHint", "战斗在切换页面后仍会继续", 11, Cyan,
+                TextAnchor.MiddleLeft, new Vector2(.07f, .08f), new Vector2(.53f, .33f));
+            var retry = AddButton(quest.transform, "RetryBattleButton", "重新挑战", Gold,
+                new Vector2(.42f, .08f), new Vector2(.93f, .31f));
+            retry.gameObject.SetActive(false);
+            PrefabUtility.SaveAsPrefabAsset(quest, $"{PrefabFolder}/PF_UI_MainQuest.prefab");
+        }
+
+        private static GameObject CreateBattlePresentation(Transform parent, GameObject cardPrefab)
+        {
+            var presentation = new GameObject("BattlePresentationRoot");
+            presentation.transform.SetParent(parent, false);
+
+            var battleCamera = CreateBattleCamera(presentation.transform);
+            var battleCanvas = CreateBattleCanvas(presentation.transform, battleCamera);
+            var page = CreatePage(battleCanvas.transform, "BattlePageRoot");
+
+            CreateEffectLayer(page.transform, "BattleStaticLayer", 10, false);
+            var cardLayer = CreateEffectLayer(page.transform, "BattleCardLayer", 20, true);
+            var enemyGrid = AddTopRect(cardLayer, "EnemyGrid", 46f, 46f, 61f, 292f);
             AddImage(enemyGrid, new Color(.10f, .025f, .04f, .48f), false);
             CreateManualGrid(enemyGrid.transform, cardPrefab, "EnemyCard", 9);
-
-            var timeline = AddTopRect(page.transform, "BattleTimeline", 38f, 38f, 338f, 42f);
-            AddImage(timeline, new Color(.035f, .07f, .085f, 1f), false);
-            AddText(timeline.transform, "NextAction", "下一次行动", 12, Muted, TextAnchor.MiddleLeft,
-                new Vector2(.04f, 0f), new Vector2(.32f, 1f));
-            AddText(timeline.transform, "TimelineClock", "◷", 28, Gold, TextAnchor.MiddleCenter,
-                new Vector2(.43f, 0f), new Vector2(.57f, 1f), FontStyle.Bold);
-            AddText(timeline.transform, "BattleTimer", "00.0s", 13, Gold, TextAnchor.MiddleRight,
-                new Vector2(.68f, 0f), new Vector2(.96f, 1f), FontStyle.Bold);
-
-            AddText(page.transform, "PlayerTitle", "己方阵列", 16, Cyan, TextAnchor.MiddleLeft,
-                new Vector2(.075f, .480f), new Vector2(.55f, .518f), FontStyle.Bold);
-            AddText(page.transform, "PlayerRule", "主角阵亡即失败", 12, Muted, TextAnchor.MiddleRight,
-                new Vector2(.56f, .480f), new Vector2(.925f, .518f));
-            var playerGrid = AddTopRect(page.transform, "PlayerGrid", 38f, 38f, 415f, 216f);
+            var playerGrid = AddTopRect(cardLayer, "PlayerGrid", 46f, 46f, 491f, 292f);
             AddImage(playerGrid, new Color(.015f, .12f, .15f, .52f), false);
             CreateManualGrid(playerGrid.transform, cardPrefab, "PlayerCard", 9);
 
-            var quest = AddTopRect(page.transform, "MainQuestPanel", 20f, 20f, 640f, 108f);
-            AddImage(quest, new Color(.045f, .08f, .095f, 1f), true);
-            AddText(quest.transform, "MainQuestTitle", "主线任务 · 通关 1-05", 16, Color.white,
-                TextAnchor.MiddleLeft, new Vector2(.04f, .57f), new Vector2(.68f, .92f), FontStyle.Bold);
-            AddText(quest.transform, "MainQuestProgress", "1 / 5   奖励：金币 ×160", 13, Muted,
-                TextAnchor.MiddleLeft, new Vector2(.04f, .30f), new Vector2(.82f, .58f));
-            AddText(quest.transform, "BattleResultHint", "战斗在切换页面后仍会继续", 12, Cyan,
-                TextAnchor.MiddleLeft, new Vector2(.04f, .05f), new Vector2(.75f, .31f));
-            var retry = AddButton(quest.transform, "RetryBattleButton", "重新挑战", Gold,
-                new Vector2(.77f, .15f), new Vector2(.96f, .55f));
-            retry.gameObject.SetActive(false);
-            PrefabUtility.SaveAsPrefabAsset(quest, $"{PrefabFolder}/PF_UI_MainQuest.prefab");
-
-            CreateEffectLayer(page.transform, "BattleStaticLayer", 10, false);
-            CreateEffectLayer(page.transform, "BattleCardLayer", 20, false);
+            var infoLayer = CreateEffectLayer(page.transform, "BattleInfoLayer", 25, true);
+            CreateBattleInfoLayer(infoLayer);
             CreateEffectLayer(page.transform, "HealthLayer", 30, false);
             var projectileLayer = CreateEffectLayer(page.transform, "ProjectileLayer", 40, false);
             projectileLayer.gameObject.AddComponent<CommercialProjectilePool>();
-            CreateEffectLayer(page.transform, "VFXLayer", 50, false);
+            CreateParticleLayer(page.transform, "VFXLayer", 50);
             var damageLayer = CreateEffectLayer(page.transform, "DamageTextLayer", 60, false);
             damageLayer.gameObject.AddComponent<CommercialFloatingTextPool>();
             CreateEffectLayer(page.transform, "BattleDragLayer", 80, false);
-            return page;
+
+            SetLayerRecursively(presentation.transform, LayerMask.NameToLayer("UI"));
+            return presentation;
         }
 
         private static GameObject CreateFormationPage(Transform parent)
@@ -204,11 +215,11 @@ namespace CardAutobattle.EditorTools
                 var col = i % 3;
                 var slot = AddButton(board.transform, $"FormationSlot_{i}", "空部署位", new Color(.06f, .15f, .17f, 1f),
                     GridMin(col, row, 3, 3, .018f), GridMax(col, row, 3, 3, .018f));
-                slot.GetComponentInChildren<Text>().fontSize = 13;
+                slot.GetComponentInChildren<Text>().fontSize = ScaleFont(13);
             }
             var hero = AddButton(page.transform, "HeroLibraryButton", "主角 · 战败核心 · 3.0s", new Color(.42f, .31f, .10f, 1f),
                 new Vector2(.06f, .52f), new Vector2(.58f, .58f));
-            hero.GetComponentInChildren<Text>().fontSize = 13;
+            hero.GetComponentInChildren<Text>().fontSize = ScaleFont(13);
             AddButton(page.transform, "ClearFormationSelection", "取消选择", Panel2,
                 new Vector2(.76f, .52f), new Vector2(.94f, .58f));
             AddText(page.transform, "CardLibraryTitle", "已拥有卡牌 · 20 / 20", 17, Cyan, TextAnchor.MiddleLeft,
@@ -223,7 +234,7 @@ namespace CardAutobattle.EditorTools
                 var button = AddButton(library.transform, $"LibraryCard_{i:00}", $"卡牌 {i + 1:00}",
                     i >= 17 ? new Color(.08f, .28f, .31f, 1f) : i is 12 or 13 ? new Color(.30f, .23f, .09f, 1f) : Panel2,
                     GridMin(col, row, 4, 5, .012f), GridMax(col, row, 4, 5, .012f));
-                button.GetComponentInChildren<Text>().fontSize = 10;
+                button.GetComponentInChildren<Text>().fontSize = ScaleFont(10);
             }
             CreateEffectLayer(page.transform, "FormationDragLayer", 80, false);
             return page;
@@ -248,7 +259,7 @@ namespace CardAutobattle.EditorTools
                 var col = i % 3;
                 var button = AddButton(slots.transform, $"EquipmentSlot_{i}", $"{slotNames[i]}\n未装备", Panel2,
                     GridMin(col, row, 3, 2, .02f), GridMax(col, row, 3, 2, .02f));
-                button.GetComponentInChildren<Text>().fontSize = 13;
+                button.GetComponentInChildren<Text>().fontSize = ScaleFont(13);
             }
 
             AddText(page.transform, "InventoryTitle", "装备背包 · 关卡掉落", 17, Cyan, TextAnchor.MiddleLeft,
@@ -261,7 +272,7 @@ namespace CardAutobattle.EditorTools
                 var col = i % 3;
                 var button = AddButton(inventory.transform, $"Inventory_{i:00}", "装备", Panel2,
                     GridMin(col, row, 3, 4, .018f), GridMax(col, row, 3, 4, .018f));
-                button.GetComponentInChildren<Text>().fontSize = 11;
+                button.GetComponentInChildren<Text>().fontSize = ScaleFont(11);
             }
             return page;
         }
@@ -316,7 +327,7 @@ namespace CardAutobattle.EditorTools
             AddText(panel.transform, "DetailTitle", "卡牌详情", 26, Gold, TextAnchor.MiddleLeft,
                 new Vector2(.07f, .79f), new Vector2(.82f, .94f), FontStyle.Bold);
             AddButton(panel.transform, "CloseDetail", "×", new Color(.18f, .08f, .09f, 1f),
-                new Vector2(.84f, .82f), new Vector2(.94f, .93f)).GetComponentInChildren<Text>().fontSize = 24;
+                new Vector2(.84f, .82f), new Vector2(.94f, .93f)).GetComponentInChildren<Text>().fontSize = ScaleFont(24);
             AddText(panel.transform, "DetailBody", "卡牌效果说明", 16, Color.white, TextAnchor.UpperLeft,
                 new Vector2(.07f, .24f), new Vector2(.93f, .77f));
             AddButton(panel.transform, "DetailAction", "选择部署", new Color(.42f, .31f, .10f, 1f),
@@ -355,10 +366,10 @@ namespace CardAutobattle.EditorTools
                 var rect = (RectTransform)instance.transform;
                 var row = i / 3;
                 var col = i % 3;
-                rect.anchorMin = GridMin(col, row, 3, 3, .017f);
-                rect.anchorMax = GridMax(col, row, 3, 3, .017f);
-                rect.offsetMin = Vector2.zero;
-                rect.offsetMax = Vector2.zero;
+                rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
+                rect.pivot = new Vector2(0f, 1f);
+                rect.sizeDelta = ScaleVector(new Vector2(144f, 92f));
+                rect.anchoredPosition = ScaleVector(new Vector2(col * 152f, -row * 100f));
             }
         }
 
@@ -373,14 +384,23 @@ namespace CardAutobattle.EditorTools
             return rect;
         }
 
+        private static RectTransform CreateParticleLayer(Transform parent, string name, int sorting)
+        {
+            var rect = CreateRect(parent, name, Vector2.zero).GetComponent<RectTransform>();
+            Stretch(rect, Vector2.zero, Vector2.one);
+            var bridge = rect.gameObject.AddComponent<CommercialBattleParticleLayer>();
+            bridge.Configure(sorting);
+            return rect;
+        }
+
         private static GameObject CreatePage(Transform parent, string name)
         {
             var page = CreateRect(parent, name, Vector2.zero);
             var rect = page.GetComponent<RectTransform>();
             rect.anchorMin = Vector2.zero;
             rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(0f, 88f);
-            rect.offsetMax = new Vector2(0f, -79f);
+            rect.offsetMin = new Vector2(0f, Scale(88f));
+            rect.offsetMax = new Vector2(0f, -Scale(79f));
             return page;
         }
 
@@ -393,19 +413,61 @@ namespace CardAutobattle.EditorTools
             canvas.sortingOrder = sorting;
             var scaler = go.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(540f, 960f);
+            scaler.referenceResolution = ReferenceResolution;
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = .5f;
             return canvas;
         }
 
-        private static void CreateCamera(Transform parent)
+        private static Canvas CreateBattleCanvas(Transform parent, Camera battleCamera)
+        {
+            var go = new GameObject("BattleCanvas", typeof(RectTransform), typeof(Canvas),
+                typeof(CanvasScaler), typeof(GraphicRaycaster));
+            go.transform.SetParent(parent, false);
+            var canvas = go.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = battleCamera;
+            canvas.planeDistance = 100f;
+            canvas.sortingLayerID = 0;
+            canvas.sortingOrder = 0;
+            var scaler = go.GetComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = ReferenceResolution;
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+            scaler.matchWidthOrHeight = .5f;
+            return canvas;
+        }
+
+        private static Camera CreateCamera(Transform parent)
         {
             var go = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener));
             go.transform.SetParent(parent, false);
             go.tag = "MainCamera";
-            go.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-            go.GetComponent<Camera>().backgroundColor = Background;
+            var camera = go.GetComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Background;
+            camera.depth = -10f;
+            var uiLayer = LayerMask.NameToLayer("UI");
+            if (uiLayer >= 0) camera.cullingMask &= ~(1 << uiLayer);
+            return camera;
+        }
+
+        private static Camera CreateBattleCamera(Transform parent)
+        {
+            var go = new GameObject("BattleUICamera", typeof(Camera));
+            go.transform.SetParent(parent, false);
+            go.transform.localPosition = new Vector3(0f, 0f, -100f);
+            var camera = go.GetComponent<Camera>();
+            camera.clearFlags = CameraClearFlags.Depth;
+            camera.backgroundColor = new Color(0f, 0f, 0f, 0f);
+            camera.orthographic = true;
+            camera.orthographicSize = 5f;
+            camera.nearClipPlane = .3f;
+            camera.farClipPlane = 500f;
+            camera.depth = 0f;
+            var uiLayer = LayerMask.NameToLayer("UI");
+            camera.cullingMask = uiLayer >= 0 ? 1 << uiLayer : ~0;
+            return camera;
         }
 
         private static void CreateEventSystem(Transform parent)
@@ -421,8 +483,8 @@ namespace CardAutobattle.EditorTools
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(1f, 1f);
             rect.pivot = new Vector2(.5f, 1f);
-            rect.offsetMin = new Vector2(left, -top - height);
-            rect.offsetMax = new Vector2(-right, -top);
+            rect.offsetMin = new Vector2(Scale(left), -Scale(top + height));
+            rect.offsetMax = new Vector2(-Scale(right), -Scale(top));
             return go;
         }
 
@@ -457,7 +519,7 @@ namespace CardAutobattle.EditorTools
             var text = go.AddComponent<Text>();
             text.font = Font;
             text.text = value;
-            text.fontSize = size;
+            text.fontSize = ScaleFont(size);
             text.fontStyle = style;
             text.color = color;
             text.alignment = alignment;
@@ -483,9 +545,15 @@ namespace CardAutobattle.EditorTools
         {
             var go = new GameObject(name, typeof(RectTransform));
             if (parent) go.transform.SetParent(parent, false);
-            go.GetComponent<RectTransform>().sizeDelta = size;
+            go.GetComponent<RectTransform>().sizeDelta = ScaleVector(size);
             return go;
         }
+
+        private static float Scale(float value) => value * UiScale;
+
+        private static int ScaleFont(int value) => Mathf.RoundToInt(value * UiScale);
+
+        private static Vector2 ScaleVector(Vector2 value) => value * UiScale;
 
         private static void Stretch(RectTransform rect, Vector2 min, Vector2 max)
         {
@@ -493,6 +561,13 @@ namespace CardAutobattle.EditorTools
             rect.anchorMax = max;
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
+        }
+
+        private static void SetLayerRecursively(Transform root, int layer)
+        {
+            if (!root || layer < 0) return;
+            root.gameObject.layer = layer;
+            for (var i = 0; i < root.childCount; i++) SetLayerRecursively(root.GetChild(i), layer);
         }
 
         private static Vector2 GridMin(int col, int row, int columns, int rows, float gap)

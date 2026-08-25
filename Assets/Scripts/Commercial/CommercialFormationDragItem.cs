@@ -108,7 +108,7 @@ namespace CardAutobattle.Commercial
             ghost.localScale = Vector3.one * 1.02f;
             var shadow = clone.GetComponent<Shadow>() ?? clone.AddComponent<Shadow>();
             shadow.effectColor = new Color(0f, 0f, 0f, .72f);
-            shadow.effectDistance = new Vector2(7f, -9f);
+            shadow.effectDistance = new Vector2(14f, -18f);
             foreach (var graphic in clone.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false;
             ghost.SetAsLastSibling();
         }

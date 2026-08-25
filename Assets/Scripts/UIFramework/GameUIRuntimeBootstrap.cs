@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace CardAutobattle.UI
 {
@@ -10,6 +11,13 @@ namespace CardAutobattle.UI
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Bootstrap()
         {
+            // FantasyMapCreator_2/Demo is a standalone map/fog presentation scene.
+            // It intentionally has no game UI overlay so the Maplayer -> Foglayer
+            // relationship can be inspected directly in Play Mode.
+            var activeScene = SceneManager.GetActiveScene();
+            if (activeScene.path == "Assets/FantasyMapCreator_2/Demo.unity")
+                return;
+
             // The commercial vertical slice owns its complete UI hierarchy.  Do not
             // inject the legacy five-tab framework over that scene.
             if (Object.FindFirstObjectByType<CardAutobattle.Commercial.CommercialPrototypeController>(

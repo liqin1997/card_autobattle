@@ -84,6 +84,7 @@ namespace CardAutobattle.Commercial
             if (!layer) return;
             var go = new GameObject("BattleDragGhost", typeof(RectTransform), typeof(CanvasRenderer),
                 typeof(Image), typeof(CanvasGroup));
+            go.layer = layer.gameObject.layer;
             ghost = (RectTransform)go.transform;
             ghost.SetParent(layer, false);
             ghost.anchorMin = ghost.anchorMax = new Vector2(.5f, .5f);
@@ -99,11 +100,11 @@ namespace CardAutobattle.Commercial
             group.alpha = .94f;
             group.blocksRaycasts = false;
             group.interactable = false;
-            CopyLabel("Name", new Vector2(.06f, .44f), new Vector2(.95f, .86f), 16, FontStyle.Bold);
-            CopyLabel("Meta", new Vector2(.06f, .07f), new Vector2(.95f, .43f), 11, FontStyle.Normal);
+            CopyLabel("Name", new Vector2(.06f, .44f), new Vector2(.95f, .86f), 32, FontStyle.Bold);
+            CopyLabel("Meta", new Vector2(.06f, .07f), new Vector2(.95f, .43f), 22, FontStyle.Normal);
             var shadow = go.AddComponent<Shadow>();
             shadow.effectColor = new Color(0f, 0f, 0f, .76f);
-            shadow.effectDistance = new Vector2(7f, -9f);
+            shadow.effectDistance = new Vector2(14f, -18f);
             ghost.SetAsLastSibling();
         }
 
@@ -111,6 +112,7 @@ namespace CardAutobattle.Commercial
         {
             var source = FindDeep(transform, childName)?.GetComponent<Text>();
             var go = new GameObject(childName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+            go.layer = ghost.gameObject.layer;
             var rect = (RectTransform)go.transform;
             rect.SetParent(ghost, false);
             rect.anchorMin = min;
