@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CardAutobattle.Commercial
 {
     public enum CommercialBattleResult { Running, Victory, Defeat }
-    public enum BattleVisualEventKind { Action, Projectile, Damage, Heal, Shield, Buff, Defeat, BattleEnded }
+    public enum BattleVisualEventKind { Action, Projectile, Damage, CriticalDamage, Heal, Shield, Buff, Defeat, BattleEnded }
 
     public readonly struct BattleVisualEvent
     {
@@ -46,6 +46,14 @@ namespace CardAutobattle.Commercial
         public float Vulnerability;
         public float Burn;
         public float Poison;
+        public float Armor;
+        public float CritChance;
+        public float CritDamage = 1.5f;
+        public CommercialProfessionId Profession;
+        public string ProfessionResourceName;
+        public int ProfessionResource;
+        public int ProfessionResourceMax;
+        public bool ProfessionReady;
         public bool Alive => Health > 0f;
         public float Health01 => MaxHealth <= 0f ? 0f : Mathf.Clamp01(Health / MaxHealth);
         public float ActionCharge01 => !Alive || AttackInterval <= 0f
@@ -81,10 +89,15 @@ namespace CardAutobattle.Commercial
             public float Remaining;
             public bool Launched;
             public Action<CommercialCombatant> AfterImpact;
+            public CommercialCardTag Tags;
+            public bool AllowCrit;
+            public bool HeroBasicAttack;
+            public int TriggerId;
         }
 
-        private readonly int playerLevelSnapshot;
-        private readonly float equipmentDefenseSnapshot;
+        private readonly CommercialCharacterSnapshot characterSnapshot;
+        private readonly CommercialProfessionRuntime professionRuntime;
+        private readonly CommercialDomainEventStream domainEvents = new();
         private readonly Queue<BattleVisualEvent> visualEvents = new();
         private readonly List<PendingImpact> pendingImpacts = new();
         private readonly List<CommercialCardRuntime> cards = new();
@@ -93,6 +106,7 @@ namespace CardAutobattle.Commercial
         private readonly System.Random random;
         private float statusTickRemaining = 1f;
         private float elapsed;
+        private int nextTriggerId = 1;
 
         public CommercialFormation FormationSnapshot { get; }
         public IReadOnlyList<CommercialCardRuntime> Cards => cards;
@@ -106,20 +120,23 @@ namespace CardAutobattle.Commercial
         public int GlobalStage => (Chapter - 1) * 20 + Stage;
         public int LivingEnemyCount => enemies.Count(enemy => enemy.Alive);
         public bool Completed => Result != CommercialBattleResult.Running;
+        public CommercialCharacterSnapshot CharacterSnapshot => characterSnapshot;
+        public CommercialProfessionRuntime ProfessionRuntime => professionRuntime;
+        public CommercialDomainEventStream DomainEvents => domainEvents;
 
-        public CommercialBattleSession(CommercialGameState state, CommercialFormation formation, int seed)
+        public CommercialBattleSession(CommercialGameState state, CommercialFormation formation, int seed,
+            CommercialWorldEncounter encounter = null)
         {
             if (state == null) throw new ArgumentNullException(nameof(state));
-            playerLevelSnapshot = state.PlayerLevel;
-            equipmentDefenseSnapshot = state.EquipmentDefense;
+            characterSnapshot = CommercialCharacterCalculator.BuildSnapshot(state);
             FormationSnapshot = (formation ?? state.DraftFormation).Clone();
-            Chapter = Mathf.Clamp(state.Chapter, 1, 5);
-            Stage = Mathf.Clamp(state.Stage, 1, 20);
+            Chapter = Mathf.Clamp(encounter?.Chapter ?? state.Chapter, 1, 5);
+            Stage = Mathf.Clamp(encounter?.Stage ?? state.Stage, 1, 20);
             random = new System.Random(seed);
 
             var heroGrid = FormationSnapshot.HeroIndex;
             if (heroGrid < 0) heroGrid = 4;
-            var heroHealth = 145f + (state.PlayerLevel - 1) * 18f + state.EquipmentHealth;
+            var heroHealth = characterSnapshot.MaxHealth;
             Hero = new CommercialCombatant
             {
                 Id = CommercialGameState.HeroCardId,
@@ -128,13 +145,35 @@ namespace CardAutobattle.Commercial
                 IsHero = true,
                 MaxHealth = heroHealth,
                 Health = heroHealth,
-                Attack = 13f + (state.PlayerLevel - 1) * 2.1f + state.EquipmentAttack,
-                AttackInterval = Mathf.Max(1.1f, 3f / (1f + state.EquipmentAttackSpeed)),
-                NextAction = 3f
+                Shield = heroHealth * characterSnapshot.Equipment[EquipmentStat.StartingShield],
+                Attack = CommercialCharacterCalculator.HeroBasicAttack(characterSnapshot),
+                AttackInterval = characterSnapshot.HeroAttackInterval,
+                NextAction = characterSnapshot.HeroAttackInterval,
+                Armor = characterSnapshot.Armor,
+                CritChance = characterSnapshot.CritChance,
+                CritDamage = characterSnapshot.CritDamage
             };
             allies.Add(Hero);
+            professionRuntime = new CommercialProfessionRuntime(characterSnapshot.Profession, Hero, domainEvents);
             BuildCards();
             BuildEnemies();
+            if (encounter != null && encounter.Kind != WorldNodeKind.Idle)
+            {
+                var boss = encounter.Kind == WorldNodeKind.Boss;
+                for (var i = 0; i < enemies.Count; i++)
+                {
+                    var enemy = enemies[i];
+                    enemy.DisplayName = i == 0 ? (CommercialWorldCatalog.Find(encounter.NodeId)?.Name ?? (boss ? "区域首领" : "巡游精英")) : "随从 " + i;
+                    enemy.MaxHealth *= i == 0 ? (boss ? 1.8f : 1.3f) : 1f;
+                    enemy.Health = enemy.MaxHealth;
+                }
+            }
+            if (encounter != null)
+                foreach (var enemy in enemies)
+                {
+                    enemy.MaxHealth *= encounter.HealthScale; enemy.Health = enemy.MaxHealth;
+                    enemy.Attack *= encounter.AttackScale;
+                }
         }
 
         public void Advance(float realSeconds)
@@ -169,7 +208,7 @@ namespace CardAutobattle.Commercial
         public float GetCurrentResolvedPower(int gridIndex)
         {
             var runtime = GetCardAt(gridIndex);
-            return runtime == null ? 0f : runtime.Definition.Power * CardPowerMultiplier(runtime);
+            return runtime == null ? 0f : ResolveCardValues(runtime).Primary;
         }
 
         /// <summary>
@@ -220,7 +259,8 @@ namespace CardAutobattle.Commercial
                 };
                 if (definition.Type == CommercialCardType.Summon)
                 {
-                    var levelScale = 1f + (playerLevelSnapshot - 1) * .045f;
+                    var levelScale = (1f + Mathf.Max(0, characterSnapshot.AbilityPower) / 360f) *
+                                     (1 + characterSnapshot.Equipment[EquipmentStat.SummonHealthBonus]);
                     runtime.Summon = new CommercialCombatant
                     {
                         Id = $"summon_{definition.Id}_{i}",
@@ -229,7 +269,7 @@ namespace CardAutobattle.Commercial
                         IsSummon = true,
                         MaxHealth = definition.SummonHealth * levelScale,
                         Health = definition.SummonHealth * levelScale,
-                        Attack = definition.Power * levelScale,
+                        Attack = CommercialCardValueCalculator.Resolve(definition, characterSnapshot, 0).Primary,
                         AttackInterval = definition.Cooldown,
                         NextAction = definition.Cooldown
                     };
@@ -275,7 +315,14 @@ namespace CardAutobattle.Commercial
             if (Hero.Alive && Hero.NextAction <= 0f)
             {
                 Hero.NextAction += Hero.AttackInterval;
-                AttackEnemy(Hero, Hero.Attack, BattleVisualEventKind.Projectile);
+                var triggerId = nextTriggerId++;
+                var proc = professionRuntime.BeginHeroBasicAttack();
+                domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.HeroBasicAttackStarted,
+                    Hero.Id, CommercialCardTag.BasicAttack | CommercialCardTag.Melee, triggerId));
+                var target = SelectEnemy();
+                if (target != null)
+                    LaunchProjectile(Hero, target, Hero.Attack * proc.Multiplier,
+                        heroBasicAttack: true, triggerId: triggerId);
             }
 
             foreach (var card in cards)
@@ -295,13 +342,9 @@ namespace CardAutobattle.Commercial
                 enemy.NextAction += enemy.AttackInterval;
                 var target = SelectEnemyTarget();
                 if (target == null) continue;
-                // Equipment is the primary way to break a progression wall.  Keep
-                // naked difficulty unchanged, but let a complete defensive set
-                // materially reduce the pressure from a full 3x3 enemy board.
-                var mitigated = Mathf.Max(1f, enemy.Attack - equipmentDefenseSnapshot * .16f);
                 visualEvents.Enqueue(new BattleVisualEvent(BattleVisualEventKind.Action, enemy.Id,
-                    target.Id, mitigated, enemy.GridIndex, target.GridIndex));
-                LaunchProjectile(enemy, target, mitigated);
+                    target.Id, enemy.Attack, enemy.GridIndex, target.GridIndex));
+                LaunchProjectile(enemy, target, enemy.Attack);
             }
 
             statusTickRemaining -= delta;
@@ -331,11 +374,28 @@ namespace CardAutobattle.Commercial
         private void TriggerCard(CommercialCardRuntime card)
         {
             var definition = card.Definition;
-            var multiplier = CardPowerMultiplier(card);
-            var primary = definition.Power * multiplier;
-            var secondary = definition.SecondaryPower * multiplier;
+            var triggerId = nextTriggerId++;
+            var values = ResolveCardValues(card);
+            var proc = professionRuntime.BeginCardTrigger(definition);
+            var primary = values.Primary * proc.Multiplier;
+            var secondary = values.Secondary * proc.Multiplier;
+            domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.CardTriggered,
+                definition.Id, definition.Tags, triggerId, primary));
             visualEvents.Enqueue(new BattleVisualEvent(BattleVisualEventKind.Action, definition.Id, string.Empty,
                 primary, card.GridIndex, -1));
+
+            var followupLaunched = false;
+            void LaunchCardProjectile(CommercialCombatant projectileTarget, float amount,
+                Action<CommercialCombatant> afterImpact = null, float launchDelay = 0f)
+            {
+                LaunchProjectile(definition.Id, card.GridIndex, projectileTarget, amount, afterImpact,
+                    null, launchDelay, definition.Tags, true, false, triggerId);
+                if (followupLaunched || proc.FollowupRatio <= 0f || projectileTarget == null) return;
+                followupLaunched = true;
+                LaunchProjectile(definition.Id, card.GridIndex, projectileTarget,
+                    primary * proc.FollowupRatio, null, null, Mathf.Max(.12f, launchDelay + .12f),
+                    definition.Tags, true, false, triggerId);
+            }
 
             if (definition.Type == CommercialCardType.Summon)
             {
@@ -350,13 +410,13 @@ namespace CardAutobattle.Commercial
             switch (definition.Effect)
             {
                 case CommercialCardEffect.Damage:
-                    if (target != null) LaunchProjectile(definition.Id, card.GridIndex, target, primary); break;
+                    if (target != null) LaunchCardProjectile(target, primary); break;
                 case CommercialCardEffect.DoubleStrike:
                     if (target != null)
                     {
                         var hit = primary * .5f;
-                        LaunchProjectile(definition.Id, card.GridIndex, target, hit);
-                        LaunchProjectile(definition.Id, card.GridIndex, target, hit, launchDelay: .12f);
+                        LaunchCardProjectile(target, hit);
+                        LaunchCardProjectile(target, hit, launchDelay: .12f);
                     }
                     break;
                 case CommercialCardEffect.ShieldHero:
@@ -364,15 +424,15 @@ namespace CardAutobattle.Commercial
                 case CommercialCardEffect.HealHero:
                     Heal(card, Hero, primary); break;
                 case CommercialCardEffect.Burn:
-                    if (target != null) LaunchProjectile(definition.Id, card.GridIndex, target, primary,
+                    if (target != null) LaunchCardProjectile(target, primary,
                         impacted => impacted.Burn += secondary); break;
                 case CommercialCardEffect.Poison:
-                    if (target != null) LaunchProjectile(definition.Id, card.GridIndex, target, primary,
+                    if (target != null) LaunchCardProjectile(target, primary,
                         impacted => impacted.Poison += secondary); break;
                 case CommercialCardEffect.SlowEnemy:
                     if (target != null)
                     {
-                        LaunchProjectile(definition.Id, card.GridIndex, target, primary, impacted =>
+                        LaunchCardProjectile(target, primary, impacted =>
                         {
                             impacted.AttackInterval *= 1f + Mathf.Clamp(secondary, 0f, .35f);
                             visualEvents.Enqueue(new BattleVisualEvent(BattleVisualEventKind.Buff, definition.Id,
@@ -389,50 +449,50 @@ namespace CardAutobattle.Commercial
                         other.Remaining = Mathf.Max(0f, other.Remaining - primary);
                     break;
                 case CommercialCardEffect.DamageAndHaste:
-                    if (target != null) LaunchProjectile(definition.Id, card.GridIndex, target, primary);
+                    if (target != null) LaunchCardProjectile(target, primary);
                     foreach (var other in cards.Where(other => other != card && AreAdjacent(other.GridIndex, card.GridIndex)))
                         other.Remaining = Mathf.Max(0f, other.Remaining - secondary);
                     break;
                 case CommercialCardEffect.ShieldAndDamage:
                     AddShield(card, Hero, primary);
-                    if (target != null) LaunchProjectile(definition.Id, card.GridIndex, target, secondary);
+                    if (target != null) LaunchCardProjectile(target, secondary);
                     break;
                 case CommercialCardEffect.Drain:
-                    if (target != null) LaunchProjectile(definition.Id, card.GridIndex, target, primary,
+                    if (target != null) LaunchCardProjectile(target, primary,
                         _ => Heal(card, Hero, secondary));
                     break;
                 case CommercialCardEffect.ChainDamage:
                     foreach (var enemy in enemies.Where(enemy => enemy.Alive).Take(3).ToArray())
-                        LaunchProjectile(definition.Id, card.GridIndex, enemy, primary);
+                        LaunchCardProjectile(enemy, primary);
                     break;
                 case CommercialCardEffect.Vulnerability:
                     if (target != null)
                     {
-                        LaunchProjectile(definition.Id, card.GridIndex, target, primary,
+                        LaunchCardProjectile(target, primary,
                             impacted => impacted.Vulnerability = Mathf.Max(impacted.Vulnerability, secondary));
                     }
                     break;
             }
         }
 
-        private float CardPowerMultiplier(CommercialCardRuntime source)
+        private CommercialResolvedCardValues ResolveCardValues(CommercialCardRuntime source)
         {
-            var multiplier = 1f + (playerLevelSnapshot - 1) * .025f;
+            var buildBonus = 0f;
             foreach (var passive in cards.Where(card => card.Definition.Type == CommercialCardType.Passive))
             {
                 if (passive.Definition.Effect == CommercialCardEffect.PassiveGlobalPower)
-                    multiplier *= 1f + passive.Definition.Power;
+                    buildBonus += passive.Definition.Power;
                 else if (AreAdjacent(passive.GridIndex, source.GridIndex))
-                    multiplier *= 1f + passive.Definition.Power;
+                    buildBonus += passive.Definition.Power;
             }
             if (source.Definition.AdjacentBonus > 0f)
             {
                 var count = cards.Count(other => other != source && AreAdjacent(other.GridIndex, source.GridIndex) &&
                     (source.Definition.AdjacentRequiredTag == CommercialCardTag.None ||
                      (other.Definition.Tags & source.Definition.AdjacentRequiredTag) != 0));
-                multiplier += source.Definition.AdjacentBonus * count / Mathf.Max(1f, source.Definition.Power);
+                buildBonus += source.Definition.AdjacentBonus * count / Mathf.Max(1f, source.Definition.Power);
             }
-            return multiplier;
+            return CommercialCardValueCalculator.Resolve(source.Definition, characterSnapshot, buildBonus);
         }
 
         private CommercialCombatant SelectEnemy() => enemies.Where(enemy => enemy.Alive)
@@ -453,14 +513,20 @@ namespace CardAutobattle.Commercial
         }
 
         private void LaunchProjectile(CommercialCombatant source, CommercialCombatant target, float amount,
-            Action<CommercialCombatant> afterImpact = null, float launchDelay = 0f)
+            Action<CommercialCombatant> afterImpact = null, float launchDelay = 0f,
+            bool heroBasicAttack = false, int triggerId = 0)
         {
-            LaunchProjectile(source?.Id, source?.GridIndex ?? -1, target, amount, afterImpact, source, launchDelay);
+            var tags = source?.IsHero == true
+                ? CommercialCardTag.BasicAttack | CommercialCardTag.Melee
+                : source?.IsSummon == true ? CommercialCardTag.Summon : CommercialCardTag.None;
+            LaunchProjectile(source?.Id, source?.GridIndex ?? -1, target, amount, afterImpact, source,
+                launchDelay, tags, source != null && !source.Enemy, heroBasicAttack, triggerId);
         }
 
         private void LaunchProjectile(string sourceId, int sourceGrid, CommercialCombatant target, float amount,
             Action<CommercialCombatant> afterImpact = null, CommercialCombatant source = null,
-            float launchDelay = 0f)
+            float launchDelay = 0f, CommercialCardTag tags = CommercialCardTag.None,
+            bool allowCrit = true, bool heroBasicAttack = false, int triggerId = 0)
         {
             if (target == null || !target.Alive) return;
             var impact = new PendingImpact
@@ -473,7 +539,11 @@ namespace CardAutobattle.Commercial
                 LaunchRemaining = Mathf.Max(0f, launchDelay),
                 Remaining = ProjectileTravelDuration,
                 Launched = launchDelay <= 0f,
-                AfterImpact = afterImpact
+                AfterImpact = afterImpact,
+                Tags = tags,
+                AllowCrit = allowCrit,
+                HeroBasicAttack = heroBasicAttack,
+                TriggerId = triggerId
             };
             if (impact.Launched) EnqueueProjectile(impact);
             pendingImpacts.Add(impact);
@@ -502,17 +572,41 @@ namespace CardAutobattle.Commercial
                 impact.Remaining -= delta;
                 if (impact.Remaining > 0f) continue;
                 pendingImpacts.RemoveAt(i);
-                if (impact.Target == null || !impact.Target.Alive) continue;
-                ApplyDamage(impact.Source, impact.Target, impact.Amount, impact.SourceId, impact.SourceGrid);
+                if (impact.Target == null || !impact.Target.Alive)
+                {
+                    if (impact.HeroBasicAttack)
+                        domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.HeroBasicAttackEnded,
+                            impact.SourceId, impact.Tags, impact.TriggerId));
+                    continue;
+                }
+                var critical = ApplyDamage(impact.Source, impact.Target, impact.Amount, impact.SourceId, impact.SourceGrid,
+                    impact.Tags, impact.AllowCrit, impact.TriggerId);
+                if (impact.HeroBasicAttack)
+                {
+                    domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.HeroBasicAttackHit,
+                        impact.SourceId, impact.Tags, impact.TriggerId, impact.Amount));
+                    if (critical)
+                        domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.HeroBasicAttackCrit,
+                            impact.SourceId, impact.Tags, impact.TriggerId, impact.Amount));
+                    domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.HeroBasicAttackEnded,
+                        impact.SourceId, impact.Tags, impact.TriggerId, impact.Amount));
+                }
                 if (impact.Target.Alive) impact.AfterImpact?.Invoke(impact.Target);
             }
         }
 
-        private void ApplyDamage(CommercialCombatant source, CommercialCombatant target, float amount,
-            string sourceIdOverride = null, int sourceGridOverride = -1)
+        private bool ApplyDamage(CommercialCombatant source, CommercialCombatant target, float amount,
+            string sourceIdOverride = null, int sourceGridOverride = -1,
+            CommercialCardTag tags = CommercialCardTag.None, bool allowCrit = false, int triggerId = 0)
         {
-            if (target == null || !target.Alive) return;
-            amount = Mathf.Max(0f, amount) * (1f + target.Vulnerability);
+            if (target == null || !target.Alive) return false;
+            amount = Mathf.Max(0f, amount);
+            var playerSource = target.Enemy && (source == null || !source.Enemy);
+            var critical = allowCrit && playerSource && random.NextDouble() < characterSnapshot.CritChance;
+            if (critical) amount *= characterSnapshot.CritDamage;
+            amount *= 1f + target.Vulnerability;
+            if (target.IsHero && target.Armor > 0f)
+                amount *= 100f / (100f + target.Armor);
             var shieldDamage = Mathf.Min(target.Shield, amount);
             target.Shield -= shieldDamage;
             var healthDamage = Mathf.Max(0f, amount - shieldDamage);
@@ -523,11 +617,20 @@ namespace CardAutobattle.Commercial
                 visualEvents.Enqueue(new BattleVisualEvent(BattleVisualEventKind.Shield, sourceId, target.Id,
                     -shieldDamage, sourceGrid, target.GridIndex));
             if (healthDamage > 0f)
-                visualEvents.Enqueue(new BattleVisualEvent(BattleVisualEventKind.Damage, sourceId, target.Id,
+                visualEvents.Enqueue(new BattleVisualEvent(critical
+                        ? BattleVisualEventKind.CriticalDamage : BattleVisualEventKind.Damage, sourceId, target.Id,
                     healthDamage, sourceGrid, target.GridIndex));
+            if (critical)
+                domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.CriticalHit,
+                    sourceId, tags, triggerId, healthDamage));
             if (!target.Alive)
+            {
                 visualEvents.Enqueue(new BattleVisualEvent(BattleVisualEventKind.Defeat, sourceId, target.Id,
                     0f, sourceGrid, target.GridIndex));
+                domainEvents.Publish(new CommercialDomainEvent(CommercialDomainEventType.UnitDefeated,
+                    sourceId, tags, triggerId));
+            }
+            return critical;
         }
 
         private void Heal(CommercialCardRuntime source, CommercialCombatant target, float amount)

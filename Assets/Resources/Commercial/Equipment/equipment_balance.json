@@ -1,0 +1,80 @@
+{
+  "Version": 1,
+  "MaxItemLevel": 50,
+  "MaxUpgradeLevel": 20,
+  "UpgradeBaseStep": 0.05,
+  "Rarities": [
+    {"Name":"普通","Quality":1.0,"AffixCount":0,"Salvage":1,"IconTier":1},
+    {"Name":"精良","Quality":1.25,"AffixCount":1,"Salvage":3,"IconTier":2},
+    {"Name":"史诗","Quality":1.6,"AffixCount":2,"Salvage":9,"IconTier":4},
+    {"Name":"传说","Quality":2.05,"AffixCount":3,"Salvage":24,"IconTier":6}
+  ],
+  "Slots": [
+    {"Name":"头盔","IconPart":1,"MainAttribute":2,"Health":18,"Armor":2,"Power":0},
+    {"Name":"护手","IconPart":4,"MainAttribute":2,"Health":0,"Armor":1,"Power":2},
+    {"Name":"护甲","IconPart":2,"MainAttribute":2,"Health":26,"Armor":4,"Power":0},
+    {"Name":"长裤","IconPart":3,"MainAttribute":2,"Health":20,"Armor":2,"Power":0},
+    {"Name":"战靴","IconPart":6,"MainAttribute":2,"Health":12,"Armor":1,"Power":0},
+    {"Name":"主武器","IconPart":0,"MainAttribute":3,"Health":0,"Armor":0,"Power":5}
+  ],
+  "Sets": [
+    {"Id":"iron_oath","Name":"铁誓守卫","Theme":"普攻 / 生存","Attribute":"Strength","Weapon":"sword","Bonuses":[
+      {"Pieces":2,"Stats":[{"Stat":"Strength","Value":6}]},
+      {"Pieces":4,"Stats":[{"Stat":"ArmorPercent","Value":0.15},{"Stat":"HealthPercent","Value":0.10}]},
+      {"Pieces":6,"Stats":[{"Stat":"BasicAttackBonus","Value":0.18},{"Stat":"StartingShield","Value":0.08}]}
+    ]},
+    {"Id":"windrunner","Name":"逐风猎手","Theme":"投射物 / 暴击","Attribute":"Dexterity","Weapon":"crossbow","Bonuses":[
+      {"Pieces":2,"Stats":[{"Stat":"Dexterity","Value":6}]},
+      {"Pieces":4,"Stats":[{"Stat":"CritChance","Value":0.05},{"Stat":"ProjectileBonus","Value":0.10}]},
+      {"Pieces":6,"Stats":[{"Stat":"CritDamage","Value":0.25},{"Stat":"HeroAttackSpeed","Value":0.10}]}
+    ]},
+    {"Id":"arcanist","Name":"星火秘仪","Theme":"魔法 / 效果强度","Attribute":"Intelligence","Weapon":"rod","Bonuses":[
+      {"Pieces":2,"Stats":[{"Stat":"Intelligence","Value":6}]},
+      {"Pieces":4,"Stats":[{"Stat":"MagicBonus","Value":0.14},{"Stat":"AbilityPower","Value":5}]},
+      {"Pieces":6,"Stats":[{"Stat":"MagicBonus","Value":0.18}]}
+    ]},
+    {"Id":"spiritbond","Name":"灵契同盟","Theme":"召唤 / 治疗","Attribute":"Intelligence","Weapon":"rod","Bonuses":[
+      {"Pieces":2,"Stats":[{"Stat":"Intelligence","Value":4},{"Stat":"Vitality","Value":4}]},
+      {"Pieces":4,"Stats":[{"Stat":"SummonHealthBonus","Value":0.20}]},
+      {"Pieces":6,"Stats":[{"Stat":"SummonDamageBonus","Value":0.25},{"Stat":"HealingBonus","Value":0.10}]}
+    ]},
+    {"Id":"dawnward","Name":"晨曦庇护","Theme":"治疗 / 护盾","Attribute":"Vitality","Weapon":"rod","Bonuses":[
+      {"Pieces":2,"Stats":[{"Stat":"Vitality","Value":6}]},
+      {"Pieces":4,"Stats":[{"Stat":"HealingBonus","Value":0.15},{"Stat":"ShieldBonus","Value":0.15}]},
+      {"Pieces":6,"Stats":[{"Stat":"StartingShield","Value":0.15},{"Stat":"HealthPercent","Value":0.10}]}
+    ]}
+  ],
+  "Affixes": [
+    {"Stat":"Strength","Min":2,"Max":4,"LevelScale":0.025,"Weight":10},
+    {"Stat":"Dexterity","Min":2,"Max":4,"LevelScale":0.025,"Weight":10},
+    {"Stat":"Intelligence","Min":2,"Max":4,"LevelScale":0.025,"Weight":10},
+    {"Stat":"Vitality","Min":2,"Max":4,"LevelScale":0.025,"Weight":10},
+    {"Stat":"AbilityPower","Min":2,"Max":4,"LevelScale":0.025,"Weight":7},
+    {"Stat":"Health","Min":10,"Max":22,"LevelScale":0.025,"Weight":8},
+    {"Stat":"Armor","Min":2,"Max":5,"LevelScale":0.025,"Weight":7},
+    {"Stat":"HealthPercent","Min":0.02,"Max":0.05,"Weight":5},
+    {"Stat":"ArmorPercent","Min":0.03,"Max":0.07,"Weight":5},
+    {"Stat":"CritChance","Min":0.015,"Max":0.04,"Weight":5},
+    {"Stat":"CritDamage","Min":0.05,"Max":0.12,"Weight":5},
+    {"Stat":"HeroAttackSpeed","Min":0.02,"Max":0.06,"Weight":4},
+    {"Stat":"DamageBonus","Min":0.02,"Max":0.05,"Weight":5},
+    {"Stat":"BasicAttackBonus","Min":0.04,"Max":0.08,"Weight":5},
+    {"Stat":"ProjectileBonus","Min":0.03,"Max":0.07,"Weight":5},
+    {"Stat":"MagicBonus","Min":0.03,"Max":0.07,"Weight":5},
+    {"Stat":"HealingBonus","Min":0.04,"Max":0.08,"Weight":5},
+    {"Stat":"ShieldBonus","Min":0.04,"Max":0.08,"Weight":5},
+    {"Stat":"SummonHealthBonus","Min":0.05,"Max":0.10,"Weight":5},
+    {"Stat":"SummonDamageBonus","Min":0.03,"Max":0.07,"Weight":5},
+    {"Stat":"StartingShield","Min":0.015,"Max":0.035,"Weight":3}
+  ],
+  "RegionDrops": [
+    {"White":45,"Blue":35,"Purple":16,"Gold":4},
+    {"White":38,"Blue":36,"Purple":20,"Gold":6},
+    {"White":32,"Blue":37,"Purple":23,"Gold":8},
+    {"White":26,"Blue":39,"Purple":25,"Gold":10},
+    {"White":20,"Blue":40,"Purple":28,"Gold":12}
+  ],
+  "UpgradeGoldBase":35,"UpgradeGoldStep":25,"UpgradeDustBase":1,
+  "ReforgeGoldBase":80,"ReforgeGoldPerLevel":8,"ReforgeDust":4,
+  "CraftGold":[0,200,480,1600],"CraftGoldPerLevel":[0,15,22,40],"CraftDust":[0,12,40,120]
+}

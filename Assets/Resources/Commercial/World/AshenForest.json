@@ -1,0 +1,24 @@
+{
+  "Quests":[
+    {"Title":"营地求援","Story":"灰烬营地遭到林兽袭扰。先清理营地外围，向守备队证明你能保护探索队。","Goal":"接取后，在营地外围获胜2次","Target":"main_1","Wins":2,"Gold":120,"Experience":35,"GearSlot":5,"GearLevel":4,"GearSet":"iron_oath","Items":[{"Id":"forest_wood","Count":4}]},
+    {"Title":"林场清障","Story":"登上雾林哨塔调查失联林场。击败林场守卫，找回修桥物资的线索。奖励的护甲与武器可组成2件铁誓套装。","Goal":"调查雾林哨塔，击败林场守卫","Target":"elite_1","Gold":160,"Experience":80,"GearSlot":2,"GearLevel":6,"GearSet":"iron_oath","Items":[{"Id":"forest_wood","Count":6},{"Id":"forge_dust","Count":3}]},
+    {"Title":"修复断桥","Story":"林心被断桥隔绝。交付木材8、铁矿4修桥。矿洞可反复挂机获得铁矿，路边矿箱提供一次性补给。","Goal":"交付材料，修复断桥","Target":"af_bridge","Gold":200,"Experience":120,"GearSlot":-1,"Items":[{"Id":"forge_dust","Count":8}]},
+    {"Title":"驱散林心阴影","Story":"断桥已通，灰烬树王正在吞噬森林。建议达到Lv.4，穿戴两件铁誓装备，并在装备页强化武器。击败树王后领奖，开放鸦羽丘陵。","Goal":"击败灰烬树王","Target":"boss_1","Gold":300,"Experience":100,"GearSlot":0,"GearLevel":8,"GearSet":"iron_oath","Items":[{"Id":"quest_seal","Count":1}]}
+  ],
+  "Nodes":[
+    {"Id":"main_1","Name":"营地外围","Description":"安全的初始挂机点。掉落木材、经验与装备；清剿计数从接取任务后开始。","Kind":"Idle","X":-14,"Y":-7,"Step":0,"Stage":1,"Health":0.8,"Attack":0.8,"Sprite":"4_Objects/Camp.png"},
+    {"Id":"quest_1","Name":"灰烬营地","Description":"守备队长在这里发布森林探索任务。","Kind":"Quest","X":-19,"Y":-5,"Step":0,"Sprite":"3_Buildings/Village_1.png"},
+    {"Id":"chest_1","Name":"遗落行囊","Description":"营地旁的物资，可领取一次。装备箱进入背包后可自行开启。","Kind":"Chest","X":-19,"Y":-10,"Step":0,"Action":"拾取行囊","Rewards":[{"Id":"equipment_chest","Count":1}],"Sprite":"4_Objects/Treasures.png"},
+    {"Id":"af_scout","Name":"雾林哨塔","Description":"调查高处的哨塔，发现林场守卫与隐藏木材堆，揭开这一带迷雾。","Kind":"Survey","X":-15,"Y":-1,"Step":1,"Action":"调查哨塔","Sprite":"3_Buildings/Town_2.png"},
+    {"Id":"elite_1","Name":"林场守卫","Description":"阻挡探索队的精英。先穿戴营地任务奖励的武器，再发起挑战。战斗会中断当前挂机。","Kind":"Elite","X":-10,"Y":2,"Step":1,"Prerequisite":"af_scout","Stage":3,"Sprite":"4_Objects/Monsters_Ogres.png"},
+    {"Id":"af_cache","Name":"隐藏木材堆","Description":"一次性探索支路：木材8。也可继续在营地外围挂机获得木材。","Kind":"Gather","X":-20,"Y":3,"Step":1,"Prerequisite":"af_scout","Action":"收集木材","Rewards":[{"Id":"forest_wood","Count":8}],"Sprite":"4_Objects/Treasures.png"},
+    {"Id":"af_mine","Name":"废弃矿洞","Description":"可反复挂机的铁矿产地，每次胜利获得铁矿1～3。经验与装备仍正常掉落。","Kind":"Idle","X":-7,"Y":-5,"Step":2,"Stage":3,"Attack":0.9,"Sprite":"2_Trees_Mountains/Mountain_Big_0.png"},
+    {"Id":"af_orecache","Name":"散落矿箱","Description":"矿工留下的修桥物资：铁矿4。任选拾取矿箱或矿洞挂机，均可完成材料目标。","Kind":"Gather","X":-3,"Y":-7,"Step":2,"Action":"拾取铁矿","Rewards":[{"Id":"iron_ore","Count":4}],"Sprite":"4_Objects/Treasures.png"},
+    {"Id":"af_bridge","Name":"林心断桥","Description":"交付木材8与铁矿4，永久打通林心道路。材料不足不会扣除任何物品。","Kind":"Bridge","X":-4,"Y":1,"Step":2,"Action":"交付材料并修桥","Costs":[{"Id":"forest_wood","Count":8},{"Id":"iron_ore","Count":4}],"Sprite":"4_Objects/Camp.png"},
+    {"Id":"af_hollow","Name":"林心营地","Description":"更深处的挂机据点。敌人更强，掉落更高物品等级的装备。","Kind":"Idle","X":-6,"Y":7,"Step":2,"Prerequisite":"af_bridge","Stage":6,"Sprite":"4_Objects/Camp.png"},
+    {"Id":"af_relic","Name":"古老树碑","Description":"调查树碑获得古老钥匙，可用于开启旁边的封印宝箱。此支路不影响区域开放。","Kind":"Survey","X":-15,"Y":8,"Step":2,"Prerequisite":"af_bridge","Action":"调查树碑","Rewards":[{"Id":"ancient_key","Count":1}],"Sprite":"3_Buildings/Desert_temple.png"},
+    {"Id":"af_sealed","Name":"封印宝箱","Description":"消耗古老钥匙1，获得史诗装备箱1。奖励存入物品仓库。","Kind":"Chest","X":-19,"Y":12,"Step":2,"Prerequisite":"af_relic","Action":"使用钥匙开启","Costs":[{"Id":"ancient_key","Count":1}],"Rewards":[{"Id":"rare_equipment_chest","Count":1}],"Sprite":"4_Objects/Treasures.png"},
+    {"Id":"boss_1","Name":"灰烬树王","Description":"区域首领。建议Lv.4、穿戴铁誓武器与护甲；失败后可回矿洞或营地积累材料与经验。","Kind":"Boss","X":-7,"Y":14,"Step":3,"Stage":10,"Health":1.1,"Attack":0.9,"Sprite":"2_Trees_Mountains/Dark_trees.png"},
+    {"Id":"af_exit","Name":"鸦羽隘口","Description":"击败树王并领取最终任务奖励后，前往鸦羽丘陵开始新的区域探索。","Kind":"Exit","X":0,"Y":12,"Step":4,"Action":"前往鸦羽丘陵","Sprite":"3_Buildings/Town_2.png"}
+  ]
+}

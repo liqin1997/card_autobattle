@@ -11,7 +11,7 @@ namespace CardAutobattle.Commercial
     [DisallowMultipleComponent]
     public sealed class CommercialPrototypeController : MonoBehaviour
     {
-        private enum ScreenTab { Gacha, Formation, City, Explore, Equipment, Activities }
+        private enum ScreenTab { Backpack, Formation, City, Explore, Equipment, Activities }
 
         [SerializeField] private bool resetSaveOnStart;
         [SerializeField, Range(.5f, 8f)] private float battleSpeed = 2f;
@@ -19,6 +19,7 @@ namespace CardAutobattle.Commercial
         private readonly Button[] navButtons = new Button[6];
         private readonly Image[] navBackgrounds = new Image[6];
         private readonly Text[] navLabels = new Text[6];
+        private readonly Text[] navIcons = new Text[6];
         private readonly CommercialBattleCardView[] playerViews = new CommercialBattleCardView[9];
         private readonly CommercialBattleCardView[] enemyViews = new CommercialBattleCardView[9];
         private readonly Button[] formationSlots = new Button[9];
@@ -46,6 +47,42 @@ namespace CardAutobattle.Commercial
         private Button detailActionButton;
         private Text detailActionLabel;
         private GameObject detailPopup;
+        private GameObject professionPage;
+        private CommercialProfessionId selectedProfession;
+        private CommercialWorldEncounter worldEncounter;
+        private bool worldMapMode;
+        private bool battleSettled;
+        private WorldNodeKind CurrentWorldKind => CommercialWorldCatalog.Find(state?.World?.CurrentNodeId)?.Kind ?? WorldNodeKind.Idle;
+        public string CurrentWorldLocation => battle == null ? "灰烬森林 · 灰烬营地" :
+            (CommercialWorldCatalog.Find(state.World.CurrentNodeId)?.Name ?? CommercialWorldCatalog.RegionNames[battle.Chapter - 1]) +
+            (CurrentWorldKind == WorldNodeKind.Boss ? " · 首领挑战" : CurrentWorldKind == WorldNodeKind.Elite ? " · 精英遭遇" : " · 挂机中");
+
+        public void SetWorldMapMode(bool visible)
+        {
+            worldMapMode = visible;
+            FindDeep(transform, "StaticPageCanvas")?.gameObject.SetActive(!visible);
+            FindDeep(transform, "NavigationCanvas")?.gameObject.SetActive(!visible);
+            if (battlePresentationRoot) battlePresentationRoot.SetActive(!visible && currentTab == ScreenTab.Explore);
+            if (visible) { CloseDetail(); GetComponent<CommercialEquipmentView>()?.CloseModals(); GetComponent<CommercialInventoryView>()?.CloseModals(); }
+        }
+
+        public void ReturnFromWorldMap() => SelectTab(currentTab);
+        public void OpenEquipmentFromMap() => SelectTab(ScreenTab.Equipment);
+        public bool AwaitingFirstQuest => state.World.Forest.Step == 0 && !state.World.Forest.Accepted && state.DropSequence == 0;
+
+        public bool RequestWorldEncounter(string nodeId)
+        {
+            var encounter = CommercialWorldCatalog.CreateEncounter(state, nodeId);
+            if (encounter == null) return false;
+            // Replacing the session discards all pending impacts; an interrupted fight never settles.
+            worldEncounter = encounter;
+            if (encounter.Kind == WorldNodeKind.Idle) state.World.IdleNodeId = nodeId;
+            if (battlePresentationRoot) battlePresentationRoot.SetActive(false);
+            SelectTab(ScreenTab.Explore);
+            StartNextBattle();
+            CommercialSaveService.Save(state);
+            return true;
+        }
 
         private static readonly Color NavNormal = new(.035f, .055f, .07f, 1f);
         private static readonly Color NavSelected = new(.25f, .20f, .09f, 1f);
@@ -64,10 +101,12 @@ namespace CardAutobattle.Commercial
             Application.runInBackground = true;
             if (resetSaveOnStart) CommercialSaveService.Reset();
             state = CommercialSaveService.Load();
+            selectedProfession = state.Character.Profession;
             CacheHierarchy();
             BindNavigation();
             BindFormation();
             BindEquipment();
+            BindProfession();
             BindCommonButtons();
         }
 
@@ -75,7 +114,7 @@ namespace CardAutobattle.Commercial
         {
             SelectTab(ScreenTab.Explore);
             RefreshAllStaticUI();
-            StartNextBattle();
+            if (!AwaitingFirstQuest) StartNextBattle();
         }
 
         private void Update()
@@ -104,20 +143,23 @@ namespace CardAutobattle.Commercial
             {
                 uiRefreshRemaining = .15f;
                 RefreshTopAndQuest();
+                if (professionPage && professionPage.activeSelf) RefreshProfessionPage();
             }
         }
 
         private void CacheHierarchy()
         {
             var root = transform.root;
-            var pageNames = new[] { "Page_Gacha", "Page_Formation", "Page_City", "Page_Explore", "Page_Equipment", "Page_Activities" };
+            var pageNames = new[] { "Page_Backpack", "Page_Formation", "Page_City", "Page_Explore", "Page_Equipment", "Page_Activities" };
             for (var i = 0; i < pages.Length; i++) pages[i] = FindDeep(root, pageNames[i])?.gameObject;
             for (var i = 0; i < navButtons.Length; i++)
             {
                 var nav = FindDeep(root, $"Nav_{i}");
                 navButtons[i] = nav?.GetComponent<Button>();
                 navBackgrounds[i] = nav?.GetComponent<Image>();
-                navLabels[i] = FindDeep(nav, "Label")?.GetComponent<Text>();
+                // Legacy buttons also contain an empty helper Label. Select the visible label.
+                navLabels[i] = nav?.GetComponentsInChildren<Text>(true).FirstOrDefault(t => t.name == "Label" && !string.IsNullOrEmpty(t.text));
+                navIcons[i] = FindDeep(nav, "Icon")?.GetComponent<Text>();
             }
             for (var i = 0; i < 9; i++)
             {
@@ -155,7 +197,9 @@ namespace CardAutobattle.Commercial
             detailBody = FindDeep(detailPopup?.transform, "DetailBody")?.GetComponent<Text>();
             detailActionButton = FindDeep(detailPopup?.transform, "DetailAction")?.GetComponent<Button>();
             detailActionLabel = FindDeep(detailActionButton?.transform, "Label")?.GetComponent<Text>();
+            professionPage = FindDeep(root, "Page_Profession")?.gameObject;
             if (detailPopup) detailPopup.SetActive(false);
+            if (professionPage) professionPage.SetActive(false);
         }
 
         private void BindNavigation()
@@ -193,6 +237,7 @@ namespace CardAutobattle.Commercial
 
         private void BindEquipment()
         {
+            if (GetComponent<CommercialEquipmentView>()) return;
             for (var i = 0; i < equipmentSlots.Length; i++)
             {
                 var slot = (EquipmentSlot)i;
@@ -216,6 +261,69 @@ namespace CardAutobattle.Commercial
             }
         }
 
+        private void BindProfession()
+        {
+            FindDeep(transform.root, "TopProfessionButton")?.GetComponent<Button>()?.onClick
+                .AddListener(OpenProfessionPage);
+            FindDeep(transform.root, "CloseProfessionPanel")?.GetComponent<Button>()?.onClick
+                .AddListener(CloseProfessionPage);
+
+            foreach (CommercialProfessionId profession in Enum.GetValues(typeof(CommercialProfessionId)))
+            {
+                var captured = profession;
+                FindDeep(transform.root, $"ProfessionButton_{profession}")?.GetComponent<Button>()?.onClick
+                    .AddListener(() =>
+                    {
+                        selectedProfession = captured;
+                        RefreshProfessionPage();
+                    });
+            }
+
+            var attributeNames = new[] { "Strength", "Dexterity", "Intelligence", "Vitality" };
+            for (var i = 0; i < attributeNames.Length; i++)
+            {
+                var captured = (CommercialAttributeType)i;
+                FindDeep(transform.root, $"AddAttribute_{attributeNames[i]}")?.GetComponent<Button>()?.onClick
+                    .AddListener(() =>
+                    {
+                        if (!state.TryAllocateAttribute(captured)) return;
+                        CommercialSaveService.Save(state);
+                        RefreshAllStaticUI();
+                        RefreshProfessionPage();
+                    });
+            }
+
+            FindDeep(transform.root, "ProfessionSwitchButton")?.GetComponent<Button>()?.onClick
+                .AddListener(() =>
+                {
+                    if (state.Character.Profession == selectedProfession) return;
+                    state.SwitchProfession(selectedProfession);
+                    CommercialSaveService.Save(state);
+                    RefreshAllStaticUI();
+                    RefreshProfessionPage();
+                });
+        }
+
+        private void OpenProfessionPage()
+        {
+            GetComponent<CommercialEquipmentView>()?.CloseModals();
+            GetComponent<CommercialInventoryView>()?.CloseModals();
+            GetComponent<CommercialWorldMapView>()?.Hide();
+            SetWorldMapMode(false);
+            if (!professionPage) return;
+            selectedProfession = state.Character.Profession;
+            for (var i = 0; i < pages.Length; i++) if (pages[i]) pages[i].SetActive(false);
+            if (battlePresentationRoot) battlePresentationRoot.SetActive(false);
+            professionPage.SetActive(true);
+            RefreshProfessionPage();
+        }
+
+        private void CloseProfessionPage()
+        {
+            if (professionPage) professionPage.SetActive(false);
+            SelectTab(currentTab);
+        }
+
         private void BindCommonButtons()
         {
             FindDeep(transform.root, "CloseDetail")?.GetComponent<Button>()?.onClick.AddListener(CloseDetail);
@@ -228,15 +336,26 @@ namespace CardAutobattle.Commercial
             {
                 CommercialSaveService.Reset();
                 state = CommercialGameState.CreateDefault();
+                worldEncounter = null;
+                battle = null;
+                nextBattleDelay = 0f;
                 blocked = false;
                 RefreshAllStaticUI();
-                StartNextBattle();
+                CommercialWorldCatalog.RevealRegion(state, 1);
+                CommercialSaveService.Save(state);
+                var map = GetComponent<CommercialWorldMapView>();
+                if (map) { map.Open(); map.FocusNode("quest_1"); }
             });
         }
 
         private void SelectTab(ScreenTab tab)
         {
+            GetComponent<CommercialEquipmentView>()?.CloseModals();
+            GetComponent<CommercialInventoryView>()?.CloseModals();
+            GetComponent<CommercialWorldMapView>()?.Hide();
+            SetWorldMapMode(false);
             currentTab = tab;
+            if (professionPage) professionPage.SetActive(false);
             for (var i = 0; i < pages.Length; i++) if (pages[i]) pages[i].SetActive(i == (int)tab);
             if (battlePresentationRoot) battlePresentationRoot.SetActive(tab == ScreenTab.Explore);
             for (var i = 0; i < navButtons.Length; i++)
@@ -244,18 +363,26 @@ namespace CardAutobattle.Commercial
                 var selected = i == (int)tab;
                 if (navBackgrounds[i]) navBackgrounds[i].color = selected ? NavSelected : NavNormal;
                 if (navLabels[i]) navLabels[i].color = selected ? TextSelected : TextNormal;
+                if (navIcons[i]) navIcons[i].color = selected ? TextSelected : TextNormal;
             }
             if (tab == ScreenTab.Formation) RefreshFormationPage();
             if (tab == ScreenTab.Equipment) RefreshEquipmentPage();
+            if (tab == ScreenTab.Backpack) GetComponent<CommercialInventoryView>()?.Refresh();
             if (tab == ScreenTab.Explore) RefreshBattleViews();
         }
 
         private void StartNextBattle()
         {
+            battleSettled = false;
             nextBattleDelay = 0f;
             blocked = false;
+            CommercialWorldCatalog.RevealRegion(state, 1);
+            worldEncounter ??= CommercialWorldCatalog.CreateEncounter(state, state.World.IdleNodeId) ??
+                               CommercialWorldCatalog.CreateEncounter(state, "main_1");
+            state.World.CurrentNodeId = worldEncounter.NodeId;
+            CommercialWorldCatalog.RevealRegion(state, worldEncounter.Chapter);
             battle = new CommercialBattleSession(state, state.DraftFormation,
-                17041 + state.GlobalStage * 7919 + state.DropSequence);
+                17041 + state.GlobalStage * 7919 + state.DropSequence, worldEncounter);
             BindBattleViews();
             RefreshBattleViews();
             SetText("BattleStatus", "战斗中");
@@ -266,16 +393,15 @@ namespace CardAutobattle.Commercial
 
         private void ResolveBattle()
         {
+            if (battleSettled || battle == null || !battle.Completed) return;
+            battleSettled = true;
             if (battle.Result == CommercialBattleResult.Victory)
             {
-                var completedChapter = state.Chapter;
-                var completedStage = state.Stage;
-                var drop = state.ApplyStageVictory(9109 + state.GlobalStage * 37 + state.DropSequence);
+                CommercialWorldCatalog.RecordVictory(state, worldEncounter);
                 CommercialSaveService.Save(state);
                 SetText("BattleStatus", "胜利");
-                SetText("BattleResultHint", drop == null
-                    ? $"已通过 {completedChapter}-{completedStage:00}，正在进入下一关"
-                    : $"掉落：{drop.DisplayName}，已放入装备背包");
+                SetText("BattleResultHint", "战斗奖励已入账 · 继续区域挂机");
+                if (worldEncounter.Kind != WorldNodeKind.Idle) worldEncounter = null;
                 nextBattleDelay = 1.25f;
                 RefreshAllStaticUI();
             }
@@ -283,13 +409,20 @@ namespace CardAutobattle.Commercial
             {
                 blocked = true;
                 SetText("BattleStatus", "战力受阻");
-                SetText("BattleResultHint", $"停留在 {state.Chapter}-{state.Stage:00}，升级、换装或调整阵容后重试");
+                SetText("BattleResultHint", "战力受阻：换装、升级后重试，或前往地图选择其他区域");
                 var retry = FindDeep(transform.root, "RetryBattleButton")?.gameObject;
                 if (retry) retry.SetActive(true);
+                if (worldEncounter != null && worldEncounter.Kind != WorldNodeKind.Idle)
+                {
+                    worldEncounter = null;
+                    blocked = false;
+                    nextBattleDelay = 3f;
+                    SetText("BattleResultHint", "挑战失败 · 即将恢复原区域挂机");
+                }
             }
         }
 
-        private void BindBattleViews()
+        private void BindBattleViews(IReadOnlyDictionary<string, float> previousValues = null)
         {
             for (var i = 0; i < 9; i++)
             {
@@ -297,15 +430,28 @@ namespace CardAutobattle.Commercial
                 var ally = battle.GetAllyAt(i);
                 var card = battle.GetCardAt(i);
                 if (ally?.IsHero == true)
+                {
                     playerViews[i]?.BindHero(ally, i, () => ShowHeroBattleDetail());
+                    playerViews[i]?.SetPrimaryValue(ally.Attack, CommercialPrimaryValueKind.Damage);
+                }
                 else if (card != null)
+                {
                     playerViews[i]?.BindCard(card, i, () => ShowCardDetail(card.Definition, false));
+                    var previous = 0f;
+                    var hasPrevious = previousValues != null &&
+                                      previousValues.TryGetValue(card.Definition.Id, out previous);
+                    playerViews[i]?.SetPrimaryValue(battle.GetCurrentResolvedPower(i),
+                        PrimaryValueKind(card.Definition), hasPrevious ? (float?)previous : null);
+                }
                 else if (playerViews[i]) playerViews[i].gameObject.SetActive(false);
                 ConfigureBattleDrag(playerViews[i], playerIndex);
 
                 var enemy = battle.GetEnemyAt(i);
                 if (enemy != null)
+                {
                     enemyViews[i]?.BindEnemy(enemy, i, () => ShowEnemyDetail(enemy));
+                    enemyViews[i]?.SetPrimaryValue(enemy.Attack, CommercialPrimaryValueKind.Damage);
+                }
                 else if (enemyViews[i]) enemyViews[i].gameObject.SetActive(false);
             }
         }
@@ -334,10 +480,16 @@ namespace CardAutobattle.Commercial
                         view ? (RectTransform)view.transform : null,
                         enemySource ? new Color(1f, .25f, .18f) : new Color(.18f, 1f, .86f));
                 }
-                if (value.Kind == BattleVisualEventKind.Damage && value.Amount > 0f)
+                if ((value.Kind == BattleVisualEventKind.Damage ||
+                     value.Kind == BattleVisualEventKind.CriticalDamage) && value.Amount > 0f)
                 {
                     floatingTextPool?.Show(view ? (RectTransform)view.transform : null,
-                        $"-{Mathf.CeilToInt(value.Amount)}", new Color(1f, .35f, .30f));
+                        value.Kind == BattleVisualEventKind.CriticalDamage
+                            ? $"暴击 -{Mathf.CeilToInt(value.Amount)}"
+                            : $"-{Mathf.CeilToInt(value.Amount)}",
+                        value.Kind == BattleVisualEventKind.CriticalDamage
+                            ? new Color(1f, .82f, .22f)
+                            : new Color(1f, .35f, .30f));
                     if (view)
                     {
                         var direction = sourceView
@@ -361,7 +513,7 @@ namespace CardAutobattle.Commercial
 
         public bool CanBeginBattleDrag(CommercialBattleBoardDragItem item)
         {
-            if (!item || currentTab != ScreenTab.Explore || battle == null || battle.Completed) return false;
+            if (!item || worldMapMode || currentTab != ScreenTab.Explore || battle == null || battle.Completed) return false;
             var grid = item.SourceGrid;
             return grid >= 0 && grid < 9 &&
                    (battle.Hero.GridIndex == grid || battle.GetCardAt(grid) != null);
@@ -375,6 +527,8 @@ namespace CardAutobattle.Commercial
         public void EndBattleDrag(CommercialBattleBoardDragItem item, Vector2 screenPosition)
         {
             var target = FindBattleDropTarget(screenPosition);
+            var previousValues = battle?.Cards.ToDictionary(card => card.Definition.Id,
+                card => battle.GetCurrentResolvedPower(card.GridIndex));
             var changed = target >= 0 && battle != null &&
                           battle.TrySwapPlayerGridPositions(item.SourceGrid, target);
             SetText("PlayerRule", "主角阵亡即失败");
@@ -383,7 +537,7 @@ namespace CardAutobattle.Commercial
                 RefreshBattleViews();
                 return;
             }
-            BindBattleViews();
+            BindBattleViews(previousValues);
             RefreshBattleViews();
             StartCoroutine(PunchBattleSlot(target));
         }
@@ -604,7 +758,7 @@ namespace CardAutobattle.Commercial
             {
                 var id = state.DraftFormation.Slots[i];
                 if (formationSlotLabels[i]) formationSlotLabels[i].text = id == CommercialGameState.HeroCardId
-                    ? "主角\n3.0s · 含生命条"
+                    ? $"主角\n{CommercialCharacterCalculator.BuildSnapshot(state).HeroAttackInterval:0.0}s · 含生命条"
                     : CommercialCardCatalog.Get(id) is { } card
                         ? $"{card.DisplayName}\n{TypeName(card.Type)}"
                         : "空部署位";
@@ -616,6 +770,8 @@ namespace CardAutobattle.Commercial
 
         private void RefreshEquipmentPage()
         {
+            var equipmentView = GetComponent<CommercialEquipmentView>();
+            if (equipmentView) { equipmentView.Refresh(); return; }
             for (var i = 0; i < 6; i++)
             {
                 var slot = (EquipmentSlot)i;
@@ -643,19 +799,125 @@ namespace CardAutobattle.Commercial
             RefreshFormationPage();
             RefreshEquipmentPage();
             RefreshTopAndQuest();
+            GetComponent<CommercialInventoryView>()?.Refresh();
+            if (professionPage && professionPage.activeSelf) RefreshProfessionPage();
+        }
+
+        public void NotifyEquipmentChanged()
+        {
+            // Current session owns an immutable stat snapshot. Never restart it on a gear change.
+            CommercialSaveService.Save(state);
+            RefreshAllStaticUI();
         }
 
         private void RefreshTopAndQuest()
         {
+            state.EnsureCharacterData();
+            var profession = CommercialProfessionCatalog.Get(state.Character.Profession);
             SetText("ResourceEnergy", state.Gems.ToString());
             SetText("ResourceGold", state.Gold.ToString());
             SetText("ResourcePremium", state.PremiumCurrency.ToString());
-            SetText("LocationTitle", $"第 {state.Chapter} 章 · 关卡 {state.Stage:00} / 20");
-            SetText("PlayerLevel", $"Lv.{state.PlayerLevel}  EXP {state.Experience}/{state.ExperienceToNextLevel}");
-            SetText("MainQuestTitle", $"主线任务 · 通关 {state.Chapter}-{state.MainQuestTargetStage:00}");
-            var progress = Mathf.Clamp(state.GlobalStage, 0, state.MainQuestTargetStage);
-            SetText("MainQuestProgress", $"{progress} / {state.MainQuestTargetStage}   奖励：金币 ×{120 + state.MainQuestTargetStage * 8}");
+            SetText("LocationTitle", CurrentWorldLocation);
+            SetText("TopProfessionAvatar", ProfessionGlyph(profession.Id));
+            SetText("TopProfessionName", $"{profession.DisplayName} · {profession.PathName}");
+            SetText("TopProfessionLevel", $"Lv.{state.PlayerLevel}");
+            SetText("TopProfessionExpText", $"EXP {state.Experience}/{state.ExperienceToNextLevel}");
+            SetImageAnchorProgress("TopProfessionExpFill",
+                state.Experience / (float)Mathf.Max(1, state.ExperienceToNextLevel));
+            var task = CommercialWorldCatalog.CurrentMainQuest(state);
+            var tracked = state.World.Quests.FirstOrDefault(q => q.Id == state.World.TrackedQuestId && !q.Claimed);
+            SetText("MainQuestTitle", tracked != null ? "支线 · 讨伐巡游精英" : task == null ? "区域任务已完成" : "主线 · 探索" + CommercialWorldCatalog.RegionNames[task.Chapter - 1]);
+            SetText("MainQuestProgress", tracked != null ? (tracked.Completed ? "已完成 · 点击领取奖励" : "击败精英 0/1 · 点击追踪") :
+                task == null ? "全部完成" : $"挂机 {task.IdleWins}/5 · 首领 {(task.BossDefeated ? 1 : 0)}/1\n" + (task.Ready ? "可领奖 · 解锁新区域" : "点击查看任务"));
+            if (!CommercialAshenForest.Finished(state) || CommercialWorldCatalog.Find(state.World.CurrentNodeId)?.Chapter == 1)
+            {
+                SetText("MainQuestTitle", "主线 · " + CommercialAshenForest.Title(state));
+                SetText("MainQuestProgress", CommercialAshenForest.Progress(state));
+            }
         }
+
+        private void RefreshProfessionPage()
+        {
+            if (!professionPage) return;
+            state.EnsureCharacterData();
+            var current = state.Character.Profession;
+            var definition = CommercialProfessionCatalog.Get(selectedProfession);
+            var snapshot = CommercialCharacterCalculator.BuildSnapshot(state, selectedProfession);
+
+            foreach (CommercialProfessionId profession in Enum.GetValues(typeof(CommercialProfessionId)))
+            {
+                var button = FindDeep(professionPage.transform, $"ProfessionButton_{profession}")?.GetComponent<Button>();
+                if (!button) continue;
+                var selected = profession == selectedProfession;
+                var equipped = profession == current;
+                button.image.color = selected
+                    ? CommercialProfessionCatalog.Get(profession).Accent * .82f
+                    : new Color(.11f, .11f, .10f, 1f);
+                var label = button.GetComponentInChildren<Text>();
+                if (label) label.text = ProfessionCardText(profession) + (equipped ? "\n当前" : string.Empty);
+            }
+
+            SetText("AvailableAttributePoints", $"可用点数 {state.AvailableAttributePoints}");
+            SetText("AttributeValue_Strength", snapshot.Strength.ToString());
+            SetText("AttributeValue_Dexterity", snapshot.Dexterity.ToString());
+            SetText("AttributeValue_Intelligence", snapshot.Intelligence.ToString());
+            SetText("AttributeValue_Vitality", snapshot.Vitality.ToString());
+            SetText("ProfessionDerivedAP", snapshot.AbilityPower.ToString("0.0"));
+            SetText("ProfessionDerivedHP", snapshot.MaxHealth.ToString("0"));
+            SetText("ProfessionDerivedArmor", snapshot.Armor.ToString("0.0"));
+            SetText("ProfessionDerivedCrit", $"{snapshot.CritChance * 100f:0.0}%");
+            SetText("ProfessionDerivedAttackInterval", $"{snapshot.HeroAttackInterval:0.00}s");
+            SetText("ProfessionDerivedPower",
+                CommercialCharacterCalculator.CombatPower(state, selectedProfession).ToString("0"));
+
+            SetText("ProfessionPreviewName", $"{definition.DisplayName} · {definition.PathName}");
+            SetText("ProfessionResourceName", $"职业资源：{definition.ResourceName}");
+            SetText("ProfessionTriggerDescription", definition.TriggerDescription);
+            SetText("ProfessionReadyDescription", definition.ReadyDescription);
+            var currentRuntime = battle != null && battle.CharacterSnapshot.Profession == selectedProfession
+                ? battle.ProfessionRuntime : null;
+            var resource = currentRuntime?.Resource ?? 0;
+            SetImageAnchorProgress("ProfessionResourceProgress", resource / (float)Mathf.Max(1, definition.MaxResource));
+            SetText("ProfessionResourceProgressText", $"{resource} / {definition.MaxResource}");
+
+            var switchButton = FindDeep(professionPage.transform, "ProfessionSwitchButton")?.GetComponent<Button>();
+            if (switchButton)
+            {
+                switchButton.interactable = selectedProfession != current;
+                var label = switchButton.GetComponentInChildren<Text>();
+                if (label) label.text = selectedProfession == current ? "当前职业" : "设为当前职业 · 下一场生效";
+            }
+            var addNames = new[] { "Strength", "Dexterity", "Intelligence", "Vitality" };
+            foreach (var name in addNames)
+            {
+                var button = FindDeep(professionPage.transform, $"AddAttribute_{name}")?.GetComponent<Button>();
+                if (button) button.interactable = state.AvailableAttributePoints > 0;
+            }
+        }
+
+        private void SetImageAnchorProgress(string objectName, float progress)
+        {
+            var image = FindDeep(transform.root, objectName)?.GetComponent<Image>();
+            if (!image) return;
+            var rect = image.rectTransform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = new Vector2(Mathf.Clamp01(progress), 1f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+        }
+
+        private static string ProfessionGlyph(CommercialProfessionId profession) => profession switch
+        {
+            CommercialProfessionId.Ranger => "游",
+            CommercialProfessionId.Mage => "法",
+            _ => "战"
+        };
+
+        private static string ProfessionCardText(CommercialProfessionId profession) => profession switch
+        {
+            CommercialProfessionId.Ranger => "游侠\n逐风\n投射物积累精准",
+            CommercialProfessionId.Mage => "法师\n秘仪\n魔法积累共鸣",
+            _ => "战士\n铁誓\n普攻积累怒气"
+        };
 
         private void ShowCardDetail(CommercialCardDefinition definition, bool allowDeploy)
         {
@@ -664,7 +926,10 @@ namespace CardAutobattle.Commercial
             if (detailTitle) detailTitle.text = definition.DisplayName;
             if (detailBody) detailBody.text = $"类型：{TypeName(definition.Type)}\n标签：{definition.Tags}\n" +
                 $"行动间隔：{(definition.Type == CommercialCardType.Passive ? "常驻" : $"{definition.Cooldown:0.0} 秒")}\n\n{definition.Description}\n\n" +
-                (definition.Type == CommercialCardType.Summon ? $"召唤生命：{definition.SummonHealth:0}" : "该卡牌不显示独立生命条");
+                $"角色属性倍率：{definition.ScalingCoefficient:0.00}\n" +
+                (definition.Type == CommercialCardType.Summon
+                    ? $"召唤基础生命：{definition.SummonHealth:0}"
+                    : "该卡牌不显示独立生命条");
             Action deployAction = null;
             if (allowDeploy) deployAction = () =>
             {
@@ -678,10 +943,14 @@ namespace CardAutobattle.Commercial
         private void ShowHeroDeployDetail()
         {
             if (!detailPopup) return;
+            var snapshot = CommercialCharacterCalculator.BuildSnapshot(state);
+            var profession = CommercialProfessionCatalog.Get(snapshot.Profession);
             detailPopup.SetActive(true);
-            if (detailTitle) detailTitle.text = "主角";
-            if (detailBody) detailBody.text = $"战败核心单位\n基础行动间隔：3.0秒\n当前等级：{state.PlayerLevel}\n" +
-                $"战力：{state.CombatPower:0}\n\n主角死亡立即失败；装备和等级只在下一场战斗创建快照时生效。";
+            if (detailTitle) detailTitle.text = $"主角 · {profession.DisplayName}";
+            if (detailBody) detailBody.text = $"战败核心单位\n等级：{state.PlayerLevel}\n职业：{profession.DisplayName} · {profession.PathName}\n" +
+                $"能力强度：{snapshot.AbilityPower:0.0}\n生命：{snapshot.MaxHealth:0}\n护甲：{snapshot.Armor:0.0}\n" +
+                $"暴击：{snapshot.CritChance * 100f:0.0}%\n普攻间隔：{snapshot.HeroAttackInterval:0.00}秒\n战力：{state.CombatPower:0}\n\n" +
+                "主角死亡立即失败；职业、装备、加点和等级只在下一场战斗创建快照时生效。";
             ConfigureDetailAction("选择部署", () =>
             {
                 pendingDeployCardId = CommercialGameState.HeroCardId;
@@ -693,10 +962,14 @@ namespace CardAutobattle.Commercial
         private void ShowHeroBattleDetail()
         {
             if (!detailPopup || battle == null) return;
+            var profession = CommercialProfessionCatalog.Get(battle.CharacterSnapshot.Profession);
             detailPopup.SetActive(true);
-            if (detailTitle) detailTitle.text = "主角 · 当前战斗快照";
+            if (detailTitle) detailTitle.text = $"主角 · {profession.DisplayName} · 当前战斗快照";
             if (detailBody) detailBody.text = $"生命：{battle.Hero.Health:0}/{battle.Hero.MaxHealth:0}\n" +
-                $"攻击：{battle.Hero.Attack:0.0}\n行动间隔：{battle.Hero.AttackInterval:0.00}秒\n护盾：{battle.Hero.Shield:0}";
+                $"攻击：{battle.Hero.Attack:0.0}\n能力强度：{battle.CharacterSnapshot.AbilityPower:0.0}\n" +
+                $"护甲：{battle.Hero.Armor:0.0}\n暴击：{battle.Hero.CritChance * 100f:0.0}%\n" +
+                $"行动间隔：{battle.Hero.AttackInterval:0.00}秒\n护盾：{battle.Hero.Shield:0}\n" +
+                $"{battle.Hero.ProfessionResourceName}：{battle.Hero.ProfessionResource}/{battle.Hero.ProfessionResourceMax}";
             ConfigureDetailAction(string.Empty, null);
         }
 
@@ -737,6 +1010,23 @@ namespace CardAutobattle.Commercial
             _ => "主动"
         };
 
+        private static CommercialPrimaryValueKind PrimaryValueKind(CommercialCardDefinition definition)
+        {
+            if (definition == null) return CommercialPrimaryValueKind.Damage;
+            return definition.Effect switch
+            {
+                CommercialCardEffect.ShieldHero or CommercialCardEffect.ShieldAndDamage =>
+                    CommercialPrimaryValueKind.Shield,
+                CommercialCardEffect.HealHero or CommercialCardEffect.SummonHealer =>
+                    CommercialPrimaryValueKind.Heal,
+                CommercialCardEffect.HasteAdjacent or CommercialCardEffect.HasteAll =>
+                    CommercialPrimaryValueKind.CooldownAdvance,
+                CommercialCardEffect.PassiveAdjacentPower or CommercialCardEffect.PassiveGlobalPower =>
+                    CommercialPrimaryValueKind.BuffPercent,
+                _ => CommercialPrimaryValueKind.Damage
+            };
+        }
+
         private static string SlotName(EquipmentSlot slot) => slot switch
         {
             EquipmentSlot.Head => "头部",
@@ -748,7 +1038,7 @@ namespace CardAutobattle.Commercial
             _ => slot.ToString()
         };
 
-        private static Transform FindDeep(Transform root, string objectName)
+        public static Transform FindDeep(Transform root, string objectName)
         {
             if (!root) return null;
             if (root.name == objectName) return root;

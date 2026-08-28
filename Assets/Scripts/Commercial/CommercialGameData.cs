@@ -17,7 +17,9 @@ namespace CardAutobattle.Commercial
     public enum CommercialCardTag
     {
         None = 0, Weapon = 1 << 0, Defense = 1 << 1, Support = 1 << 2,
-        Magic = 1 << 3, Summon = 1 << 4
+        Magic = 1 << 3, Summon = 1 << 4, Projectile = 1 << 5, Melee = 1 << 6,
+        Lightning = 1 << 7, Fire = 1 << 8, Poison = 1 << 9, Healing = 1 << 10,
+        Shield = 1 << 11, BasicAttack = 1 << 12
     }
 
     [Serializable]
@@ -35,11 +37,16 @@ namespace CardAutobattle.Commercial
         public float SummonHealth;
         public float AdjacentBonus;
         public CommercialCardTag AdjacentRequiredTag;
+        public float ScalingCoefficient;
+        public float SecondaryScalingCoefficient;
+        public bool ScalesWithBuild;
 
         public CommercialCardDefinition(string id, string displayName, string description,
             CommercialCardType type, CommercialCardEffect effect, CommercialCardTag tags,
             float cooldown, float power, float secondaryPower = 0f, float summonHealth = 0f,
-            float adjacentBonus = 0f, CommercialCardTag adjacentRequiredTag = CommercialCardTag.None)
+            float adjacentBonus = 0f, CommercialCardTag adjacentRequiredTag = CommercialCardTag.None,
+            float scalingCoefficient = -1f, float secondaryScalingCoefficient = -1f,
+            bool scalesWithBuild = true)
         {
             Id = id;
             DisplayName = displayName;
@@ -53,7 +60,27 @@ namespace CardAutobattle.Commercial
             SummonHealth = summonHealth;
             AdjacentBonus = adjacentBonus;
             AdjacentRequiredTag = adjacentRequiredTag;
+            ScalingCoefficient = scalingCoefficient >= 0f ? scalingCoefficient : DefaultPrimaryScaling(effect);
+            SecondaryScalingCoefficient = secondaryScalingCoefficient >= 0f
+                ? secondaryScalingCoefficient : DefaultSecondaryScaling(effect);
+            ScalesWithBuild = scalesWithBuild;
         }
+
+        private static float DefaultPrimaryScaling(CommercialCardEffect effect) => effect switch
+        {
+            CommercialCardEffect.HasteAdjacent or CommercialCardEffect.HasteAll or
+                CommercialCardEffect.PassiveAdjacentPower or CommercialCardEffect.PassiveGlobalPower => 0f,
+            CommercialCardEffect.Damage or CommercialCardEffect.DoubleStrike or
+                CommercialCardEffect.ChainDamage => .9f,
+            _ => 1f
+        };
+
+        private static float DefaultSecondaryScaling(CommercialCardEffect effect) => effect switch
+        {
+            CommercialCardEffect.Burn or CommercialCardEffect.Poison => .45f,
+            CommercialCardEffect.ShieldAndDamage or CommercialCardEffect.Drain => .9f,
+            _ => 0f
+        };
     }
 
     public static class CommercialCardCatalog
@@ -61,26 +88,26 @@ namespace CardAutobattle.Commercial
         private static readonly List<CommercialCardDefinition> Cards = new()
         {
             new("iron_blade", "斩铁剑", "造成9点伤害；每个相邻卡牌使伤害+3。", CommercialCardType.Active,
-                CommercialCardEffect.Damage, CommercialCardTag.Weapon, 3.2f, 9f, adjacentBonus: 3f),
+                CommercialCardEffect.Damage, CommercialCardTag.Weapon | CommercialCardTag.Melee, 3.2f, 9f, adjacentBonus: 3f),
             new("quick_dagger", "迅影匕", "连续攻击同一目标2次，总计造成4点伤害。", CommercialCardType.Active,
-                CommercialCardEffect.DoubleStrike, CommercialCardTag.Weapon, 1.8f, 4f),
+                CommercialCardEffect.DoubleStrike, CommercialCardTag.Weapon | CommercialCardTag.Melee, 1.8f, 4f),
             new("war_hammer", "破城锤", "造成18点重击伤害。", CommercialCardType.Active,
-                CommercialCardEffect.Damage, CommercialCardTag.Weapon, 5.2f, 18f),
+                CommercialCardEffect.Damage, CommercialCardTag.Weapon | CommercialCardTag.Melee, 5.2f, 18f),
             new("longbow", "连珠弓", "造成8点伤害；每个相邻武器额外+3。", CommercialCardType.Active,
-                CommercialCardEffect.ChainDamage, CommercialCardTag.Weapon, 3.8f, 8f,
+                CommercialCardEffect.ChainDamage, CommercialCardTag.Weapon | CommercialCardTag.Projectile, 3.8f, 8f,
                 adjacentBonus: 3f, adjacentRequiredTag: CommercialCardTag.Weapon),
             new("oak_shield", "橡木盾", "为主角获得11点护盾。", CommercialCardType.Active,
-                CommercialCardEffect.ShieldHero, CommercialCardTag.Defense, 4f, 11f),
+                CommercialCardEffect.ShieldHero, CommercialCardTag.Defense | CommercialCardTag.Shield, 4f, 11f),
             new("plate_armor", "荆棘甲", "获得9点护盾并反击4点伤害。", CommercialCardType.Active,
-                CommercialCardEffect.ShieldAndDamage, CommercialCardTag.Defense, 5.4f, 9f, 4f),
+                CommercialCardEffect.ShieldAndDamage, CommercialCardTag.Defense | CommercialCardTag.Shield, 5.4f, 9f, 4f),
             new("healing_potion", "圣愈药", "为主角恢复12点生命。", CommercialCardType.Active,
-                CommercialCardEffect.HealHero, CommercialCardTag.Support, 5.5f, 12f),
+                CommercialCardEffect.HealHero, CommercialCardTag.Support | CommercialCardTag.Healing, 5.5f, 12f),
             new("fire_flask", "灼热瓶", "造成7点伤害并附加燃烧。", CommercialCardType.Active,
-                CommercialCardEffect.Burn, CommercialCardTag.Magic, 4.8f, 7f, 3f),
+                CommercialCardEffect.Burn, CommercialCardTag.Magic | CommercialCardTag.Fire | CommercialCardTag.Projectile, 4.8f, 7f, 3f),
             new("venom_vial", "蛇毒瓶", "造成2点伤害并附加中毒。", CommercialCardType.Active,
-                CommercialCardEffect.Poison, CommercialCardTag.Magic, 4.6f, 2f, 4f),
+                CommercialCardEffect.Poison, CommercialCardTag.Magic | CommercialCardTag.Poison | CommercialCardTag.Projectile, 4.6f, 2f, 4f),
             new("frost_rune", "寒霜符", "造成5点伤害并减缓敌方行动。", CommercialCardType.Active,
-                CommercialCardEffect.SlowEnemy, CommercialCardTag.Magic, 5f, 5f, .18f),
+                CommercialCardEffect.SlowEnemy, CommercialCardTag.Magic | CommercialCardTag.Projectile, 5f, 5f, .18f),
             new("war_drum", "战鼓", "推进相邻卡牌1.4秒冷却。", CommercialCardType.Active,
                 CommercialCardEffect.HasteAdjacent, CommercialCardTag.Support, 6.5f, 1.4f),
             new("hourglass", "时漏", "推进全部友方卡牌0.9秒冷却。", CommercialCardType.Active,
@@ -90,11 +117,13 @@ namespace CardAutobattle.Commercial
             new("command_core", "指挥核心", "常驻：全部己方卡牌效果提高10%。", CommercialCardType.Passive,
                 CommercialCardEffect.PassiveGlobalPower, CommercialCardTag.Support | CommercialCardTag.Magic, 0f, .10f),
             new("arc_battery", "雷能核心", "造成6点伤害，并推进相邻卡牌0.8秒。", CommercialCardType.Active,
-                CommercialCardEffect.DamageAndHaste, CommercialCardTag.Magic | CommercialCardTag.Support, 4.5f, 6f, .8f),
+                CommercialCardEffect.DamageAndHaste, CommercialCardTag.Magic | CommercialCardTag.Support |
+                    CommercialCardTag.Lightning | CommercialCardTag.Projectile, 4.5f, 6f, .8f),
             new("blood_fang", "血牙", "造成8点伤害并为主角恢复5点生命。", CommercialCardType.Active,
-                CommercialCardEffect.Drain, CommercialCardTag.Weapon | CommercialCardTag.Magic, 4f, 8f, 5f),
+                CommercialCardEffect.Drain, CommercialCardTag.Weapon | CommercialCardTag.Magic |
+                    CommercialCardTag.Melee, 4f, 8f, 5f),
             new("armor_break", "破甲印", "造成4点伤害，使目标承伤提高15%。", CommercialCardType.Active,
-                CommercialCardEffect.Vulnerability, CommercialCardTag.Magic, 5.2f, 4f, .15f),
+                CommercialCardEffect.Vulnerability, CommercialCardTag.Magic | CommercialCardTag.Projectile, 5.2f, 4f, .15f),
             new("stone_guard", "石像守卫", "召唤：高生命守卫，周期攻击并优先承伤。", CommercialCardType.Summon,
                 CommercialCardEffect.SummonGuard, CommercialCardTag.Summon | CommercialCardTag.Defense, 3.4f, 5f, 0f, 95f),
             new("frost_wolf", "霜狼", "召唤：快速攻击敌人的近战单位。", CommercialCardType.Summon,
@@ -126,8 +155,15 @@ namespace CardAutobattle.Commercial
         public float Defense;
         public float Health;
         public float AttackSpeed;
+        public int EquipmentVersion;
+        public int RequiredLevel = 1;
+        public string SetId;
+        public bool Locked, Legacy;
+        public int RollSeed, ReforgeCount;
+        public List<EquipmentStatValue> BaseStats = new();
+        public List<EquipmentAffix> Affixes = new();
 
-        public float Power => Attack * 8f + Defense * 6f + Health * .65f + AttackSpeed * 120f;
+        public float Power => CommercialEquipmentService.ItemScore(this);
     }
 
     [Serializable]
@@ -139,52 +175,8 @@ namespace CardAutobattle.Commercial
 
     public static class EquipmentGenerator
     {
-        private static readonly string[] SlotNames = { "头冠", "护手", "护甲", "长裤", "战靴", "主武器" };
-        private static readonly string[] RarityNames = { "白", "蓝", "紫", "金" };
-
-        public static EquipmentItem Generate(int chapter, int stage, int seed)
-        {
-            var globalStage = Mathf.Max(1, (chapter - 1) * 20 + stage);
-            var random = new System.Random(seed);
-            var roll = random.NextDouble();
-            var goldChance = Mathf.Min(.02f + globalStage * .0015f, .12f);
-            var purpleChance = Mathf.Min(.10f + globalStage * .002f, .28f);
-            var blueChance = Mathf.Min(.36f + globalStage * .002f, .56f);
-            var rarity = roll < goldChance ? EquipmentRarity.Gold :
-                roll < purpleChance ? EquipmentRarity.Purple :
-                roll < blueChance ? EquipmentRarity.Blue : EquipmentRarity.White;
-            var slot = (EquipmentSlot)random.Next(0, 6);
-            var quality = rarity switch
-            {
-                EquipmentRarity.Blue => 1.45f,
-                EquipmentRarity.Purple => 2.05f,
-                EquipmentRarity.Gold => 2.9f,
-                _ => 1f
-            };
-            var levelScale = 1f + globalStage * .075f;
-            var primary = (4.2f + (float)random.NextDouble() * 2.3f) * quality * levelScale;
-            var item = new EquipmentItem
-            {
-                Id = $"eq_{globalStage}_{seed:X8}",
-                DisplayName = $"{RarityNames[(int)rarity]}色·{SlotNames[(int)slot]}",
-                Slot = slot,
-                Rarity = rarity,
-                ItemLevel = globalStage
-            };
-            if (slot == EquipmentSlot.MainWeapon || slot == EquipmentSlot.Hands)
-                item.Attack = primary;
-            else if (slot == EquipmentSlot.Shoes)
-            {
-                item.Defense = primary * .35f;
-                item.AttackSpeed = .025f * quality;
-            }
-            else
-            {
-                item.Defense = primary * .62f;
-                item.Health = primary * 4.4f;
-            }
-            return item;
-        }
+        public static EquipmentItem Generate(int chapter, int stage, int seed) =>
+            CommercialEquipmentService.Generate(chapter, stage, seed);
 
         public static Color RarityColor(EquipmentRarity rarity) => rarity switch
         {
@@ -214,6 +206,7 @@ namespace CardAutobattle.Commercial
     public sealed class CommercialGameState
     {
         public const string HeroCardId = "hero";
+        public int SaveVersion = 2;
         public int PlayerLevel = 1;
         public int Experience;
         public int Chapter = 1;
@@ -226,7 +219,11 @@ namespace CardAutobattle.Commercial
         public CommercialFormation DraftFormation = new();
         public List<EquipmentItem> Inventory = new();
         public List<EquippedItemEntry> Equipped = new();
+        public CommercialCharacterProgress Character = new();
+        public EquipmentProgress Equipment = new();
+        public CommercialInventoryProgress Storage = new();
         public int DropSequence;
+        public CommercialWorldProgress World = new();
 
         public int ExperienceToNextLevel => 40 + PlayerLevel * 25;
         public int GlobalStage => (Chapter - 1) * 20 + Stage;
@@ -242,7 +239,42 @@ namespace CardAutobattle.Commercial
             state.DraftFormation.Slots[5] = "frost_wolf";
             state.DraftFormation.Slots[7] = "healing_potion";
             state.DraftFormation.Slots[8] = "battle_banner";
+            state.EnsureCharacterData();
+            CommercialEquipmentService.Migrate(state);
+            CommercialInventoryService.Migrate(state);
             return state;
+        }
+
+        public void EnsureCharacterData()
+        {
+            Character ??= new CommercialCharacterProgress();
+            Equipment ??= new EquipmentProgress();
+            Equipment.Ensure();
+            Storage ??= new CommercialInventoryProgress();
+            Storage.Ensure();
+            World ??= new CommercialWorldProgress();
+            World.Ensure();
+            SaveVersion = Mathf.Max(3, SaveVersion);
+        }
+
+        public int TotalAttributePoints => 6 + Mathf.Max(0, PlayerLevel - 1) * 2;
+        public int AvailableAttributePoints
+        {
+            get { EnsureCharacterData(); return Mathf.Max(0, TotalAttributePoints - Character.AllocatedPoints); }
+        }
+
+        public bool TryAllocateAttribute(CommercialAttributeType type)
+        {
+            EnsureCharacterData();
+            if (AvailableAttributePoints <= 0) return false;
+            Character.AddPoint(type);
+            return true;
+        }
+
+        public void SwitchProfession(CommercialProfessionId profession)
+        {
+            EnsureCharacterData();
+            Character.Profession = profession;
         }
 
         public EquipmentItem GetEquipped(EquipmentSlot slot) =>
@@ -250,18 +282,16 @@ namespace CardAutobattle.Commercial
 
         public void Equip(EquipmentItem item)
         {
-            if (item == null || !Inventory.Contains(item)) return;
-            Equipped.RemoveAll(entry => entry.Slot == item.Slot);
-            Equipped.Add(new EquippedItemEntry { Slot = item.Slot, Item = item });
+            CommercialEquipmentService.Equip(this, item);
         }
 
-        public void Unequip(EquipmentSlot slot) => Equipped.RemoveAll(entry => entry.Slot == slot);
+        public void Unequip(EquipmentSlot slot) => CommercialEquipmentService.Unequip(this, slot);
 
-        public float EquipmentAttack => Equipped.Sum(entry => entry.Item?.Attack ?? 0f);
-        public float EquipmentDefense => Equipped.Sum(entry => entry.Item?.Defense ?? 0f);
-        public float EquipmentHealth => Equipped.Sum(entry => entry.Item?.Health ?? 0f);
-        public float EquipmentAttackSpeed => Equipped.Sum(entry => entry.Item?.AttackSpeed ?? 0f);
-        public float CombatPower => 100f + PlayerLevel * 32f + Equipped.Sum(entry => entry.Item?.Power ?? 0f);
+        public float EquipmentAttack => CommercialEquipmentService.Aggregate(this)[EquipmentStat.AbilityPower];
+        public float EquipmentDefense => CommercialEquipmentService.Aggregate(this)[EquipmentStat.Armor];
+        public float EquipmentHealth => CommercialEquipmentService.Aggregate(this)[EquipmentStat.Health];
+        public float EquipmentAttackSpeed => CommercialEquipmentService.Aggregate(this)[EquipmentStat.HeroAttackSpeed];
+        public float CombatPower => CommercialCharacterCalculator.CombatPower(this);
 
         public void GainExperience(int amount)
         {
@@ -275,16 +305,17 @@ namespace CardAutobattle.Commercial
 
         public EquipmentItem ApplyStageVictory(int seed)
         {
-            Gold += 18 + GlobalStage * 3;
-            GainExperience(15 + GlobalStage * 2);
+            var reward = new InventoryRewardBundle { Gold = 18 + GlobalStage * 3, Experience = 15 + GlobalStage * 2 };
             EquipmentItem drop = null;
             var guaranteed = Stage % 5 == 0;
             var random = new System.Random(seed ^ (DropSequence++ * 486187739));
             if (guaranteed || random.NextDouble() < .58)
             {
                 drop = EquipmentGenerator.Generate(Chapter, Stage, seed ^ DropSequence);
-                Inventory.Add(drop);
+                reward.Equipment.Add(drop);
             }
+            var error = CommercialInventoryService.Grant(this, reward, "关卡奖励");
+            if (error != null) throw new InvalidOperationException(error);
             Stage++;
             if (Stage > 20)
             {
@@ -307,7 +338,11 @@ namespace CardAutobattle.Commercial
             try
             {
                 var state = JsonUtility.FromJson<CommercialGameState>(json);
-                return state?.DraftFormation?.Slots?.Length == 9 ? state : CommercialGameState.CreateDefault();
+                if (state?.DraftFormation?.Slots?.Length != 9) return CommercialGameState.CreateDefault();
+                state.EnsureCharacterData();
+                CommercialEquipmentService.Migrate(state);
+                CommercialInventoryService.Migrate(state);
+                return state;
             }
             catch { return CommercialGameState.CreateDefault(); }
         }

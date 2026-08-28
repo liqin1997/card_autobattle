@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Fireball_CardFX
+  m_Shader: {fileID: 4800000, guid: 1f7565f1994e5464091f77608542ac31, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _EFFECT1ENABLED_ON
+  - _EFFECT4POLAR_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DistortTex:
+        m_Texture: {fileID: 2800000, guid: 77f92ff4e68049b4293045230c877b03, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
+    - _Effect1Tex:
+        m_Texture: {fileID: 2800000, guid: 20e2b4ff28e29fc4f9f8e9829fddee64, type: 3}
+        m_Scale: {x: 1, y: 0}
+        m_Offset: {x: 0, y: 0}
+    - _Effect2Tex:
+        m_Texture: {fileID: 2800000, guid: 3230cb4cd52002b45b7a52ac45a617df, type: 3}
+        m_Scale: {x: 1.35, y: 1.1}
+        m_Offset: {x: 0, y: 0}
+    - _Effect3Tex:
+        m_Texture: {fileID: 2800000, guid: 20e2b4ff28e29fc4f9f8e9829fddee64, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Effect4Tex:
+        m_Texture: {fileID: 2800000, guid: 20e2b4ff28e29fc4f9f8e9829fddee64, type: 3}
+        m_Scale: {x: 1.15, y: 1.15}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 42d49fd8c692227468fe6d152115630d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 2800000, guid: c1fb2a3650a81c24fb03de1ad2a784b5, type: 3}
+        m_Scale: {x: 1.17, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AnimationSpeed: 1
+    - _ColorMask: 15
+    - _DistortAngle: 0
+    - _DistortBlendMode: 0
+    - _DistortChannel: 3
+    - _DistortEnabled: 0
+    - _DistortFlashV: 0
+    - _DistortPanX: 0.12
+    - _DistortPanY: 0.04
+    - _DistortPolar: 0
+    - _DistortRotV: 0
+    - _DistortSpiral: 0
+    - _DisturbAmpX: 0
+    - _DisturbAmpY: -0.073
+    - _Effect1Angle: 0
+    - _Effect1BlendMode: 0
+    - _Effect1Channel: 3
+    - _Effect1Enabled: 1
+    - _Effect1FlashV: 12.11
+    - _Effect1PanX: 1
+    - _Effect1PanY: 0
+    - _Effect1Polar: 0
+    - _Effect1RotV: 0
+    - _Effect1Spiral: 0
+    - _Effect2Angle: 0
+    - _Effect2BlendMode: 0
+    - _Effect2Channel: 2
+    - _Effect2Enabled: 0
+    - _Effect2FlashV: 0.15
+    - _Effect2PanX: 0.42
+    - _Effect2PanY: -0.025
+    - _Effect2Polar: 0
+    - _Effect2RotV: 0
+    - _Effect2Spiral: 0
+    - _Effect3Angle: 0
+    - _Effect3BlendMode: 2
+    - _Effect3Channel: 3
+    - _Effect3Enabled: 0
+    - _Effect3FlashV: 0.28
+    - _Effect3PanX: 0.16
+    - _Effect3PanY: -0.055
+    - _Effect3Polar: 0
+    - _Effect3RotV: 0
+    - _Effect3Spiral: 0
+    - _Effect4Angle: 0
+    - _Effect4BlendMode: 0
+    - _Effect4Channel: 1
+    - _Effect4Enabled: 0
+    - _Effect4FlashV: 0.8
+    - _Effect4PanX: 0
+    - _Effect4PanY: 0
+    - _Effect4Polar: 1
+    - _Effect4RotV: 0.055
+    - _Effect4Spiral: 0.42
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _StormCloudStrength: 1
+    - _StormDuration: 0.9
+    - _StormEnabled: 0
+    - _StormIdleMinimum: 0.06
+    - _StormIdleSharpness: 5
+    - _StormPeriod: 4.5
+    - _StormPhase: 0
+    - _StormRevealSoftness: 0.025
+    - _TimeOffset: 0
+    - _UseUIAlphaClip: 0
+    - _UseUV1: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DistortColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Effect1Color: {r: 766.9963, g: 484.70844, b: 178.00095, a: 0.5176471}
+    - _Effect2Color: {r: 4.5, g: 1.45, b: 0.12, a: 0.9}
+    - _Effect3Color: {r: 472.14163, g: 451.01144, b: 38.305794, a: 0.5058824}
+    - _Effect4Color: {r: 2.6, g: 0.72, b: 0.08, a: 0.28}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: InventoryUI
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 0
+      compressionQuality: 0
+      maxTextureSize: 0
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: b1d5de4de3055d245a1f3cebce1994a4, type: 3}
+    - {fileID: 2800000, guid: 54f5a846aac911841b3c6273b7732eb6, type: 3}
+    - {fileID: 2800000, guid: 021a6fb82325ad74ebb7c3c4e2ac0747, type: 3}
+    - {fileID: 2800000, guid: df9d3e7226571054b95ee587eabf80df, type: 3}
+    - {fileID: 2800000, guid: 521ab7ed8d56ce9418e092c3394781da, type: 3}
+    - {fileID: 2800000, guid: 6825107dd3323384bad368cf30078178, type: 3}
+    - {fileID: 2800000, guid: 162d7caf596533d41a44ede63fdf563b, type: 3}
+    - {fileID: 2800000, guid: ee795784b9b2767488d2495d6f16b75d, type: 3}
+    - {fileID: 2800000, guid: 4e3f785e9c80a3a4591477b42056bd7f, type: 3}
+    - {fileID: 2800000, guid: 8cfef130485dc3f4894522159b0c92fb, type: 3}
+    - {fileID: 2800000, guid: ec2846efb73a21b4b86c7e73aebbfb46, type: 3}
+    - {fileID: 2800000, guid: 93a6a1c2aeb01494ea8fd5b78fca2f50, type: 3}
+    - {fileID: 2800000, guid: 1a5e4a579a06adf418241c302a0e3fd3, type: 3}
+    - {fileID: 2800000, guid: d06401e8465d4ee4d9417ce4ff49c1b6, type: 3}
+    - {fileID: 2800000, guid: 91feb72b09291504c854695c3dd4db5d, type: 3}
+    - {fileID: 2800000, guid: 08626648e90965f4690712d3548f26e1, type: 3}
+    - {fileID: 2800000, guid: 35b00204e74de6741a8df135a3b47944, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 8cfef130485dc3f4894522159b0c92fb: 21300000
+    - df9d3e7226571054b95ee587eabf80df: 21300000
+    - 93a6a1c2aeb01494ea8fd5b78fca2f50: 21300000
+    - 35b00204e74de6741a8df135a3b47944: 21300000
+    - ee795784b9b2767488d2495d6f16b75d: 21300000
+    - 54f5a846aac911841b3c6273b7732eb6: 21300000
+    - 1a5e4a579a06adf418241c302a0e3fd3: 21300000
+    - 08626648e90965f4690712d3548f26e1: 21300000
+    - 021a6fb82325ad74ebb7c3c4e2ac0747: 21300000
+    - d06401e8465d4ee4d9417ce4ff49c1b6: 21300000
+    - 91feb72b09291504c854695c3dd4db5d: 21300000
+    - b1d5de4de3055d245a1f3cebce1994a4: 21300000
+    - 6825107dd3323384bad368cf30078178: 21300000
+    - 521ab7ed8d56ce9418e092c3394781da: 21300000
+    - 4e3f785e9c80a3a4591477b42056bd7f: 21300000
+    - 162d7caf596533d41a44ede63fdf563b: 21300000
+    - ec2846efb73a21b4b86c7e73aebbfb46: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 8cfef130485dc3f4894522159b0c92fb, type: 3}
+  - {fileID: 21300000, guid: df9d3e7226571054b95ee587eabf80df, type: 3}
+  - {fileID: 21300000, guid: 93a6a1c2aeb01494ea8fd5b78fca2f50, type: 3}
+  - {fileID: 21300000, guid: 35b00204e74de6741a8df135a3b47944, type: 3}
+  - {fileID: 21300000, guid: ee795784b9b2767488d2495d6f16b75d, type: 3}
+  - {fileID: 21300000, guid: 54f5a846aac911841b3c6273b7732eb6, type: 3}
+  - {fileID: 21300000, guid: 1a5e4a579a06adf418241c302a0e3fd3, type: 3}
+  - {fileID: 21300000, guid: 08626648e90965f4690712d3548f26e1, type: 3}
+  - {fileID: 21300000, guid: 021a6fb82325ad74ebb7c3c4e2ac0747, type: 3}
+  - {fileID: 21300000, guid: d06401e8465d4ee4d9417ce4ff49c1b6, type: 3}
+  - {fileID: 21300000, guid: 91feb72b09291504c854695c3dd4db5d, type: 3}
+  - {fileID: 21300000, guid: b1d5de4de3055d245a1f3cebce1994a4, type: 3}
+  - {fileID: 21300000, guid: 6825107dd3323384bad368cf30078178, type: 3}
+  - {fileID: 21300000, guid: 521ab7ed8d56ce9418e092c3394781da, type: 3}
+  - {fileID: 21300000, guid: 4e3f785e9c80a3a4591477b42056bd7f, type: 3}
+  - {fileID: 21300000, guid: 162d7caf596533d41a44ede63fdf563b, type: 3}
+  - {fileID: 21300000, guid: ec2846efb73a21b4b86c7e73aebbfb46, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - weapon_refine
+  - Icon_chest02
+  - icon_decomposition
+  - Scales
+  - material_04
+  - icon_box
+  - icon_book
+  - icon_ice
+  - Icon_chest01
+  - icon_bamboo
+  - icon_rock
+  - set_button_backpack
+  - material_02
+  - material_01
+  - material_05
+  - material_03
+  - weapon_coin
+  m_RenderDataMap: {}
+  m_Tag: InventoryUI
+  m_IsVariant: 0

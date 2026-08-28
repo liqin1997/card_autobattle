@@ -1,0 +1,28 @@
+{
+  "Warehouses": [
+    {"Id":"items","Name":"物品仓库","Description":"宝箱与消耗品，可批量开启或使用"},
+    {"Id":"equipment","Name":"装备仓库","Description":"与装备页共用，可查看、比较与穿戴"},
+    {"Id":"materials","Name":"材料仓库","Description":"野怪掉落与养成材料，使用时由对应系统扣除"},
+    {"Id":"special","Name":"特殊仓库","Description":"任务凭证、钥匙及活动道具"}
+  ],
+  "RegionMaterials":["forest_wood","wild_hide","iron_ore","frost_crystal","arcane_shard"],
+  "IdleEquipmentChance":0.58,
+  "IdleSupplyChance":0.06,
+  "Items":[
+    {"Id":"supply_chest","Name":"野外补给箱","WarehouseId":"items","Category":"宝箱","Quality":1,"Icon":"icon_box","Description":"野怪偶尔携带的补给箱。开启后奖励自动分类入库。","Source":"各区域挂机战斗概率掉落","SourceNode":"main_1","UseRewards":[{"Kind":"gold","Count":40},{"Kind":"xp","Count":20},{"Kind":"item","Id":"forest_wood","Count":2},{"Kind":"item","Id":"iron_ore","Count":2}]},
+    {"Id":"equipment_chest","Name":"稀有装备箱","WarehouseId":"items","Category":"宝箱","Quality":1,"Icon":"Icon_chest01","Description":"必得一件稀有装备；部位与词条随机。","Source":"世界地图遗落宝箱、后续商店","SourceNode":"chest_1","UseRewards":[{"Kind":"equipment","Rarity":1,"Count":1}]},
+    {"Id":"rare_equipment_chest","Name":"史诗装备箱","WarehouseId":"items","Category":"宝箱","Quality":2,"Icon":"Icon_chest02","Description":"必得一件史诗装备，适合补充套装。","Source":"区域主线任务奖励、后续商店","SourceNode":"boss_1","UseRewards":[{"Kind":"equipment","Rarity":2,"Count":1}]},
+    {"Id":"experience_scroll","Name":"冒险心得","WarehouseId":"items","Category":"消耗品","Quality":1,"Icon":"icon_book","Description":"记录旅途经验。使用后获得经验，升级后的属性在下一场战斗生效。","Source":"后续任务和商店奖励","UseRewards":[{"Kind":"xp","Count":80}]},
+    {"Id":"material_pouch","Name":"锻造材料袋","WarehouseId":"items","Category":"宝箱","Quality":1,"Icon":"set_button_backpack","Description":"一袋锻造所需的材料。","Source":"后续任务和商店奖励","UseRewards":[{"Kind":"item","Id":"forge_dust","Count":5},{"Kind":"item","Id":"iron_ore","Count":8}]},
+    {"Id":"forest_wood","Name":"灰烬木材","WarehouseId":"materials","Category":"地区材料","Quality":0,"Icon":"icon_bamboo","Description":"灰烬森林的木材。用于后续任务提交和制作。","Source":"灰烬森林野怪、区域委托","SourceNode":"main_1"},
+    {"Id":"wild_hide","Name":"坚韧兽皮","WarehouseId":"materials","Category":"地区材料","Quality":0,"Icon":"Scales","Description":"鸦羽丘陵的兽皮。用于后续任务提交和制作。","Source":"鸦羽丘陵野怪、区域委托","SourceNode":"main_2"},
+    {"Id":"iron_ore","Name":"精铁矿石","WarehouseId":"materials","Category":"地区材料","Quality":1,"Icon":"icon_rock","Description":"古城矿藏。用于后续任务提交和制作。","Source":"荒沙古城野怪、补给箱","SourceNode":"main_3"},
+    {"Id":"frost_crystal","Name":"寒霜结晶","WarehouseId":"materials","Category":"地区材料","Quality":1,"Icon":"icon_ice","Description":"凝聚雪原寒气的结晶。用于后续制作。","Source":"霜落雪原野怪、区域委托","SourceNode":"main_4"},
+    {"Id":"arcane_shard","Name":"奥术碎片","WarehouseId":"materials","Category":"地区材料","Quality":2,"Icon":"weapon_coin","Description":"终焉王座中凝结的奥术碎片。用于后续制作。","Source":"终焉王座野怪、区域委托","SourceNode":"main_5"},
+    {"Id":"forge_dust","Name":"锻造尘","WarehouseId":"materials","Category":"养成材料","Quality":1,"Icon":"icon_decomposition","Description":"用于装备强化、重铸和定向锻造。此处与装备页显示的是同一份数量。","Source":"装备分解、区域任务、材料袋"},
+    {"Id":"boss_essence","Name":"首领精华","WarehouseId":"materials","Category":"首领材料","Quality":2,"Icon":"weapon_refine","Description":"击败区域首领获得。预留用于后续高级制作和任务提交。","Source":"各区域首领战","SourceNode":"boss_1"},
+    {"Id":"quest_seal","Name":"探索徽记","WarehouseId":"special","Category":"任务凭证","Quality":2,"Icon":"material_01","Description":"完成区域主线任务的凭证，后续任务可校验或扣除。","Source":"区域主线任务"},
+    {"Id":"ancient_key","Name":"古老钥匙","WarehouseId":"special","Category":"钥匙","Quality":1,"Icon":"material_04","Description":"预留给特殊事件的钥匙，当前不可直接使用。","Source":"后续任务或事件"},
+    {"Id":"event_token","Name":"庆典代币","WarehouseId":"special","Category":"活动道具","Quality":2,"Icon":"weapon_coin","Description":"后续活动道具。当前不会自动过期或被清除。","Source":"后续活动奖励"}
+  ]
+}

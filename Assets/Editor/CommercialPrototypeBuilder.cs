@@ -13,6 +13,8 @@ namespace CardAutobattle.EditorTools
     {
         private const string RootFolder = "Assets/Resources/Commercial";
         private const string PrefabFolder = RootFolder + "/Prefabs";
+        private const string RuntimeBattleArtFolder = RootFolder + "/BattleUI";
+        private const string RuntimeBattleArtResource = "Commercial/BattleUI";
         private const string ScenePath = "Assets/Scenes/CommercialVerticalSlice.unity";
         private const float UiScale = 2f;
         private static readonly Vector2 ReferenceResolution = new(1080f, 1920f);
@@ -44,12 +46,16 @@ namespace CardAutobattle.EditorTools
             var battlePresentation = CreateBattlePresentation(root.transform, cardPrefab);
             PrefabUtility.SaveAsPrefabAsset(battlePresentation, $"{PrefabFolder}/PF_UI_BattlePresentation.prefab");
             var pages = new GameObject[6];
-            pages[0] = CreatePlaceholderPage(staticCanvas.transform, "Page_Gacha", "抽奖商城", "卡包、每日商店与付费入口", "今日免费抽取  1 / 1");
+            pages[0] = CreatePlaceholderPage(staticCanvas.transform, "Page_Backpack", "背包", "物品、装备、材料与特殊仓库", "探索奖励自动入库");
             pages[1] = CreateFormationPage(staticCanvas.transform);
             pages[2] = CreatePlaceholderPage(staticCanvas.transform, "Page_City", "主城", "任务、活动与装备打造的外围玩法中心", "铁匠铺  ·  委托所  ·  营地");
             pages[3] = CreateExplorePage(staticCanvas.transform);
             pages[4] = CreateEquipmentPage(staticCanvas.transform);
             pages[5] = CreatePlaceholderPage(staticCanvas.transform, "Page_Activities", "活动", "常驻活动与限时玩法入口", "七日远征  ·  首领挑战  ·  赛季目标");
+
+            var professionPage = CreateProfessionPage(staticCanvas.transform);
+            PrefabUtility.SaveAsPrefabAsset(professionPage, $"{PrefabFolder}/PF_Screen_Profession.prefab");
+            professionPage.SetActive(false);
 
             for (var i = 0; i < pages.Length; i++)
             {
@@ -66,7 +72,12 @@ namespace CardAutobattle.EditorTools
             PrefabUtility.SaveAsPrefabAsset(popup, $"{PrefabFolder}/PF_Popup_CardDetail.prefab");
             popup.SetActive(false);
 
-            PrefabUtility.SaveAsPrefabAsset(root, $"{PrefabFolder}/PF_CommercialGameRoot.prefab");
+            CommercialWorldMapBuilder.Install(root);
+            CommercialEquipmentBuilder.Install(root);
+            CommercialInventoryBuilder.Install(root);
+            CommercialWorldMapBuilder.SavePrefabs(root);
+            CommercialEquipmentBuilder.SavePrefabs(root);
+            CommercialInventoryBuilder.SavePrefabs(root);
             EditorSceneManager.SaveScene(scene, ScenePath);
             AddSceneToBuildSettings(ScenePath);
             AssetDatabase.SaveAssets();
@@ -77,32 +88,74 @@ namespace CardAutobattle.EditorTools
 
         private static GameObject CreateBattleCardPrefab()
         {
+            EnsureBattleArtAssets();
             var root = CreateRect(null, "PF_Card_Battle", new Vector2(144f, 92f));
             var surface = root.AddComponent<Image>();
-            surface.color = new Color(.08f, .25f, .32f, 1f);
+            surface.color = Color.white;
+            surface.sprite = LoadBattleArtSprite("battle_card_art_summon_skull_544x336");
+            surface.type = Image.Type.Simple;
             surface.raycastTarget = true;
             var button = root.AddComponent<Button>();
             button.targetGraphic = surface;
             root.AddComponent<CommercialBattleCardView>();
 
-            var cooldown = AddFullImage(root.transform, "CooldownFill", new Color(.22f, .92f, 1f, .18f), false);
+            // CooldownFill is only the unrevealed-area mask. At 50% black it makes
+            // the unswept region exactly half as bright while leaving revealed art untouched.
+            var cooldown = AddFullImage(root.transform, "CooldownFill", new Color(0f, 0f, 0f, .5f), false);
             cooldown.type = Image.Type.Filled;
             cooldown.sprite = FilledSprite();
             cooldown.fillMethod = Image.FillMethod.Vertical;
-            cooldown.fillOrigin = 0;
+            cooldown.fillOrigin = (int)Image.OriginVertical.Top;
             cooldown.fillAmount = .52f;
             var sweep = AddFullImage(root.transform, "CooldownSweep", new Color(.55f, 1f, 1f, .58f), false);
 
             var accent = AddPanel(root.transform, "Accent", Cyan, new Vector2(.02f, .78f), new Vector2(.98f, .82f));
             accent.GetComponent<Image>().raycastTarget = false;
-            AddText(root.transform, "Name", "卡牌", 17, Color.white, TextAnchor.MiddleLeft,
+            var name = AddText(root.transform, "Name", "卡牌", 17, Color.white, TextAnchor.MiddleLeft,
                 new Vector2(.08f, .42f), new Vector2(.95f, .84f), FontStyle.Bold);
-            AddText(root.transform, "Meta", "3.0s · 主动", 12, Muted, TextAnchor.MiddleLeft,
+            name.gameObject.SetActive(false);
+            var meta = AddText(root.transform, "Meta", "3.0s · 主动", 12, Muted, TextAnchor.MiddleLeft,
                 new Vector2(.08f, .12f), new Vector2(.95f, .43f));
+            meta.gameObject.SetActive(false);
+
+            var status = AddPanel(root.transform, "StatusGroup", new Color(.018f, .027f, .032f, .96f),
+                new Vector2(.05f, .035f), new Vector2(.95f, .235f));
+            var statusImage = status.GetComponent<Image>();
+            statusImage.sprite = LoadBattleArtSprite("battle_card_status_base_520x62");
+            statusImage.color = Color.white;
+            statusImage.type = Image.Type.Simple;
+            statusImage.raycastTarget = false;
+            var statusFill = AddFullImage(status.transform, "StatusFill", new Color(.23f, .70f, .68f, .95f), false);
+            statusFill.type = Image.Type.Filled;
+            statusFill.sprite = FilledSprite();
+            statusFill.fillMethod = Image.FillMethod.Horizontal;
+            statusFill.fillAmount = .5f;
+            AddText(status.transform, "StatusText", "CD 3.0s", 10, Color.white, TextAnchor.MiddleRight,
+                Vector2.zero, Vector2.one, FontStyle.Bold);
+
+            var tagBadge = AddFullImage(root.transform, "TagBadge", Color.white, false);
+            tagBadge.sprite = LoadBattleArtSprite("battle_card_tag_badge_196x76");
+            tagBadge.rectTransform.anchorMin = new Vector2(.60f, .70f);
+            tagBadge.rectTransform.anchorMax = new Vector2(.98f, .98f);
+            tagBadge.rectTransform.offsetMin = tagBadge.rectTransform.offsetMax = Vector2.zero;
+            AddText(root.transform, "TagText", "召唤", 10, Color.white, TextAnchor.MiddleCenter,
+                new Vector2(.70f, .72f), new Vector2(.97f, .96f), FontStyle.Bold);
+            var powerBackdrop = AddPanel(root.transform, "PowerBackdrop", new Color(0f, 0f, 0f, .72f),
+                new Vector2(.035f, .70f), new Vector2(.56f, .98f));
+            powerBackdrop.GetComponent<Image>().raycastTarget = false;
+            AddText(root.transform, "PowerText", "伤 68", 20, Color.white, TextAnchor.MiddleCenter,
+                new Vector2(.055f, .71f), new Vector2(.54f, .98f), FontStyle.Bold);
+            var delta = AddText(root.transform, "PowerDeltaText", "15 → 18", 11,
+                new Color(.35f, 1f, .50f, 0f), TextAnchor.MiddleCenter,
+                new Vector2(.04f, .58f), new Vector2(.58f, .76f), FontStyle.Bold);
+            delta.gameObject.SetActive(false);
 
             var health = AddPanel(root.transform, "HealthGroup", new Color(.018f, .027f, .032f, .96f),
                 new Vector2(.05f, .035f), new Vector2(.95f, .235f));
             var healthBg = health.GetComponent<Image>();
+            healthBg.sprite = LoadBattleArtSprite("battle_card_status_base_520x62");
+            healthBg.color = Color.white;
+            healthBg.type = Image.Type.Simple;
             healthBg.raycastTarget = false;
             var lag = AddFullImage(health.transform, "HealthLagFill", new Color(.95f, .20f, .13f, .78f), false);
             lag.type = Image.Type.Simple;
@@ -118,6 +171,11 @@ namespace CardAutobattle.EditorTools
             shieldRect.offsetMin = shieldRect.offsetMax = Vector2.zero;
             AddText(health.transform, "HealthText", "HP 100/100", 11, Color.white, TextAnchor.MiddleCenter,
                 Vector2.zero, Vector2.one, FontStyle.Bold);
+
+            var frame = AddFullImage(root.transform, "Frame", Color.white, false);
+            frame.sprite = LoadBattleArtSprite("battle_card_frame_common_576x368");
+            frame.type = Image.Type.Simple;
+            frame.transform.SetAsLastSibling();
 
             PrefabUtility.SaveAsPrefabAsset(root, $"{PrefabFolder}/PF_Card_Battle.prefab");
             Object.DestroyImmediate(root);
@@ -302,7 +360,7 @@ namespace CardAutobattle.EditorTools
         {
             var root = AddPanel(parent, "BottomNavigation", new Color(.025f, .045f, .055f, 1f),
                 Vector2.zero, new Vector2(1f, .092f));
-            var labels = new[] { "抽奖", "卡组", "主城", "探索", "装备", "活动" };
+            var labels = new[] { "背包", "卡组", "主城", "探索", "装备", "活动" };
             var icons = new[] { "◇", "▤", "⌂", "✧", "⬡", "▦" };
             for (var i = 0; i < 6; i++)
             {
@@ -339,13 +397,115 @@ namespace CardAutobattle.EditorTools
         {
             var bar = AddPanel(parent, "TopBar", new Color(.02f, .04f, .05f, 1f),
                 new Vector2(0f, .918f), Vector2.one);
-            AddText(bar.transform, "Brand", "▲  森境远征", 18, Color.white, TextAnchor.MiddleLeft,
-                new Vector2(.035f, .18f), new Vector2(.30f, .91f), FontStyle.Bold);
-            AddText(bar.transform, "PlayerLevel", "Lv.1  EXP 0/65", 11, Muted, TextAnchor.LowerLeft,
-                new Vector2(.07f, .04f), new Vector2(.35f, .35f));
-            AddResource(bar.transform, "ResourceEnergy", "◆", "128", .40f, Cyan);
-            AddResource(bar.transform, "ResourceGold", "●", "500", .61f, Gold);
-            AddResource(bar.transform, "ResourcePremium", "♦", "3690", .79f, new Color(1f, .35f, .52f));
+            var profession = AddButton(bar.transform, "TopProfessionButton", string.Empty,
+                new Color(.055f, .075f, .075f, 1f), new Vector2(.018f, .10f), new Vector2(.405f, .92f));
+            AddText(profession.transform, "TopProfessionAvatar", "⚔", 27, Gold, TextAnchor.MiddleCenter,
+                new Vector2(.015f, .08f), new Vector2(.235f, .92f), FontStyle.Bold);
+            AddText(profession.transform, "TopProfessionName", "战士 · 铁誓", 14, Color.white,
+                TextAnchor.MiddleLeft, new Vector2(.24f, .45f), new Vector2(.76f, .92f), FontStyle.Bold);
+            AddText(profession.transform, "TopProfessionLevel", "Lv.1", 11, Muted,
+                TextAnchor.MiddleRight, new Vector2(.75f, .50f), new Vector2(.96f, .90f));
+            var expTrack = AddPanel(profession.transform, "TopProfessionExpTrack", new Color(.08f, .08f, .075f, 1f),
+                new Vector2(.245f, .16f), new Vector2(.955f, .40f));
+            var expFill = AddFullImage(expTrack.transform, "TopProfessionExpFill", Gold, false);
+            expFill.rectTransform.anchorMax = new Vector2(.35f, 1f);
+            AddText(expTrack.transform, "TopProfessionExpText", "EXP 0/65", 8, Color.white,
+                TextAnchor.MiddleCenter, Vector2.zero, Vector2.one, FontStyle.Bold);
+            AddResource(bar.transform, "ResourceEnergy", "◆", "128", .44f, Cyan);
+            AddResource(bar.transform, "ResourceGold", "●", "500", .63f, Gold);
+            AddResource(bar.transform, "ResourcePremium", "♦", "3690", .81f, new Color(1f, .35f, .52f));
+        }
+
+        private static GameObject CreateProfessionPage(Transform parent)
+        {
+            var page = CreatePage(parent, "Page_Profession");
+            AddFullImage(page.transform, "ProfessionBackdrop", new Color(.012f, .018f, .018f, .99f), true);
+            AddText(page.transform, "ProfessionPageTitle", "职业 · 属性 · 加点", 25, Color.white,
+                TextAnchor.MiddleLeft, new Vector2(.055f, .925f), new Vector2(.68f, .99f), FontStyle.Bold);
+            AddButton(page.transform, "CloseProfessionPanel", "返回", new Color(.14f, .10f, .075f, 1f),
+                new Vector2(.80f, .935f), new Vector2(.945f, .985f));
+
+            var loop = AddPanel(page.transform, "ProfessionLoopOverview", new Color(.055f, .052f, .044f, 1f),
+                new Vector2(.05f, .84f), new Vector2(.95f, .915f));
+            AddText(loop.transform, "ProfessionLoopText", "当前职业进入战斗 → 普攻/卡牌触发职业资源 → 满层强化下一次对应行动",
+                12, new Color(.88f, .80f, .63f), TextAnchor.MiddleCenter, new Vector2(.03f, .10f), new Vector2(.97f, .90f));
+
+            var professionPanel = AddPanel(page.transform, "ProfessionSelection", new Color(.035f, .035f, .031f, .98f),
+                new Vector2(.05f, .625f), new Vector2(.95f, .825f));
+            var professionNames = new[] { "战士\n铁誓\n普攻积累怒气", "游侠\n逐风\n投射物积累精准", "法师\n秘仪\n魔法积累共鸣" };
+            var professionColors = new[]
+            {
+                new Color(.34f, .12f, .09f, 1f), new Color(.08f, .25f, .18f, 1f), new Color(.08f, .16f, .30f, 1f)
+            };
+            var professionIds = new[] { "Warrior", "Ranger", "Mage" };
+            for (var i = 0; i < 3; i++)
+            {
+                var button = AddButton(professionPanel.transform, $"ProfessionButton_{professionIds[i]}",
+                    professionNames[i], professionColors[i], GridMin(i, 0, 3, 1, .018f), GridMax(i, 0, 3, 1, .018f));
+                button.GetComponentInChildren<Text>().fontSize = ScaleFont(12);
+            }
+
+            var attributes = AddPanel(page.transform, "ProfessionAttributesPanel", new Color(.035f, .043f, .041f, 1f),
+                new Vector2(.05f, .345f), new Vector2(.535f, .605f));
+            AddText(attributes.transform, "AttributePanelTitle", "基础属性",
+                17, Gold, TextAnchor.MiddleLeft, new Vector2(.06f, .84f), new Vector2(.55f, .98f), FontStyle.Bold);
+            AddText(attributes.transform, "AvailableAttributePoints", "可用点数 6",
+                12, Muted, TextAnchor.MiddleRight, new Vector2(.48f, .84f), new Vector2(.94f, .98f));
+            var attrNames = new[] { "力量", "敏捷", "智力", "体质" };
+            var attrIds = new[] { "Strength", "Dexterity", "Intelligence", "Vitality" };
+            for (var i = 0; i < 4; i++)
+            {
+                var yMax = .80f - i * .19f;
+                var yMin = yMax - .15f;
+                AddText(attributes.transform, $"AttributeName_{attrIds[i]}", attrNames[i], 14, Color.white,
+                    TextAnchor.MiddleLeft, new Vector2(.07f, yMin), new Vector2(.42f, yMax), FontStyle.Bold);
+                AddText(attributes.transform, $"AttributeValue_{attrIds[i]}", "10", 17, Gold,
+                    TextAnchor.MiddleCenter, new Vector2(.45f, yMin), new Vector2(.72f, yMax), FontStyle.Bold);
+                AddButton(attributes.transform, $"AddAttribute_{attrIds[i]}", "+", new Color(.26f, .18f, .07f, 1f),
+                    new Vector2(.79f, yMin), new Vector2(.93f, yMax));
+            }
+
+            var derived = AddPanel(page.transform, "ProfessionDerivedPanel", new Color(.035f, .043f, .041f, 1f),
+                new Vector2(.555f, .345f), new Vector2(.95f, .605f));
+            AddText(derived.transform, "DerivedPanelTitle", "战斗属性",
+                17, Gold, TextAnchor.MiddleLeft, new Vector2(.07f, .84f), new Vector2(.93f, .98f), FontStyle.Bold);
+            var derivedIds = new[] { "AP", "HP", "Armor", "Crit", "AttackInterval", "Power" };
+            var derivedNames = new[] { "能力强度", "最大生命", "护甲", "暴击率", "普攻间隔", "综合战力" };
+            for (var i = 0; i < derivedIds.Length; i++)
+            {
+                var col = i % 2;
+                var row = i / 2;
+                var min = GridMin(col, row, 2, 3, .028f);
+                var max = GridMax(col, row, 2, 3, .028f);
+                var cell = AddPanel(derived.transform, $"DerivedCell_{derivedIds[i]}", new Color(.06f, .065f, .055f, 1f), min, max);
+                AddText(cell.transform, $"DerivedName_{derivedIds[i]}", derivedNames[i], 10, Muted,
+                    TextAnchor.MiddleCenter, new Vector2(.03f, .52f), new Vector2(.97f, .94f));
+                AddText(cell.transform, $"ProfessionDerived{derivedIds[i]}", "0", 16, Color.white,
+                    TextAnchor.MiddleCenter, new Vector2(.03f, .05f), new Vector2(.97f, .58f), FontStyle.Bold);
+            }
+
+            var mechanism = AddPanel(page.transform, "ProfessionMechanismPanel", new Color(.045f, .038f, .032f, 1f),
+                new Vector2(.05f, .105f), new Vector2(.95f, .325f));
+            AddText(mechanism.transform, "ProfessionPreviewName", "战士 · 铁誓", 20, Gold,
+                TextAnchor.MiddleLeft, new Vector2(.05f, .73f), new Vector2(.50f, .95f), FontStyle.Bold);
+            AddText(mechanism.transform, "ProfessionResourceName", "职业资源：怒气", 13, Color.white,
+                TextAnchor.MiddleLeft, new Vector2(.05f, .52f), new Vector2(.52f, .73f), FontStyle.Bold);
+            var resourceTrack = AddPanel(mechanism.transform, "ProfessionResourceTrack", new Color(.09f, .075f, .06f, 1f),
+                new Vector2(.53f, .57f), new Vector2(.95f, .70f));
+            var resourceFill = AddFullImage(resourceTrack.transform, "ProfessionResourceProgress", Gold, false);
+            resourceFill.rectTransform.anchorMax = new Vector2(.6f, 1f);
+            AddText(resourceTrack.transform, "ProfessionResourceProgressText", "0 / 10", 10, Color.white,
+                TextAnchor.MiddleCenter, Vector2.zero, Vector2.one, FontStyle.Bold);
+            AddText(mechanism.transform, "ProfessionTriggerDescription", "主角普通攻击命中获得 2 怒气", 12, Muted,
+                TextAnchor.MiddleLeft, new Vector2(.05f, .29f), new Vector2(.95f, .51f));
+            AddText(mechanism.transform, "ProfessionReadyDescription", "满层：下一次普通攻击伤害 ×1.6", 13,
+                new Color(.95f, .74f, .30f), TextAnchor.MiddleLeft, new Vector2(.05f, .07f), new Vector2(.95f, .31f), FontStyle.Bold);
+
+            AddText(page.transform, "ProfessionEffectHint", "职业、加点与装备在下一场战斗创建快照时生效，不修改正在进行的战斗。",
+                11, Muted, TextAnchor.MiddleLeft, new Vector2(.055f, .065f), new Vector2(.66f, .10f));
+            AddButton(page.transform, "ProfessionSwitchButton", "设为当前职业", new Color(.42f, .30f, .09f, 1f),
+                new Vector2(.69f, .045f), new Vector2(.95f, .098f));
+            return page;
         }
 
         private static void AddResource(Transform parent, string name, string icon, string value, float x, Color color)
@@ -586,13 +746,59 @@ namespace CardAutobattle.EditorTools
 
         private static string PageAssetName(int index) => index switch
         {
-            0 => "Gacha",
+            0 => "Backpack",
             1 => "Formation",
             2 => "City",
             3 => "Explore",
             4 => "Equipment",
             _ => "Activities"
         };
+
+        private static void EnsureBattleArtAssets()
+        {
+            EnsureFolder(RootFolder, "BattleUI");
+            var sourceFolder = "Assets/Art/BattleUI/Cutouts";
+            var names = new[]
+            {
+                "battle_card_frame_common_576x368",
+                "battle_card_tag_badge_196x76",
+                "battle_card_status_base_520x62",
+                "battle_card_status_hp_fill_300x34",
+                "battle_card_status_charge_fill_300x34",
+                "battle_card_art_summon_skull_544x336",
+                "battle_card_art_defense_shield_544x336",
+                "battle_card_art_sword_relic_544x336",
+                "battle_card_art_thunder_cannon_544x336",
+                "battle_card_art_gun_rifle_544x336",
+                "battle_card_art_hero_swordsman_544x336"
+            };
+            foreach (var name in names)
+            {
+                var source = $"{sourceFolder}/{name}.png";
+                var destination = $"{RuntimeBattleArtFolder}/{name}.png";
+                if (!File.Exists(Path.GetFullPath(source))) continue;
+                if (AssetDatabase.LoadAssetAtPath<Texture2D>(destination) == null)
+                    AssetDatabase.CopyAsset(source, destination);
+                ConfigureBattleSprite(destination);
+            }
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+        }
+
+        private static void ConfigureBattleSprite(string assetPath)
+        {
+            var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (!importer) return;
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.mipmapEnabled = false;
+            importer.filterMode = FilterMode.Bilinear;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.spritePixelsPerUnit = 100f;
+            importer.SaveAndReimport();
+        }
+
+        private static Sprite LoadBattleArtSprite(string name) =>
+            AssetDatabase.LoadAssetAtPath<Sprite>($"{RuntimeBattleArtFolder}/{name}.png");
 
         private static void EnsureFolder(string parent, string child)
         {
