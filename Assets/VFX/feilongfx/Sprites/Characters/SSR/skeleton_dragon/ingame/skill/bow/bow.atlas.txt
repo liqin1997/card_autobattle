@@ -1,0 +1,13 @@
+bow.png
+size:1024,1024
+filter:Linear,Linear
+pma:true
+scale:0.8
+arrow01
+bounds:198,125,60,598
+offsets:0,3,63,602
+bow01
+bounds:2,2,194,721
+offsets:0,26,194,747
+line01
+bounds:260,117,13,606

@@ -1,0 +1,557 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2061118857266811603
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1502677281631121102}
+  - component: {fileID: 221428294733530181}
+  m_Layer: 0
+  m_Name: Eff_Boss_Octopus_Italian_Smoke_sixshot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1502677281631121102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061118857266811603}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1307548471174384589}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &221428294733530181
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2061118857266811603}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 898aa540aa79144419c9fe0300bdb810, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &4244561880381645811
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1307548471174384589}
+  - component: {fileID: 7200943622113229299}
+  m_Layer: 0
+  m_Name: ScaleRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1307548471174384589
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244561880381645811}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3742994250737828876}
+  - {fileID: 372142585839470455}
+  - {fileID: 4448869674641107474}
+  - {fileID: 5708939852882884313}
+  - {fileID: 3199026326562847584}
+  - {fileID: 5279314478143046334}
+  m_Father: {fileID: 1502677281631121102}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7200943622113229299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4244561880381645811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2dc0195e665a47b184aa220e99714cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  audioname: CannonOctopus_frogshoot
+  delay: 0
+  randlist: []
+  StopWhenDisable: 0
+--- !u!1001 &1883607632731766383
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1307548471174384589}
+    m_Modifications:
+    - target: {fileID: 1133258344255111908, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Boss_Octopus_Italian_Smoke_smallshot06
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f60d76a47ebcd442807578b5a8ebe9f, type: 3}
+--- !u!4 &5279314478143046334 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1883607632731766383}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2043003856901392904
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1307548471174384589}
+    m_Modifications:
+    - target: {fileID: 1133258344255111908, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Boss_Octopus_Italian_Smoke_smallshot04
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.21643949
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.976296
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 205
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f60d76a47ebcd442807578b5a8ebe9f, type: 3}
+--- !u!4 &5708939852882884313 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2043003856901392904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6217802128496933798
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1307548471174384589}
+    m_Modifications:
+    - target: {fileID: 1133258344255111908, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Boss_Octopus_Italian_Smoke_smallshot02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9659259
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.258819
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -30
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f60d76a47ebcd442807578b5a8ebe9f, type: 3}
+--- !u!4 &372142585839470455 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6217802128496933798}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6958561508501829853
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1307548471174384589}
+    m_Modifications:
+    - target: {fileID: 1133258344255111908, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Boss_Octopus_Italian_Smoke_smallshot01
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.953717
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.30070576
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 35
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f60d76a47ebcd442807578b5a8ebe9f, type: 3}
+--- !u!4 &3742994250737828876 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 6958561508501829853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7988682908804470467
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1307548471174384589}
+    m_Modifications:
+    - target: {fileID: 1133258344255111908, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Boss_Octopus_Italian_Smoke_smallshot03
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f60d76a47ebcd442807578b5a8ebe9f, type: 3}
+--- !u!4 &4448869674641107474 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7988682908804470467}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &9152782139838515121
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1307548471174384589}
+    m_Modifications:
+    - target: {fileID: 1133258344255111908, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Boss_Octopus_Italian_Smoke_smallshot05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.30070576
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.953717
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -215
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9f60d76a47ebcd442807578b5a8ebe9f, type: 3}
+--- !u!4 &3199026326562847584 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6007819093426306257, guid: 9f60d76a47ebcd442807578b5a8ebe9f,
+    type: 3}
+  m_PrefabInstance: {fileID: 9152782139838515121}
+  m_PrefabAsset: {fileID: 0}

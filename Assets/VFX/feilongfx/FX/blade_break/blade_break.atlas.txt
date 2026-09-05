@@ -1,0 +1,52 @@
+blade_break.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+	scale: 0.95
+1
+	bounds: 1, 471, 299, 446
+	rotate: 90
+2
+	bounds: 282, 950, 61, 147
+	rotate: 90
+21
+	bounds: 121, 982, 29, 44
+	rotate: 90
+3
+	bounds: 430, 949, 62, 101
+	rotate: 90
+5
+	bounds: 532, 948, 63, 71
+	rotate: 90
+51
+	bounds: 166, 981, 30, 44
+	rotate: 90
+6
+	bounds: 604, 947, 64, 88
+	rotate: 90
+7
+	bounds: 693, 935, 76, 148
+	rotate: 90
+71
+	bounds: 36, 991, 20, 29
+	rotate: 90
+8
+	bounds: 1, 895, 81, 267
+	rotate: 90
+81
+	bounds: 66, 985, 26, 54
+	rotate: 90
+91
+	bounds: 242, 977, 34, 39
+	rotate: 90
+92
+	bounds: 1, 993, 18, 34
+	rotate: 90
+bg
+	bounds: 211, 981, 30, 30
+blade_ori
+	bounds: 1, 171, 299, 1010
+	rotate: 90
+line
+	bounds: 269, 771, 163, 570
+	rotate: 90

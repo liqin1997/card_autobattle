@@ -1,0 +1,36 @@
+Skathi_Arrow.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+	scale: 0.95
+arrow01
+	bounds: 1, 869, 727, 75
+bow01
+	bounds: 1, 734, 134, 917
+	rotate: 90
+line01
+	bounds: 1, 945, 29, 887
+	rotate: 90
+thunder_01
+	bounds: 488, 538, 195, 486
+	rotate: 90
+thunder_02
+	bounds: 1, 343, 195, 486
+	rotate: 90
+thunder_03
+	bounds: 1, 539, 194, 486
+	rotate: 90
+thunder_04
+	bounds: 488, 342, 195, 486
+	rotate: 90
+thunder_05
+	bounds: 1, 147, 195, 486
+	rotate: 90
+
+Skathi_Arrow_2.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+	scale: 0.95
+GLOW/GLOW
+	bounds: 1, 1, 146, 570

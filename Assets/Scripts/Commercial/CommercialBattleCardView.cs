@@ -76,7 +76,8 @@ namespace CardAutobattle.Commercial
             StopPrimaryValueAnimation();
             RestoreRestPosition();
             card = runtime;
-            combatant = runtime?.Summon;
+            // V2 cards are effect carriers only. Summon HP/state belongs to the arena disc.
+            combatant = null;
             GridIndex = gridIndex;
             clickAction = onClick;
             ApplyIdentity(runtime?.Definition?.DisplayName ?? "空位",
@@ -86,8 +87,8 @@ namespace CardAutobattle.Commercial
                 runtime?.Definition?.Type == CommercialCardType.Passive ? new Color(.35f, .27f, .12f, 1f) :
                 new Color(.08f, .25f, .32f, 1f));
             ApplyCardArtwork(runtime?.Definition, false, -1);
-            ConfigureHealth(combatant != null);
-            ConfigureStatus(combatant == null, runtime);
+            ConfigureHealth(false);
+            ConfigureStatus(true, runtime);
             ConfigureCooldown(runtime != null && runtime.Definition.Type != CommercialCardType.Passive);
             gameObject.SetActive(runtime != null);
             CacheRestPosition();

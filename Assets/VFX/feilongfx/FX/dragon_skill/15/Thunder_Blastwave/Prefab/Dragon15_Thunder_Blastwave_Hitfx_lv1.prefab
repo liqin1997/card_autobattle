@@ -1,0 +1,220 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5717292032775914114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4584094377081463886}
+  - component: {fileID: 6691999329514443169}
+  m_Layer: 0
+  m_Name: Dragon15_Thunder_Blastwave_Hitfx_lv1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4584094377081463886
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5717292032775914114}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7067120570045837514}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6691999329514443169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5717292032775914114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf261cdd6baab4ffba02e994ce9d9051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  parentDespawnAction: 1
+  despawnTime: 1
+  usePassiveDespawn: 1
+--- !u!1001 &6741480978788537476
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4584094377081463886}
+    m_Modifications:
+    - target: {fileID: 1287957545014641578, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287957545014641578, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime0
+      value: 9252
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287957545014641578, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime1
+      value: 22359
+      objectReference: {fileID: 0}
+    - target: {fileID: 2385781465307211464, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476670354653194933, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476670354653194933, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime0
+      value: 17348
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476670354653194933, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime1
+      value: 31611
+      objectReference: {fileID: 0}
+    - target: {fileID: 2476670354653194933, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime2
+      value: 53199
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5015181341365181995, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5327355204784600005, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5717292032775914114, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_Name
+      value: Dragon15_Thunder_Blastwave_Hitfx_Ori 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5762580203809159919, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7194496228181643566, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7194496228181643566, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7194496228181643566, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8683989739187293837, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8897527888953500353, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9049238774137632805, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9049238774137632805, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9120788045661151210, guid: a950fccca21ca5a4ab50ee9561c02938,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a950fccca21ca5a4ab50ee9561c02938, type: 3}
+--- !u!4 &7067120570045837514 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4584094377081463886, guid: a950fccca21ca5a4ab50ee9561c02938,
+    type: 3}
+  m_PrefabInstance: {fileID: 6741480978788537476}
+  m_PrefabAsset: {fileID: 0}

@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8079476420220544527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1194470382329373427}
+  - component: {fileID: -8528950058620255853}
+  - component: {fileID: -5774421950128035538}
+  - component: {fileID: 7445084523989603137}
+  m_Layer: 0
+  m_Name: Crucible_Explosion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1194470382329373427
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8079476420220544527}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1704498281627168763}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8528950058620255853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8079476420220544527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3cd01f78f0a04351973c59e43cb8fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  modifier: 1
+--- !u!114 &-5774421950128035538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8079476420220544527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf261cdd6baab4ffba02e994ce9d9051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  parentDespawnAction: 1
+  despawnTime: 0.9
+  usePassiveDespawn: 1
+--- !u!114 &7445084523989603137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8079476420220544527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2dc0195e665a47b184aa220e99714cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  audioname: 16_crucible_hit
+  delay: 0
+  randlist: []
+  StopWhenDisable: 0
+--- !u!1001 &8998176338442860554
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1194470382329373427}
+    m_Modifications:
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852911077419049497, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Dragon_potions_CrucibleHit
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05, type: 3}
+--- !u!4 &1704498281627168763 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7744055680475109361, guid: 8801a8e1e0f87fb4697d78bbaa5c7d05,
+    type: 3}
+  m_PrefabInstance: {fileID: 8998176338442860554}
+  m_PrefabAsset: {fileID: 0}

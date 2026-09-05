@@ -1,0 +1,28 @@
+SnowBallDragon_Gun.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+	scale: 0.8
+Light01
+	bounds: 915, 973, 49, 50
+body
+	bounds: 1, 510, 282, 513
+	offsets: 0, 54, 287, 606
+fire01
+	bounds: 283, 735, 259, 288
+fire02
+	bounds: 543, 753, 259, 270
+fire03
+	bounds: 543, 497, 255, 270
+	rotate: 90
+kaikou
+	bounds: 914, 737, 109, 116
+	offsets: 1, 1, 110, 117
+ribbon01
+	bounds: 280, 460, 274, 212
+	rotate: 90
+ribbon02
+	bounds: 803, 829, 138, 194
+yingxian
+	bounds: 814, 648, 122, 122
+	offsets: 1, 0, 123, 122

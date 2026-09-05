@@ -1,0 +1,175 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5717292032775914114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4584094377081463886}
+  - component: {fileID: 2481879007526814005}
+  m_Layer: 0
+  m_Name: Dragon15_Thunder_Blastwave_Lv2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4584094377081463886
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5717292032775914114}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3823507967398199123}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &2481879007526814005
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5717292032775914114}
+  m_Enabled: 0
+  m_SortingLayerID: 47421343
+  m_SortingLayer: 4
+  m_SortingOrder: -25
+--- !u!1001 &761721527131134749
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4584094377081463886}
+    m_Modifications:
+    - target: {fileID: 2956965999088327582, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: audioname
+      value: death_wave2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3681387165841400708, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0625
+      objectReference: {fileID: 0}
+    - target: {fileID: 3681387165841400708, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.82908
+      objectReference: {fileID: 0}
+    - target: {fileID: 3699764086113714804, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.6650944
+      objectReference: {fileID: 0}
+    - target: {fileID: 3699764086113714804, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.7956091
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4808307115295141376, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4808307115295141376, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5717292032775914114, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_Name
+      value: Dragon15_Thunder_Blastwave_Lv1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915450719579438760, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.ctime1
+      value: 27756
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915450719579438760, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.r
+      value: 0.62270975
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915450719579438760, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.g
+      value: 0.23921567
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915450719579438760, guid: f0d377f4a5a93bb49b669bf83da30002,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.r
+      value: 0.5541387
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f0d377f4a5a93bb49b669bf83da30002, type: 3}
+--- !u!4 &3823507967398199123 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4584094377081463886, guid: f0d377f4a5a93bb49b669bf83da30002,
+    type: 3}
+  m_PrefabInstance: {fileID: 761721527131134749}
+  m_PrefabAsset: {fileID: 0}

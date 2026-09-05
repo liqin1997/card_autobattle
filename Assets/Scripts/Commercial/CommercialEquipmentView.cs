@@ -27,7 +27,7 @@ namespace CardAutobattle.Commercial
         private Action confirmed;
         private static readonly Color Muted = new(.58f, .73f, .85f);
         private static readonly Color Accent = new(.30f, .83f, 1f);
-        private static readonly string[] EmptyIcons = { "bg_icon_helmet", "bg_icon_gloves", "bg_icon_clothes", "bg_icon_trousers", "bg_icon_shoes", "bg_icon_weapons" };
+        private static readonly string[] EmptyIcons = { "btn_img_helmet", "btn_img_wristbands", "btn_img_clothes", "btn_img_trousers", "btn_img_shoes", "btn_img_weapons" };
 
         private Transform W(string name) => widgets.TryGetValue(name, out var value) ? value : null;
         private Text T(string name) => W(name)?.GetComponent<Text>();
@@ -37,7 +37,12 @@ namespace CardAutobattle.Commercial
         private void Active(string name, bool active) { var w = W(name); if (w) w.gameObject.SetActive(active); }
         private Sprite Art(string name)
         {
-            if (!sprites.TryGetValue(name, out var value)) sprites[name] = value = Resources.Load<Sprite>("Commercial/Equipment/Art/" + name);
+            if (!sprites.TryGetValue(name, out var value))
+            {
+                value = Resources.Load<Sprite>("Commercial/FeilongUI/Equipment/" + name);
+                if (!value) value = Resources.Load<Sprite>("Commercial/Equipment/Art/" + name);
+                sprites[name] = value;
+            }
             return value;
         }
         public Sprite IconFor(EquipmentItem item) => item == null ? null : Art(CommercialEquipmentCatalog.IconKey(item));
@@ -49,6 +54,7 @@ namespace CardAutobattle.Commercial
             controller = GetComponent<CommercialPrototypeController>();
             foreach (var root in new[] { RootUI, ModalRoot })
                 foreach (var child in root.GetComponentsInChildren<Transform>(true)) widgets.TryAdd(child.name, child);
+            CommercialFeilongEquipmentSkin.Apply(this);
             bound = true;
             for (var i = 0; i < Slots.Length; i++)
             {
@@ -224,6 +230,7 @@ namespace CardAutobattle.Commercial
             var set = CommercialEquipmentCatalog.Set(item.SetId);
             Label("EQ_DetailSet", set == null ? "无套装归属\n旧版装备完整保留原属性，不自动洗成新词条。" : SetDescription(set, false));
             ButtonLabel("EQ_Equip", worn ? "卸下装备" : "穿戴装备"); ButtonLabel("EQ_Lock", item.Locked ? "解除锁定" : "锁定装备");
+            CommercialFeilongEquipmentSkin.SetButtonIcon(W("EQ_Lock"), Art(item.Locked ? "btn_unlock" : "btn_locked"));
             B("EQ_Equip").interactable = worn || item.RequiredLevel <= State.PlayerLevel;
             B("EQ_Salvage").interactable = CommercialEquipmentService.ProtectedReason(State, item) == null;
             B("EQ_Reforge").interactable = item.Affixes.Count > 0 && State.Equipment.PendingRoll == null;

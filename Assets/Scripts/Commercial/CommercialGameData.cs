@@ -203,6 +203,14 @@ namespace CardAutobattle.Commercial
     }
 
     [Serializable]
+    public sealed class CommercialCardProgress
+    {
+        public string CardId;
+        public int Level = 1;
+        public int Copies;
+    }
+
+    [Serializable]
     public sealed class CommercialGameState
     {
         public const string HeroCardId = "hero";
@@ -214,8 +222,11 @@ namespace CardAutobattle.Commercial
         public int Gold = 500;
         public int Gems = 128;
         public int PremiumCurrency = 3690;
+        public int GachaPity;
+        public int GachaSequence;
         public int MainQuestTargetStage = 5;
         public List<string> OwnedCardIds = new();
+        public List<CommercialCardProgress> CardProgress = new();
         public CommercialFormation DraftFormation = new();
         public List<EquipmentItem> Inventory = new();
         public List<EquippedItemEntry> Equipped = new();
@@ -234,11 +245,13 @@ namespace CardAutobattle.Commercial
             state.OwnedCardIds.AddRange(CommercialCardCatalog.All.Select(card => card.Id));
             state.DraftFormation.Slots[0] = "stone_guard";
             state.DraftFormation.Slots[1] = "oak_shield";
+            state.DraftFormation.Slots[2] = "longbow";
             state.DraftFormation.Slots[3] = "iron_blade";
-            state.DraftFormation.Slots[4] = HeroCardId;
+            state.DraftFormation.Slots[4] = "arc_battery";
             state.DraftFormation.Slots[5] = "frost_wolf";
-            state.DraftFormation.Slots[7] = "healing_potion";
-            state.DraftFormation.Slots[8] = "battle_banner";
+            state.DraftFormation.Slots[6] = "healing_potion";
+            state.DraftFormation.Slots[7] = "battle_banner";
+            state.DraftFormation.Slots[8] = "blood_fang";
             state.EnsureCharacterData();
             CommercialEquipmentService.Migrate(state);
             CommercialInventoryService.Migrate(state);
@@ -254,8 +267,52 @@ namespace CardAutobattle.Commercial
             Storage.Ensure();
             World ??= new CommercialWorldProgress();
             World.Ensure();
-            SaveVersion = Mathf.Max(3, SaveVersion);
+            CardProgress ??= new List<CommercialCardProgress>();
+            OwnedCardIds ??= new List<string>();
+            DraftFormation ??= new CommercialFormation();
+            if (DraftFormation.Slots == null || DraftFormation.Slots.Length != 9)
+                DraftFormation.Slots = new string[9];
+            // V2: the hero is an arena carrier and never consumes one of the nine card slots.
+            for (var i = 0; i < DraftFormation.Slots.Length; i++)
+                if (DraftFormation.Slots[i] == HeroCardId) DraftFormation.Slots[i] = null;
+            var deployed = new HashSet<string>(DraftFormation.Slots.Where(id => !string.IsNullOrEmpty(id)));
+            var fallbackCards = CommercialCardCatalog.All.Where(card => OwnedCardIds.Contains(card.Id) && !deployed.Contains(card.Id)).ToList();
+            for (var i = 0; i < DraftFormation.Slots.Length && fallbackCards.Count > 0; i++)
+            {
+                if (!string.IsNullOrEmpty(DraftFormation.Slots[i])) continue;
+                DraftFormation.Slots[i] = fallbackCards[0].Id;
+                deployed.Add(fallbackCards[0].Id);
+                fallbackCards.RemoveAt(0);
+            }
+            foreach (var id in OwnedCardIds.Where(id => !string.IsNullOrEmpty(id)).Distinct().ToArray())
+                if (CardProgress.All(entry => entry.CardId != id))
+                    CardProgress.Add(new CommercialCardProgress { CardId = id, Level = 1 });
+            foreach (var entry in CardProgress)
+            {
+                entry.Level = Mathf.Max(1, entry.Level);
+                entry.Copies = Mathf.Max(0, entry.Copies);
+                if (!OwnedCardIds.Contains(entry.CardId)) OwnedCardIds.Add(entry.CardId);
+            }
+            SaveVersion = Mathf.Max(4, SaveVersion);
         }
+
+        public CommercialCardProgress GetCardProgress(string cardId)
+        {
+            EnsureCharacterData();
+            var progress = CardProgress.FirstOrDefault(entry => entry.CardId == cardId);
+            if (progress != null) return progress;
+            progress = new CommercialCardProgress { CardId = cardId, Level = 1 };
+            CardProgress.Add(progress);
+            return progress;
+        }
+
+        public int CardLevel(string cardId)
+        {
+            if (string.IsNullOrEmpty(cardId) || CardProgress == null) return 1;
+            var progress = CardProgress.FirstOrDefault(entry => entry.CardId == cardId);
+            return Mathf.Max(1, progress?.Level ?? 1);
+        }
+        public float CardLevelMultiplier(string cardId) => 1f + .10f * Mathf.Max(0, CardLevel(cardId) - 1);
 
         public int TotalAttributePoints => 6 + Mathf.Max(0, PlayerLevel - 1) * 2;
         public int AvailableAttributePoints

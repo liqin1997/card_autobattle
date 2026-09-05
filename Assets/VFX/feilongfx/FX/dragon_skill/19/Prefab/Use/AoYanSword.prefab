@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5145739954508882028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2948209770163021833}
+  - component: {fileID: 7222202134196153464}
+  m_Layer: 0
+  m_Name: AoYanSword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2948209770163021833
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5145739954508882028}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1693348557378381715}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7222202134196153464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5145739954508882028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b251366b922e54d0d9a6010b75fb030e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  parentDespawnAction: 1
+  colliderInfos:
+  - colliderType: 1
+    offset:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: -1589137920
+    size:
+      x:
+        _serializedValue: 2619930112
+      y:
+        _serializedValue: 8375186432
+    points: []
+    layer: 27
+  offset: {x: 0, y: 0, z: 0}
+  rot: {x: 0, y: 0, z: 0, w: 0}
+  scale: {x: 1, y: 1, z: 1}
+  animator: {fileID: 0}
+  skinAnimBoolPara: 
+  absorbScaleRoot: {fileID: 0}
+  hitFx: {fileID: 4903766661928967991, guid: e8c0e3d3b86db5e4da54132c85ed8477, type: 3}
+  hitFxAtHitPos: 0
+  critFx: {fileID: 0}
+  skinName: 
+  enableAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+  absorbAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+  updateAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+--- !u!1001 &2775391733132526826
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2948209770163021833}
+    m_Modifications:
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4107147274633032091, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+        type: 3}
+      propertyPath: m_Name
+      value: Dragon19_Sword
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1, type: 3}
+--- !u!4 &1693348557378381715 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3601709379522323321, guid: 5bebc4c52bed6cb4ba79fe9d92218ae1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2775391733132526826}
+  m_PrefabAsset: {fileID: 0}

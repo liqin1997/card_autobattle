@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Dragon17_IceWave06
+  m_Shader: {fileID: 4800000, guid: b4240d8e7da21b340b1f3bcb91829a47, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: d1476b56add5d7f4a807e6a4c1349663, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 1, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 2800000, guid: 3c2220205bf33b74e91fb46cd5858af1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample3:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample4:
+        m_Texture: {fileID: 2800000, guid: 6701bfb8e762cd54e96d8dc1a763d942, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample5:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ASEOutlineWidth: 0
+    - _Cutoff: 0.5
+    - _Float0: 0
+    - _Float1: 0.1
+    - _Float11: -0.57
+    - _Float12: 1.76
+    - _Float13: 1
+    - _Float2: 1
+    - _Float55: 0
+    - _Float7: 0.01
+    - __dirty: 0
+    - _dissolve: 3
+    - _dissolve1: 0
+    - _eage_scale: -0.24
+    - _inside_edge_power: 1.58
+    - _outline: 0
+    - _power: 0.23
+    - _tex_power: 2.6
+    - vertex01: 1
+    - vertex2: 1
+    m_Colors:
+    - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Color0: {r: 2.227451, g: 2.6352942, b: 2.9960785, a: 1}
+    - _Color1: {r: 1, g: 1, b: 1, a: 1}
+    - _Color2: {r: 0, g: 0.016898155, b: 1, a: 0}
+    - _Vector0: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector1: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector2: {r: 2, g: 2, b: 0, a: 0}
+    - _Vector3: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector4: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector5: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector6: {r: 1, g: 1, b: 0, a: 0}
+    - _Vector7: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector8: {r: 0, g: 0, b: 0, a: 0}
+    - _eage_color: {r: 1, g: 1, b: 1, a: 1}
+    - _eage_color1: {r: 0, g: 0, b: 0, a: 0}
+    - _flow_glow: {r: 0.6226415, g: 0.6226415, b: 0.6226415, a: 0}
+    - _inside_color: {r: 1, g: 1, b: 1, a: 1}
+    - _inside_power2: {r: 1, g: 1, b: 1, a: 0}
+    - _maincolor: {r: 0.75, g: 0.9964539, b: 1, a: 1}
+    - _noise_speed_and_time: {r: 0.2, g: 0.2, b: 1, a: 0}
+    - _scale_offset: {r: 1, g: 1, b: 0, a: 0}
+    - _scale_offset1: {r: 1, g: 0.57, b: 0, a: 0}
+    - _screen_color: {r: 1, g: 1, b: 1, a: 1}
+    - _smooth_step: {r: 3, g: 0, b: 0, a: 0}
+    - _speed_and_time: {r: 0.2, g: 0.2, b: 1, a: 0}
+    - _speed_and_time1: {r: 1, g: 1, b: 1, a: 0}

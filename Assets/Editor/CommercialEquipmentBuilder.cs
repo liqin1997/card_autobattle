@@ -16,6 +16,7 @@ namespace CardAutobattle.EditorTools
     public static class CommercialEquipmentBuilder
     {
         public const string ArtFolder = "Assets/Resources/Commercial/Equipment/Art";
+        public const string FeilongArtFolder = "Assets/Resources/Commercial/FeilongUI/Equipment";
         private const string Prefabs = "Assets/Resources/Commercial/Prefabs";
         private const string ReferenceProject = "C:/Users/LQ/Documents/Codex/2026-07-29/c-unityproject-lyzwlkjvip/outputs/feilong";
         private static Font font;
@@ -308,7 +309,9 @@ namespace CardAutobattle.EditorTools
             var colors = button.colors; colors.highlightedColor = new Color(.90f, .97f, 1); colors.pressedColor = new Color(.64f, .77f, .92f); colors.disabledColor = new Color(.36f, .43f, .50f); button.colors = colors;
             Label(rect, name + "_Label", label, size, Color.white, 8, 0, w - 16, h, TextAnchor.MiddleCenter); return button;
         }
-        private static Sprite Art(string name) => AssetDatabase.LoadAssetAtPath<Sprite>(ArtFolder + "/" + name + ".png");
+        private static Sprite Art(string name) =>
+            AssetDatabase.LoadAssetAtPath<Sprite>(FeilongArtFolder + "/" + name + ".png") ??
+            AssetDatabase.LoadAssetAtPath<Sprite>(ArtFolder + "/" + name + ".png");
         private static void EnsureFolder(string path)
         {
             if (AssetDatabase.IsValidFolder(path)) return; var parent = Path.GetDirectoryName(path).Replace('\\', '/'); EnsureFolder(parent); AssetDatabase.CreateFolder(parent, Path.GetFileName(path));

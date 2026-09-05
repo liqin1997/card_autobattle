@@ -1,0 +1,260 @@
+king_horn.png
+	size: 1024, 1024
+	filter: Linear, Linear
+	pma: true
+	scale: 0.6
+Crotch
+	bounds: 811, 802, 77, 44
+	rotate: 90
+Gourd01
+	bounds: 162, 485, 144, 134
+	rotate: 90
+Gourd02
+	bounds: 428, 452, 109, 100
+	rotate: 90
+Gourd03
+	bounds: 105, 341, 35, 41
+Gourd04
+	bounds: 250, 269, 16, 14
+	rotate: 90
+King_Silver_Horn_Belt
+	bounds: 271, 392, 63, 25
+	rotate: 90
+King_Silver_Horn_Shoulder armour01
+	bounds: 1, 254, 103, 128
+King_Silver_Horn_Shoulder armour01 拷贝
+	bounds: 1, 383, 140, 175
+King_Silver_Horn_Skirt armour01
+	bounds: 712, 393, 106, 65
+King_Silver_Horn_Skirt armour02
+	bounds: 271, 156, 92, 76
+King_Silver_Horn_Skirt armour03
+	bounds: 665, 562, 113, 83
+King_Silver_Horn_arm01
+	bounds: 822, 270, 56, 59
+King_Silver_Horn_arm011
+	bounds: 296, 353, 131, 37
+King_Silver_Horn_arm01_1
+	bounds: 712, 343, 49, 80
+	rotate: 90
+King_Silver_Horn_arm01_12
+	bounds: 132, 258, 79, 54
+King_Silver_Horn_arm01_2
+	bounds: 105, 257, 26, 83
+King_Silver_Horn_arm01_22
+	bounds: 949, 767, 47, 77
+King_Silver_Horn_arm01_3
+	bounds: 212, 259, 26, 37
+	rotate: 90
+King_Silver_Horn_arm01_finger01
+	bounds: 263, 15, 16, 44
+	rotate: 90
+King_Silver_Horn_arm01_finger02
+	bounds: 532, 723, 12, 38
+	rotate: 90
+King_Silver_Horn_arm01_finger03
+	bounds: 642, 398, 16, 37
+King_Silver_Horn_arm01_finger04
+	bounds: 333, 27, 23, 38
+King_Silver_Horn_arm02_1
+	bounds: 212, 286, 26, 56
+	rotate: 90
+King_Silver_Horn_armour02
+	bounds: 524, 343, 117, 92
+King_Silver_Horn_armour022
+	bounds: 529, 436, 115, 95
+	rotate: 90
+King_Silver_Horn_backfurry
+	bounds: 532, 879, 197, 144
+King_Silver_Horn_body01
+	bounds: 1, 159, 94, 94
+King_Silver_Horn_cape01
+	bounds: 1, 559, 160, 234
+King_Silver_Horn_cape02
+	bounds: 1, 794, 300, 229
+King_Silver_Horn_cape03
+	bounds: 534, 552, 130, 170
+King_Silver_Horn_corner01
+	bounds: 625, 436, 22, 37
+	rotate: 90
+King_Silver_Horn_corner02
+	bounds: 730, 880, 50, 126
+	rotate: 90
+King_Silver_Horn_corner03
+	bounds: 367, 234, 59, 118
+King_Silver_Horn_corner04
+	bounds: 200, 94, 61, 135
+	rotate: 90
+King_Silver_Horn_corner05
+	bounds: 682, 805, 73, 128
+	rotate: 90
+King_Silver_Horn_corner06
+	bounds: 96, 6, 73, 128
+King_Silver_Horn_corner07
+	bounds: 197, 32, 61, 135
+	rotate: 90
+King_Silver_Horn_earring01
+	bounds: 571, 725, 10, 19
+	rotate: 90
+King_Silver_Horn_earring02
+	bounds: 591, 725, 10, 17
+	rotate: 90
+King_Silver_Horn_eye01
+	bounds: 336, 126, 29, 26
+	rotate: 90
+King_Silver_Horn_eye01_decay
+	bounds: 336, 96, 29, 26
+	rotate: 90
+King_Silver_Horn_eye02
+	bounds: 142, 524, 19, 34
+King_Silver_Horn_eye02_decay
+	bounds: 142, 489, 19, 34
+King_Silver_Horn_eye04
+	bounds: 170, 100, 34, 26
+	rotate: 90
+King_Silver_Horn_eye05
+	bounds: 271, 349, 24, 42
+King_Silver_Horn_eye06
+	bounds: 634, 729, 6, 15
+	rotate: 90
+King_Silver_Horn_eye07
+	bounds: 620, 728, 13, 7
+King_Silver_Horn_eye08
+	bounds: 609, 727, 10, 8
+King_Silver_Horn_foot01
+	bounds: 170, 37, 27, 24
+	rotate: 90
+King_Silver_Horn_foot02
+	bounds: 642, 357, 14, 40
+King_Silver_Horn_hand01
+	bounds: 220, 11, 20, 42
+	rotate: 90
+King_Silver_Horn_hand02
+	bounds: 170, 4, 22, 32
+King_Silver_Horn_hand03
+	bounds: 193, 10, 21, 26
+	rotate: 90
+King_Silver_Horn_hand_1
+	bounds: 811, 750, 51, 42
+	rotate: 90
+King_Silver_Horn_hand_left01
+	bounds: 234, 456, 28, 62
+	rotate: 90
+King_Silver_Horn_head
+	bounds: 200, 156, 101, 70
+	rotate: 90
+King_Silver_Horn_leg01
+	bounds: 1, 1, 62, 68
+	rotate: 90
+King_Silver_Horn_leg02
+	bounds: 885, 454, 59, 71
+	rotate: 90
+King_Silver_Horn_leg03
+	bounds: 819, 330, 76, 77
+	rotate: 90
+King_Silver_Horn_leg04
+	bounds: 893, 718, 47, 114
+	rotate: 90
+King_golden_Horn_Skirt armour01
+	bounds: 893, 652, 106, 65
+King_golden_Horn_Skirt armour01_decay
+	bounds: 819, 407, 106, 65
+	rotate: 90
+King_golden_Horn_Skirt armour02
+	bounds: 857, 843, 92, 76
+	rotate: 90
+King_golden_Horn_Skirt armour02_decay
+	bounds: 856, 766, 92, 76
+King_golden_Horn_Skirt armour03
+	bounds: 416, 120, 113, 83
+	rotate: 90
+King_golden_Horn_Skirt armour03_decay
+	bounds: 573, 229, 113, 83
+	rotate: 90
+King_golden_Horn_armour02
+	bounds: 625, 459, 117, 92
+King_golden_Horn_armour022
+	bounds: 428, 336, 115, 95
+	rotate: 90
+King_golden_Horn_armour022_decay
+	bounds: 271, 233, 115, 95
+	rotate: 90
+King_golden_Horn_armour02_decay
+	bounds: 730, 931, 117, 92
+King_golden_Horn_body01
+	bounds: 1, 64, 94, 94
+King_golden_Horn_body01_decay
+	bounds: 142, 313, 140, 128
+	rotate: 90
+King_golden_Horn_body02_decay
+	bounds: 848, 936, 130, 87
+King_golden_Horn_body03_decay
+	bounds: 779, 596, 135, 49
+King_golden_Horn_cape01
+	bounds: 299, 562, 160, 234
+	rotate: 90
+King_golden_Horn_cape02
+	bounds: 302, 723, 300, 229
+	rotate: 90
+King_golden_Horn_cape03
+	bounds: 297, 391, 130, 170
+King_golden_Horn_corner01
+	bounds: 657, 241, 47, 164
+	rotate: 90
+King_golden_Horn_corner01_decay
+	bounds: 743, 514, 47, 164
+	rotate: 90
+King_golden_Horn_corner02
+	bounds: 162, 455, 29, 35
+	rotate: 90
+King_golden_Horn_corner02_decay
+	bounds: 198, 455, 29, 35
+	rotate: 90
+King_golden_Horn_corner03
+	bounds: 663, 289, 48, 169
+King_golden_Horn_corner03_evil
+	bounds: 524, 173, 48, 169
+King_golden_Horn_corner04
+	bounds: 367, 64, 48, 169
+King_golden_Horn_eye01
+	bounds: 336, 66, 29, 26
+	rotate: 90
+King_golden_Horn_eye02
+	bounds: 142, 454, 19, 34
+King_golden_Horn_eye04
+	bounds: 170, 65, 34, 26
+	rotate: 90
+King_golden_Horn_eye05
+	bounds: 70, 21, 24, 42
+King_golden_Horn_hair
+	bounds: 682, 736, 68, 128
+	rotate: 90
+King_golden_Horn_head
+	bounds: 427, 234, 101, 70
+	rotate: 90
+King_golden_Horn_head_decay
+	bounds: 791, 665, 101, 70
+bottle01
+	bounds: 908, 538, 79, 57
+bottle02
+	bounds: 105, 135, 121, 94
+	rotate: 90
+bottle02_tooth_decay
+	bounds: 162, 630, 163, 136
+	rotate: 90
+bottle03
+	bounds: 665, 646, 89, 125
+	rotate: 90
+bottle04
+	bounds: 532, 736, 149, 142
+bottle05
+	bounds: 934, 845, 90, 58
+	rotate: 90
+
+king_horn_2.png
+	size: 256, 256
+	filter: Linear, Linear
+	pma: true
+	scale: 0.6
+glow/light_fx
+	bounds: 1, 1, 154, 154

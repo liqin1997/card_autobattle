@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1442259326884616870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7587618370148034746}
+  - component: {fileID: 5830260334301287892}
+  - component: {fileID: -4168844589382965511}
+  - component: {fileID: 3445911348377744170}
+  m_Layer: 0
+  m_Name: PlusSnowBallExplosion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7587618370148034746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442259326884616870}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8722316290951966073}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5830260334301287892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442259326884616870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3cd01f78f0a04351973c59e43cb8fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  modifier: 1
+--- !u!114 &-4168844589382965511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442259326884616870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2dc0195e665a47b184aa220e99714cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  audioname: 
+  delay: 0
+  randlist: []
+  StopWhenDisable: 0
+--- !u!114 &3445911348377744170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442259326884616870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf261cdd6baab4ffba02e994ce9d9051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  parentDespawnAction: 1
+  despawnTime: 0.8
+  usePassiveDespawn: 1
+--- !u!1001 &1946353327739645768
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7587618370148034746}
+    m_Modifications:
+    - target: {fileID: 7064233008321610288, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_Name
+      value: Dragon17_SnowBall_Plus_Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 990d83262d9cb8b49a01d8ab89ea7f92, type: 3}
+--- !u!4 &8722316290951966073 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7064233008321610289, guid: 990d83262d9cb8b49a01d8ab89ea7f92,
+    type: 3}
+  m_PrefabInstance: {fileID: 1946353327739645768}
+  m_PrefabAsset: {fileID: 0}

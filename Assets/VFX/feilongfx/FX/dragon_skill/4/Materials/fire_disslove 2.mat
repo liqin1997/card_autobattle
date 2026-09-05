@@ -1,0 +1,181 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: fire_disslove 2
+  m_Shader: {fileID: 4800000, guid: 02907c1d59bd66240861c0c50144ec01, type: 3}
+  m_ShaderKeywords: _COLOR_ON _DISTORTMAINTEXTURE_ON _SMOOTHFALSESTEPTRUE_ON _USECUSTOMDATA_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BackAlbedo:
+        m_Texture: {fileID: 2800000, guid: b297077dae62c1944ba14cad801cddf5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BackNormalMap:
+        m_Texture: {fileID: 2800000, guid: 0bebe40e9ebbecc48b8e9cfea982da7e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissolveTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Distortion:
+        m_Texture: {fileID: 2800000, guid: 82f4b06147155c54da475b309b9e24fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortionTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FrontAlbedo:
+        m_Texture: {fileID: 2800000, guid: c68296334e691ed45b62266cbc716628, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FrontNormalMap:
+        m_Texture: {fileID: 2800000, guid: f5453dca2ac649e4182c56a3966ad395, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Gradient:
+        m_Texture: {fileID: 2800000, guid: 28c7aad1372ff114b90d330f8a2dd938, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 0b97246bedc1c6d41b8bc698e2010645, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 2800000, guid: 5e230cc8411b8174799be31bbdf72b5c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise_tex:
+        m_Texture: {fileID: 2800000, guid: 3c2220205bf33b74e91fb46cd5858af1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ramptex:
+        m_Texture: {fileID: 2800000, guid: 4cd9fe53ba4453f40bda7bec8a4bf018, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample0:
+        m_Texture: {fileID: 2800000, guid: 84d2065fb5a7631498e52c89d8241193, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: 1763184fee992fa478d54a0c32a8ca57, type: 3}
+        m_Scale: {x: 4, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _distorted_map:
+        m_Texture: {fileID: 2800000, guid: 3c2220205bf33b74e91fb46cd5858af1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _main_tex:
+        m_Texture: {fileID: 2800000, guid: 32a2a0fff0c45634fb83d8d541ab67a1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _maintex:
+        m_Texture: {fileID: 2800000, guid: e505e649e0a8d5045985b89a5176bdc5, type: 3}
+        m_Scale: {x: 1, y: 0.5}
+        m_Offset: {x: 0, y: 0}
+    - _mask:
+        m_Texture: {fileID: 2800000, guid: e505e649e0a8d5045985b89a5176bdc5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _mask_02:
+        m_Texture: {fileID: 2800000, guid: fecbc2dbf76d9ab4089330c3e5ee2423, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _tex4coord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ColorMultiplier: 4.99
+    - _Cutoff: 0.5
+    - _DissolveAmount: 2
+    - _DistortMainTexture: 1
+    - _DistortionAmount: -0.37
+    - _DistortionUSpeed: 1.29
+    - _DistortionVSpeed: 1.08
+    - _DoubleSided: 1
+    - _EdgeSoftness: 1
+    - _Emission: 2
+    - _Float0: 0
+    - _Float2: 0.5
+    - _Float3: 0.3620715
+    - _Float4: 1
+    - _Fresnel: 1
+    - _FresnelEmission: 1
+    - _GradientPower: 50
+    - _GradientUSpeed: 0.98
+    - _GradientVSpeed: 1.31
+    - _MainTextUSpeed: 1.29
+    - _MainTextVSpeed: 1.54
+    - _MaskClipValue: 0.5
+    - _NoiseAmount: 1
+    - _SeparateEmission: 2
+    - _SeparateFresnel: 0
+    - _UseCustomData: 1
+    - _UseFresnel: 0
+    - __dirty: 0
+    - _color: 1
+    - _distorted_map01power: 1
+    - _edge: 0.02
+    - _mask: 0
+    - _mask_noisepower: 0
+    - _mask_power: 1.21
+    - _maskpower: 0
+    - _smooth_step: 0.5
+    - _smoothfalsesteptrue: 1
+    - _step: 0.5
+    - _zwirte: 0
+    - _zwrite: 0
+    m_Colors:
+    - _BackColor: {r: 0, g: 0, b: 1, a: 0}
+    - _BackFacesColor: {r: 0, g: 0.3524227, b: 1, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _DissolveSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _DissolveTiling1: {r: 1, g: 1, b: 0, a: 0}
+    - _DistortionSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _DistortionTiling1: {r: 1, g: 1, b: 0, a: 0}
+    - _FresnelColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FrontColor: {r: 1, g: 0.6691177, b: 0.6691177, a: 0}
+    - _FrontFacesColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainTexSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _MainTexTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Maincolor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
+    - _TintColor: {r: 1, g: 0.559633, b: 0, a: 1}
+    - _Vector0: {r: 0, g: 2, b: 0, a: 0}
+    - _Vector1: {r: 0, g: 0, b: 0, a: 0}
+    - _add: {r: 0, g: 0, b: 0, a: 0}
+    - _backcolor: {r: 0.6162718, g: 1.7411011, b: 0.07391464, a: 0}
+    - _color_map: {r: 1, g: 1, b: 1, a: 0}
+    - _edge_color: {r: 1, g: 1, b: 1, a: 1}
+    - _edgecolor: {r: 0, g: 0, b: 0, a: 0}
+    - _main_tes_speed: {r: 1, g: 1, b: -1, a: 0}
+    - _maincolor: {r: 1, g: 1, b: 1, a: 0}
+    - _mask_speed: {r: 1, g: 3, b: 0, a: 0}
+    - _noise_speed: {r: 1, g: 1, b: -1, a: 0}

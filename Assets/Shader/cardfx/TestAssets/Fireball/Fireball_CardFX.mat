@@ -13,7 +13,11 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _DISTORTENABLED_ON
   - _EFFECT1ENABLED_ON
+  - _EFFECT2ENABLED_ON
+  - _EFFECT3ENABLED_ON
+  - _EFFECT4ENABLED_ON
   - _EFFECT4POLAR_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -60,14 +64,14 @@ Material:
     - _DistortAngle: 0
     - _DistortBlendMode: 0
     - _DistortChannel: 3
-    - _DistortEnabled: 0
+    - _DistortEnabled: 1
     - _DistortFlashV: 0
     - _DistortPanX: 0.12
     - _DistortPanY: 0.04
     - _DistortPolar: 0
     - _DistortRotV: 0
     - _DistortSpiral: 0
-    - _DisturbAmpX: 0
+    - _DisturbAmpX: 0.06
     - _DisturbAmpY: -0.073
     - _Effect1Angle: 0
     - _Effect1BlendMode: 0
@@ -82,7 +86,7 @@ Material:
     - _Effect2Angle: 0
     - _Effect2BlendMode: 0
     - _Effect2Channel: 2
-    - _Effect2Enabled: 0
+    - _Effect2Enabled: 1
     - _Effect2FlashV: 0.15
     - _Effect2PanX: 0.42
     - _Effect2PanY: -0.025
@@ -92,7 +96,7 @@ Material:
     - _Effect3Angle: 0
     - _Effect3BlendMode: 2
     - _Effect3Channel: 3
-    - _Effect3Enabled: 0
+    - _Effect3Enabled: 1
     - _Effect3FlashV: 0.28
     - _Effect3PanX: 0.16
     - _Effect3PanY: -0.055
@@ -102,7 +106,7 @@ Material:
     - _Effect4Angle: 0
     - _Effect4BlendMode: 0
     - _Effect4Channel: 1
-    - _Effect4Enabled: 0
+    - _Effect4Enabled: 1
     - _Effect4FlashV: 0.8
     - _Effect4PanX: 0
     - _Effect4PanY: 0

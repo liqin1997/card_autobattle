@@ -12,7 +12,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _EFFECT1ENABLED_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -78,7 +79,7 @@ Material:
     - _Effect1Angle: 0
     - _Effect1BlendMode: 0
     - _Effect1Channel: 0
-    - _Effect1Enabled: 0
+    - _Effect1Enabled: 1
     - _Effect1FlashV: 0
     - _Effect1PanX: 0
     - _Effect1PanY: 0
@@ -121,6 +122,14 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _StormCloudStrength: 1
+    - _StormDuration: 0.9
+    - _StormEnabled: 0
+    - _StormIdleMinimum: 0.06
+    - _StormIdleSharpness: 5
+    - _StormPeriod: 4.5
+    - _StormPhase: 0
+    - _StormRevealSoftness: 0.025
     - _TimeOffset: 0
     - _UseUIAlphaClip: 0
     - _UseUV1: 0

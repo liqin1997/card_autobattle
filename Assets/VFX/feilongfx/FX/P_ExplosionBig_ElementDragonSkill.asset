@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d26f4d2a44a4c31ba2bd4f08537f51, type: 3}
+  m_Name: P_ExplosionBig_ElementDragonSkill
+  m_EditorClassIdentifier: 
+  serVar: []
+  prefab: {fileID: 0}
+  damagerSkin: {fileID: 0}
+  colliderInfos: []
+  dmgMulti:
+    _serializedValue: 4294967296
+  dmgSource: 11
+  dmgElement: 1
+  canDodge: 0
+  canCrit: 0
+  buffIds: []
+  buffs: []
+  spawnFx: {fileID: 0}
+  explodeFx: {fileID: 4225238979464839402, guid: b58cc7a4cb273e64faef8f8bab033c3e,
+    type: 3}
+  elementExplodeFxGroup: []
+  hitFx: {fileID: 0}
+  spawnedFXRadius:
+    _serializedValue: 4294967296
+  radius:
+    _serializedValue: 12884901888
+  absorbRadius:
+    _serializedValue: 4294967296
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 8192
+  decayCurve:
+    keys:
+      innerlist:
+      - continuity: 0
+        position:
+          _serializedValue: 0
+        tangentIn:
+          _serializedValue: 0
+        tangentOut:
+          _serializedValue: 0
+        value:
+          _serializedValue: 4294967296
+      - continuity: 0
+        position:
+          _serializedValue: 4294967296
+        tangentIn:
+          _serializedValue: 0
+        tangentOut:
+          _serializedValue: 0
+        value:
+          _serializedValue: 4294967296
+  lifetime:
+    _serializedValue: 0
+  dmgInterval:
+    _serializedValue: 429496736
+  initialDelay:
+    _serializedValue: 0
+  despawnDelay:
+    _serializedValue: 0
+  initOffset:
+    _serializedValue: 0
+  scaleRatio:
+    _serializedValue: 4294967296
+  scaleOvertimeCurve:
+    keys:
+      innerlist:
+      - continuity: 0
+        position:
+          _serializedValue: 0
+        tangentIn:
+          _serializedValue: 0
+        tangentOut:
+          _serializedValue: 0
+        value:
+          _serializedValue: 4294967296
+      - continuity: 0
+        position:
+          _serializedValue: 4294967296
+        tangentIn:
+          _serializedValue: 0
+        tangentOut:
+          _serializedValue: 0
+        value:
+          _serializedValue: 4294967296
+  knockBack:
+    _serializedValue: 0
+  useShockWave: 1
+  cameraShakeAmount: 0.8
+  cameraShakeDuration: 0.2
+  startSpeed:
+    _serializedValue: 0
+  acceSpeed:
+    _serializedValue: 0
+  limitSpeed:
+    x:
+      _serializedValue: -9223372036854775807
+    y:
+      _serializedValue: 9223372036854775807
+  isChildedToOwner: 0
+  toEliteDmgMulti:
+    _serializedValue: 4294967296
+  toBossDmgMulti:
+    _serializedValue: 4294967296
+  damagerAddons: []
+  repeatNum: 1
+  repeatInterval:
+    _serializedValue: 0

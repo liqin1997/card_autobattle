@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7365664118847156506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6057336506723151292}
+  - component: {fileID: 3748133813006466654}
+  - component: {fileID: 5880542228649056911}
+  m_Layer: 0
+  m_Name: Ice_Treasure_SwordWave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6057336506723151292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7365664118847156506}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8021058054110865407}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3748133813006466654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7365664118847156506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b251366b922e54d0d9a6010b75fb030e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  parentDespawnAction: 1
+  colliderInfos:
+  - colliderType: 1
+    offset:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 2147483648
+    size:
+      x:
+        _serializedValue: 21474836480
+      y:
+        _serializedValue: 7730940928
+    points:
+    - x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 19327352832
+    - x:
+        _serializedValue: -17179869184
+      y:
+        _serializedValue: 14173391872
+    - x:
+        _serializedValue: -25769803776
+      y:
+        _serializedValue: 0
+    - x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 4294967296
+    - x:
+        _serializedValue: 25769803776
+      y:
+        _serializedValue: 0
+    - x:
+        _serializedValue: 17179869184
+      y:
+        _serializedValue: 14173391872
+    layer: 27
+  offset: {x: 0, y: 0, z: 0}
+  rot: {x: 0, y: 0, z: 0, w: 0}
+  scale: {x: 1, y: 1, z: 1}
+  animator: {fileID: 0}
+  skinAnimBoolPara: 
+  absorbScaleRoot: {fileID: 0}
+  hitFx: {fileID: 2220531459524727392, guid: a30289d3ef61e5d499c60ff947a1254f, type: 3}
+  hitFxAtHitPos: 0
+  critFx: {fileID: 113576, guid: e12c8a0c07c2546408ec89fe8d4379b0, type: 3}
+  skinName: 
+  enableAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+  absorbAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+  updateAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+--- !u!114 &5880542228649056911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7365664118847156506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2dc0195e665a47b184aa220e99714cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  audioname: 
+  delay: 0
+  randlist: []
+  StopWhenDisable: 0
+--- !u!1001 &7003639745075223106
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6057336506723151292}
+    m_Modifications:
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6738627963582450814, guid: 988564efdb229824289876a2c5259cc1,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Dragon_IceSkeleton_Sword_Wave
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 988564efdb229824289876a2c5259cc1, type: 3}
+--- !u!4 &8021058054110865407 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1036224770382003645, guid: 988564efdb229824289876a2c5259cc1,
+    type: 3}
+  m_PrefabInstance: {fileID: 7003639745075223106}
+  m_PrefabAsset: {fileID: 0}

@@ -1,0 +1,198 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4845231789033178318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8156733594532633346}
+  - component: {fileID: -7693019811755816643}
+  - component: {fileID: 4727424009175138795}
+  - component: {fileID: -8681092579187198291}
+  m_Layer: 0
+  m_Name: Alikesi_charge_Bullet_Middle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8156733594532633346
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4845231789033178318}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 8796530202099859584}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &-7693019811755816643
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4845231789033178318}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+--- !u!114 &4727424009175138795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4845231789033178318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efc299a1218b04406b42b962b60d7565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  toScale: {x: 1, y: 1, z: 1}
+  time: 0.04
+  ease: 0
+  curve: 
+  loopCount: 1
+  loopType: 1
+  isIgnoreTime: 0
+  interval: 0
+--- !u!114 &-8681092579187198291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4845231789033178318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b251366b922e54d0d9a6010b75fb030e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serVar: []
+  parentDespawnAction: 1
+  colliderInfos:
+  - colliderType: 1
+    offset:
+      x:
+        _serializedValue: 0
+      y:
+        _serializedValue: 0
+    size:
+      x:
+        _serializedValue: 6442450944
+      y:
+        _serializedValue: 12884901888
+    points: []
+    layer: 27
+  offset: {x: 0, y: 0, z: 0}
+  rot: {x: 0, y: 0, z: 0, w: 0}
+  scale: {x: 1, y: 1, z: 1}
+  animator: {fileID: 0}
+  skinAnimBoolPara: 
+  absorbScaleRoot: {fileID: 0}
+  hitFx: {fileID: 4232549981162143765, guid: 6eb517c6eb5cb8a4b8c8d5abe5b3d2da, type: 3}
+  hitFxAtHitPos: 0
+  critFx: {fileID: 0}
+  skinName: 
+  enableAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+  absorbAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+  updateAnim:
+    useFastAnim: 0
+    length: 0
+    animTargets: []
+--- !u!1001 &4197000724943060050
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8156733594532633346}
+    m_Modifications:
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624405653537029331, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_Dragon_Alikesi_charge_Bullet_Middle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bec93c8ff2f6acd45b0c2ccef55334d4, type: 3}
+--- !u!4 &8796530202099859584 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4624405653537029330, guid: bec93c8ff2f6acd45b0c2ccef55334d4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4197000724943060050}
+  m_PrefabAsset: {fileID: 0}

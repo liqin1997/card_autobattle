@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ice_aim
+  m_Shader: {fileID: 4800000, guid: e9cd9d612b492a34db3fbd2bd2c8ddb8, type: 3}
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ColorRamp:
+        m_Texture: {fileID: 2800000, guid: 789405d2635550c4c9df257b8e484c62, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DissolveTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Distortion:
+        m_Texture: {fileID: 2800000, guid: 82f4b06147155c54da475b309b9e24fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortionTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Gradient:
+        m_Texture: {fileID: 2800000, guid: 28c7aad1372ff114b90d330f8a2dd938, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: ab937a0262549554aaa5ee726aa6c474, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexutre:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 2800000, guid: ca9d7dc4791fe4e4c9a5f7f306114517, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample1:
+        m_Texture: {fileID: 2800000, guid: 396f38a210576e54e859be3bfc253e2d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _maintex:
+        m_Texture: {fileID: 2800000, guid: ab937a0262549554aaa5ee726aa6c474, type: 3}
+        m_Scale: {x: 1, y: 4}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ColorMultiplier: 0
+    - _DissolveAmount: 2
+    - _DistortMainTexture: 0
+    - _DistortionAmount: 0
+    - _DistortionUSpeed: 0.2
+    - _DistortionVSpeed: 0
+    - _DoubleSided: 1
+    - _Float2: -0.66
+    - _GradientPower: 2.214298
+    - _GradientUSpeed: -0.2
+    - _GradientVSpeed: -0.2
+    - _MainTextureUSpeed: 0
+    - _MainTextureVSpeed: 0
+    - _NoiseAmount: 0.1144851
+    - __dirty: 0
+    m_Colors:
+    - _Color: {r: 0, g: 0.7693858, b: 1, a: 0}
+    - _DissolveSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _DissolveTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _DistortionSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _DistortionTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _MainTexSpeed: {r: 2, g: 0, b: 1, a: 0}
+    - _MainTexTiling: {r: 2, g: 1, b: 0, a: 0}
+    - _TintColor: {r: 1, g: 0.5342799, b: 0.1764706, a: 1}
+    - _Vector0: {r: 0, g: 0, b: 0, a: 0}
+    - _mask_speed: {r: 0, g: 0, b: 0, a: 0}

@@ -11,17 +11,16 @@ namespace CardAutobattle.Commercial
     [DisallowMultipleComponent]
     public sealed class CommercialPrototypeController : MonoBehaviour
     {
-        private enum ScreenTab { Backpack, Formation, City, Explore, Equipment, Activities }
+        private enum ScreenTab { Role, Deck, Explore, Backpack, Shop }
 
         [SerializeField] private bool resetSaveOnStart;
         [SerializeField, Range(.5f, 8f)] private float battleSpeed = 2f;
-        private readonly GameObject[] pages = new GameObject[6];
-        private readonly Button[] navButtons = new Button[6];
-        private readonly Image[] navBackgrounds = new Image[6];
-        private readonly Text[] navLabels = new Text[6];
-        private readonly Text[] navIcons = new Text[6];
+        private readonly GameObject[] pages = new GameObject[5];
+        private readonly Button[] navButtons = new Button[5];
+        private readonly Image[] navBackgrounds = new Image[5];
+        private readonly Text[] navLabels = new Text[5];
+        private readonly Text[] navIcons = new Text[5];
         private readonly CommercialBattleCardView[] playerViews = new CommercialBattleCardView[9];
-        private readonly CommercialBattleCardView[] enemyViews = new CommercialBattleCardView[9];
         private readonly Button[] formationSlots = new Button[9];
         private readonly Text[] formationSlotLabels = new Text[9];
         private readonly Button[] equipmentSlots = new Button[6];
@@ -33,6 +32,10 @@ namespace CardAutobattle.Commercial
         private CommercialBattleSession battle;
         private CommercialFloatingTextPool floatingTextPool;
         private CommercialProjectilePool projectilePool;
+        private CommercialMeleeFxPool meleeFxPool;
+        private CommercialCombatPrefabVfxPool combatPrefabVfxPool;
+        private CommercialBattleArenaView arenaView;
+        private CommercialWorldBattleView worldBattleView;
         private RectTransform formationDragLayer;
         private RectTransform battleDragLayer;
         private GameObject battlePresentationRoot;
@@ -52,6 +55,8 @@ namespace CardAutobattle.Commercial
         private CommercialWorldEncounter worldEncounter;
         private bool worldMapMode;
         private bool battleSettled;
+        private bool battlePaused;
+        private bool autoBattle = true;
         private WorldNodeKind CurrentWorldKind => CommercialWorldCatalog.Find(state?.World?.CurrentNodeId)?.Kind ?? WorldNodeKind.Idle;
         public string CurrentWorldLocation => battle == null ? "灰烬森林 · 灰烬营地" :
             (CommercialWorldCatalog.Find(state.World.CurrentNodeId)?.Name ?? CommercialWorldCatalog.RegionNames[battle.Chapter - 1]) +
@@ -67,7 +72,7 @@ namespace CardAutobattle.Commercial
         }
 
         public void ReturnFromWorldMap() => SelectTab(currentTab);
-        public void OpenEquipmentFromMap() => SelectTab(ScreenTab.Equipment);
+        public void OpenEquipmentFromMap() => SelectTab(ScreenTab.Backpack);
         public bool AwaitingFirstQuest => state.World.Forest.Step == 0 && !state.World.Forest.Accepted && state.DropSequence == 0;
 
         public bool RequestWorldEncounter(string nodeId)
@@ -121,7 +126,7 @@ namespace CardAutobattle.Commercial
         {
             if (battle != null)
             {
-                if (!battle.Completed)
+                if (!battle.Completed && !battlePaused)
                 {
                     battle.Advance(Time.unscaledDeltaTime * battleSpeed);
                     ConsumeVisualEvents();
@@ -150,7 +155,7 @@ namespace CardAutobattle.Commercial
         private void CacheHierarchy()
         {
             var root = transform.root;
-            var pageNames = new[] { "Page_Backpack", "Page_Formation", "Page_City", "Page_Explore", "Page_Equipment", "Page_Activities" };
+            var pageNames = new[] { "Page_Profession", "Page_Formation", "Page_Explore", "Page_Equipment", "Page_Activities" };
             for (var i = 0; i < pages.Length; i++) pages[i] = FindDeep(root, pageNames[i])?.gameObject;
             for (var i = 0; i < navButtons.Length; i++)
             {
@@ -164,7 +169,6 @@ namespace CardAutobattle.Commercial
             for (var i = 0; i < 9; i++)
             {
                 playerViews[i] = FindDeep(root, $"PlayerCard_{i}")?.GetComponent<CommercialBattleCardView>();
-                enemyViews[i] = FindDeep(root, $"EnemyCard_{i}")?.GetComponent<CommercialBattleCardView>();
                 var slot = FindDeep(root, $"FormationSlot_{i}");
                 formationSlots[i] = slot?.GetComponent<Button>();
                 formationSlotLabels[i] = FindDeep(slot, "Label")?.GetComponent<Text>();
@@ -186,6 +190,15 @@ namespace CardAutobattle.Commercial
             if (projectileLayer)
                 projectilePool = projectileLayer.GetComponent<CommercialProjectilePool>() ??
                                  projectileLayer.gameObject.AddComponent<CommercialProjectilePool>();
+            var vfxLayer = FindDeep(root, "VFXLayer");
+            if (vfxLayer)
+            {
+                meleeFxPool = vfxLayer.GetComponent<CommercialMeleeFxPool>() ??
+                              vfxLayer.gameObject.AddComponent<CommercialMeleeFxPool>();
+            }
+            combatPrefabVfxPool = FindDeep(root, "BattleWorldVFXRoot")?.GetComponent<CommercialCombatPrefabVfxPool>();
+            arenaView = FindDeep(root, "BattleArenaLayer")?.GetComponent<CommercialBattleArenaView>();
+            worldBattleView = FindDeep(root, "WorldBattleStage")?.GetComponent<CommercialWorldBattleView>();
             formationDragLayer = FindDeep(root, "FormationDragLayer") as RectTransform ??
                                  FindDeep(root, "PopupCanvas") as RectTransform;
             battleDragLayer = FindDeep(root, "BattleDragLayer") as RectTransform ??
@@ -223,8 +236,7 @@ namespace CardAutobattle.Commercial
                 ConfigureDrag(button, definition.Id, -1);
             }
             var heroButton = FindDeep(transform.root, "HeroLibraryButton")?.GetComponent<Button>();
-            heroButton?.onClick.AddListener(ShowHeroDeployDetail);
-            ConfigureDrag(heroButton, CommercialGameState.HeroCardId, -1);
+            if (heroButton) heroButton.gameObject.SetActive(false);
             for (var i = 0; i < formationSlots.Length; i++)
             {
                 var index = i;
@@ -306,26 +318,37 @@ namespace CardAutobattle.Commercial
 
         private void OpenProfessionPage()
         {
-            GetComponent<CommercialEquipmentView>()?.CloseModals();
-            GetComponent<CommercialInventoryView>()?.CloseModals();
-            GetComponent<CommercialWorldMapView>()?.Hide();
-            SetWorldMapMode(false);
-            if (!professionPage) return;
             selectedProfession = state.Character.Profession;
-            for (var i = 0; i < pages.Length; i++) if (pages[i]) pages[i].SetActive(false);
-            if (battlePresentationRoot) battlePresentationRoot.SetActive(false);
-            professionPage.SetActive(true);
-            RefreshProfessionPage();
+            SelectTab(ScreenTab.Role);
         }
 
         private void CloseProfessionPage()
         {
-            if (professionPage) professionPage.SetActive(false);
-            SelectTab(currentTab);
+            SelectTab(ScreenTab.Explore);
         }
 
         private void BindCommonButtons()
         {
+            FindDeep(transform.root, "SpeedButton")?.GetComponent<Button>()?.onClick.AddListener(() =>
+            {
+                battleSpeed = battleSpeed < 1.5f ? 2f : battleSpeed < 2.5f ? 3f : 1f;
+                SetButtonLabel("SpeedButton", $"×{battleSpeed:0} 倍速");
+            });
+            FindDeep(transform.root, "AutoButton")?.GetComponent<Button>()?.onClick.AddListener(() =>
+            {
+                autoBattle = !autoBattle;
+                SetButtonLabel("AutoButton", autoBattle ? "自动 ON" : "自动 OFF");
+            });
+            FindDeep(transform.root, "PauseButton")?.GetComponent<Button>()?.onClick.AddListener(() =>
+            {
+                battlePaused = !battlePaused;
+                SetButtonLabel("PauseButton", battlePaused ? "继续" : "暂停");
+                SetText("BattleStatus", battlePaused ? "已暂停" : "战斗中");
+            });
+            FindDeep(transform.root, "DamageStatsButton")?.GetComponent<Button>()?.onClick.AddListener(() =>
+                SetText("BattleResultHint", "伤害统计将在结算面板汇总，本场实时战斗不中断"));
+            FindDeep(transform.root, "WorldChatButton")?.GetComponent<Button>()?.onClick.AddListener(() =>
+                SetText("BattleResultHint", "世界频道：灰烬森林讨伐队正在集结"));
             FindDeep(transform.root, "CloseDetail")?.GetComponent<Button>()?.onClick.AddListener(CloseDetail);
             FindDeep(transform.root, "RetryBattleButton")?.GetComponent<Button>()?.onClick.AddListener(() =>
             {
@@ -352,11 +375,12 @@ namespace CardAutobattle.Commercial
         {
             GetComponent<CommercialEquipmentView>()?.CloseModals();
             GetComponent<CommercialInventoryView>()?.CloseModals();
+            GetComponent<CommercialGachaView>()?.CloseModals();
             GetComponent<CommercialWorldMapView>()?.Hide();
             SetWorldMapMode(false);
             currentTab = tab;
-            if (professionPage) professionPage.SetActive(false);
-            for (var i = 0; i < pages.Length; i++) if (pages[i]) pages[i].SetActive(i == (int)tab);
+            var selectedPage = pages[(int)tab];
+            foreach (var page in pages.Where(page => page).Distinct()) page.SetActive(page == selectedPage);
             if (battlePresentationRoot) battlePresentationRoot.SetActive(tab == ScreenTab.Explore);
             for (var i = 0; i < navButtons.Length; i++)
             {
@@ -365,9 +389,11 @@ namespace CardAutobattle.Commercial
                 if (navLabels[i]) navLabels[i].color = selected ? TextSelected : TextNormal;
                 if (navIcons[i]) navIcons[i].color = selected ? TextSelected : TextNormal;
             }
-            if (tab == ScreenTab.Formation) RefreshFormationPage();
-            if (tab == ScreenTab.Equipment) RefreshEquipmentPage();
+            if (tab == ScreenTab.Deck) RefreshFormationPage();
+            if (tab == ScreenTab.Role) RefreshProfessionPage();
             if (tab == ScreenTab.Backpack) GetComponent<CommercialInventoryView>()?.Refresh();
+            if (tab == ScreenTab.Backpack) GetComponent<CommercialUnifiedInventoryView>()?.ShowMode(true);
+            if (tab == ScreenTab.Shop) GetComponent<CommercialGachaView>()?.Refresh();
             if (tab == ScreenTab.Explore) RefreshBattleViews();
         }
 
@@ -402,7 +428,7 @@ namespace CardAutobattle.Commercial
                 SetText("BattleStatus", "胜利");
                 SetText("BattleResultHint", "战斗奖励已入账 · 继续区域挂机");
                 if (worldEncounter.Kind != WorldNodeKind.Idle) worldEncounter = null;
-                nextBattleDelay = 1.25f;
+                nextBattleDelay = autoBattle ? 1.25f : 0f;
                 RefreshAllStaticUI();
             }
             else
@@ -422,19 +448,20 @@ namespace CardAutobattle.Commercial
             }
         }
 
+        private void SetButtonLabel(string objectName, string value)
+        {
+            var button = FindDeep(transform.root, objectName);
+            var label = button?.GetComponentsInChildren<Text>(true).FirstOrDefault();
+            if (label) label.text = value;
+        }
+
         private void BindBattleViews(IReadOnlyDictionary<string, float> previousValues = null)
         {
             for (var i = 0; i < 9; i++)
             {
                 var playerIndex = i;
-                var ally = battle.GetAllyAt(i);
                 var card = battle.GetCardAt(i);
-                if (ally?.IsHero == true)
-                {
-                    playerViews[i]?.BindHero(ally, i, () => ShowHeroBattleDetail());
-                    playerViews[i]?.SetPrimaryValue(ally.Attack, CommercialPrimaryValueKind.Damage);
-                }
-                else if (card != null)
+                if (card != null)
                 {
                     playerViews[i]?.BindCard(card, i, () => ShowCardDetail(card.Definition, false));
                     var previous = 0f;
@@ -445,24 +472,26 @@ namespace CardAutobattle.Commercial
                 }
                 else if (playerViews[i]) playerViews[i].gameObject.SetActive(false);
                 ConfigureBattleDrag(playerViews[i], playerIndex);
-
-                var enemy = battle.GetEnemyAt(i);
-                if (enemy != null)
-                {
-                    enemyViews[i]?.BindEnemy(enemy, i, () => ShowEnemyDetail(enemy));
-                    enemyViews[i]?.SetPrimaryValue(enemy.Attack, CommercialPrimaryValueKind.Damage);
-                }
-                else if (enemyViews[i]) enemyViews[i].gameObject.SetActive(false);
             }
+            arenaView?.Bind(battle, OnEnemyClicked);
+            worldBattleView?.Bind(battle, arenaView);
         }
 
         private void RefreshBattleViews()
         {
             foreach (var view in playerViews) view?.Refresh();
-            foreach (var view in enemyViews) view?.Refresh();
             if (battle == null) return;
+            arenaView?.Refresh(OnEnemyClicked);
+            worldBattleView?.Refresh();
             SetText("LivingEnemyCount", $"{battle.LivingEnemyCount} / {battle.Enemies.Count}");
             SetText("BattleTimer", $"{battle.Elapsed:00.0}s");
+            var maxEnemyHealth = battle.Enemies.Sum(enemy => enemy.MaxHealth);
+            var enemyHealth = battle.Enemies.Sum(enemy => enemy.Health);
+            var enemyFill = FindDeep(transform.root, "EnemyHpFill")?.GetComponent<Image>();
+            if (enemyFill) enemyFill.fillAmount = maxEnemyHealth <= 0f ? 0f : Mathf.Clamp01(enemyHealth / maxEnemyHealth);
+            var focus = battle.Enemies.FirstOrDefault(enemy => enemy.Id == battle.FocusedEnemyId && enemy.Alive);
+            var lead = focus ?? battle.Enemies.Where(enemy => enemy.Alive).OrderByDescending(enemy => enemy.EnemyTier).FirstOrDefault();
+            SetText("EnemyTitle", lead == null ? "敌军已肃清" : focus != null ? $"优先集火 · {lead.DisplayName}" : lead.DisplayName);
             var progress = FindDeep(transform.root, "StageProgressFill")?.GetComponent<Image>();
             if (progress) progress.fillAmount = Mathf.Clamp01((state.Stage - 1) / 20f);
         }
@@ -471,19 +500,50 @@ namespace CardAutobattle.Commercial
         {
             while (battle.TryDequeueVisualEvent(out var value))
             {
-                var view = FindBattleView(value.TargetId, value.TargetGrid);
-                var sourceView = FindBattleView(value.SourceId, value.SourceGrid);
+                if (value.Kind == BattleVisualEventKind.Summon) arenaView?.Refresh(OnEnemyClicked);
+                // Damage/heal/shield belong to combatants in the arena. Never fall back to
+                // the 3x3 source card, otherwise combat text appears over the deck board.
+                var view = arenaView?.FindAnchor(value.TargetId);
+                var sourceView = FindBattleAnchor(value.SourceId, value.SourceGrid);
+                var worldTarget = worldBattleView?.FindHitAnchor(value.TargetId);
+                var projectileSource = worldBattleView?.FindProjectileAnchor(value.SourceId);
+                var weaponSource = worldBattleView?.FindWeaponAnchor(value.SourceId);
+                // A card definition is not a world actor. Unless the source is an enemy
+                // or summon with its own socket, originate its presentation from the hero.
+                if (!projectileSource) projectileSource = worldBattleView?.FindProjectileAnchor(battle?.Hero?.Id);
+                if (!weaponSource) weaponSource = worldBattleView?.FindWeaponAnchor(battle?.Hero?.Id);
                 if (value.Kind == BattleVisualEventKind.Projectile)
                 {
                     var enemySource = value.SourceId != null && value.SourceId.StartsWith("enemy_", StringComparison.Ordinal);
-                    projectilePool?.Play(sourceView ? (RectTransform)sourceView.transform : null,
-                        view ? (RectTransform)view.transform : null,
-                        enemySource ? new Color(1f, .25f, .18f) : new Color(.18f, 1f, .86f));
+                    if (combatPrefabVfxPool != null)
+                    {
+                        if (projectileSource && worldTarget) combatPrefabVfxPool.PlayProjectile(projectileSource, worldTarget, enemySource);
+                        else combatPrefabVfxPool.PlayProjectile(sourceView, view, enemySource);
+                    }
+                    else
+                        projectilePool?.Play(sourceView, view,
+                            enemySource ? new Color(1f, .25f, .18f) : new Color(.18f, 1f, .86f));
+                    arenaView?.Recoil(value.SourceId, value.TargetId);
+                    worldBattleView?.Recoil(value.SourceId, value.TargetId);
+                }
+                else if (value.Kind == BattleVisualEventKind.Melee)
+                {
+                    var enemySource = value.SourceId != null && value.SourceId.StartsWith("enemy_", StringComparison.Ordinal);
+                    if (!enemySource && combatPrefabVfxPool != null)
+                    {
+                        if (weaponSource && worldTarget) combatPrefabVfxPool.PlayMelee(weaponSource, worldTarget);
+                        else combatPrefabVfxPool.PlayMelee(sourceView, view);
+                    }
+                    else
+                        meleeFxPool?.Play(sourceView, view,
+                            enemySource ? new Color(1f, .30f, .20f) : new Color(.35f, .92f, 1f));
+                    arenaView?.Recoil(value.SourceId, value.TargetId);
+                    worldBattleView?.Recoil(value.SourceId, value.TargetId);
                 }
                 if ((value.Kind == BattleVisualEventKind.Damage ||
                      value.Kind == BattleVisualEventKind.CriticalDamage) && value.Amount > 0f)
                 {
-                    floatingTextPool?.Show(view ? (RectTransform)view.transform : null,
+                    floatingTextPool?.Show(view,
                         value.Kind == BattleVisualEventKind.CriticalDamage
                             ? $"暴击 -{Mathf.CeilToInt(value.Amount)}"
                             : $"-{Mathf.CeilToInt(value.Amount)}",
@@ -493,21 +553,21 @@ namespace CardAutobattle.Commercial
                     if (view)
                     {
                         var direction = sourceView
-                            ? (Vector2)(view.transform.position - sourceView.transform.position)
+                            ? (Vector2)(view.position - sourceView.position)
                             : Vector2.down;
-                        view.ReceiveHit(direction);
+                        HitBattleTarget(value.TargetId, direction);
                     }
                 }
                 else if (value.Kind == BattleVisualEventKind.Heal && value.Amount > 0f)
-                    floatingTextPool?.Show(view ? (RectTransform)view.transform : null,
+                    floatingTextPool?.Show(view,
                         $"+{Mathf.CeilToInt(value.Amount)}", new Color(.30f, 1f, .62f));
                 else if (value.Kind == BattleVisualEventKind.Shield && Mathf.Abs(value.Amount) > .01f)
-                    floatingTextPool?.Show(view ? (RectTransform)view.transform : null,
+                    floatingTextPool?.Show(view,
                         value.Amount > 0f
                             ? $"盾 +{Mathf.CeilToInt(value.Amount)}"
                             : $"盾 -{Mathf.CeilToInt(-value.Amount)}",
                         value.Amount > 0f ? new Color(.28f, .82f, 1f) : new Color(.34f, .64f, 1f));
-                if (value.Kind == BattleVisualEventKind.Action) sourceView?.FlashAction();
+                if (value.Kind == BattleVisualEventKind.Action) FlashBattleSource(value.SourceId, value.SourceGrid);
             }
         }
 
@@ -516,7 +576,7 @@ namespace CardAutobattle.Commercial
             if (!item || worldMapMode || currentTab != ScreenTab.Explore || battle == null || battle.Completed) return false;
             var grid = item.SourceGrid;
             return grid >= 0 && grid < 9 &&
-                   (battle.Hero.GridIndex == grid || battle.GetCardAt(grid) != null);
+                    battle.GetCardAt(grid) != null;
         }
 
         public void BeginBattleDrag(CommercialBattleBoardDragItem item)
@@ -531,7 +591,7 @@ namespace CardAutobattle.Commercial
                 card => battle.GetCurrentResolvedPower(card.GridIndex));
             var changed = target >= 0 && battle != null &&
                           battle.TrySwapPlayerGridPositions(item.SourceGrid, target);
-            SetText("PlayerRule", "主角阵亡即失败");
+            SetText("PlayerRule", "战斗中拖拽换位 · 相邻效果立即重算");
             if (!changed)
             {
                 RefreshBattleViews();
@@ -586,13 +646,33 @@ namespace CardAutobattle.Commercial
             rect.localScale = Vector3.one;
         }
 
-        private CommercialBattleCardView FindBattleView(string runtimeId, int gridIndex)
+        private RectTransform FindBattleAnchor(string runtimeId, int gridIndex)
         {
-            if (runtimeId == CommercialGameState.HeroCardId)
-                return playerViews.FirstOrDefault(candidate => candidate && candidate.GridIndex == battle.Hero.GridIndex);
-            if (!string.IsNullOrEmpty(runtimeId) && runtimeId.StartsWith("enemy_", StringComparison.Ordinal))
-                return enemyViews.FirstOrDefault(candidate => candidate && candidate.GridIndex == gridIndex);
-            return playerViews.FirstOrDefault(candidate => candidate && candidate.GridIndex == gridIndex);
+            var arenaAnchor = arenaView?.FindAnchor(runtimeId);
+            if (arenaAnchor) return arenaAnchor;
+            var card = playerViews.FirstOrDefault(candidate => candidate && candidate.GridIndex == gridIndex);
+            return card ? (RectTransform)card.transform : null;
+        }
+
+        private void FlashBattleSource(string runtimeId, int gridIndex)
+        {
+            if (arenaView?.FindAnchor(runtimeId)) { arenaView.Flash(runtimeId); return; }
+            playerViews.FirstOrDefault(candidate => candidate && candidate.GridIndex == gridIndex)?.FlashAction();
+        }
+
+        private void HitBattleTarget(string runtimeId, Vector2 direction)
+        {
+            if (arenaView?.FindAnchor(runtimeId)) arenaView.Hit(runtimeId, direction);
+            worldBattleView?.Hit(runtimeId, direction);
+        }
+
+        private void OnEnemyClicked(CommercialCombatant enemy)
+        {
+            if (enemy == null || battle == null) return;
+            battle.TogglePriorityTarget(enemy.Id);
+            arenaView?.Refresh(OnEnemyClicked);
+            SetText("BattleResultHint", battle.FocusedEnemyId == enemy.Id
+                ? $"已优先集火：{enemy.DisplayName}" : "已取消优先集火");
         }
 
         private void ClickFormationSlot(int index)
@@ -604,8 +684,7 @@ namespace CardAutobattle.Commercial
                 return;
             }
             var id = state.DraftFormation.Slots[index];
-            if (id == CommercialGameState.HeroCardId) ShowHeroDeployDetail();
-            else if (!string.IsNullOrEmpty(id)) ShowCardDetail(CommercialCardCatalog.Get(id), true);
+            if (!string.IsNullOrEmpty(id)) ShowCardDetail(CommercialCardCatalog.Get(id), true);
         }
 
         public bool CanBeginFormationDrag(CommercialFormationDragItem item)
@@ -624,12 +703,7 @@ namespace CardAutobattle.Commercial
             for (var i = 0; i < formationSlots.Length; i++)
             {
                 if (formationSlots[i]?.targetGraphic is not Image image) continue;
-                var invalidHeroReplacement = state.DraftFormation.Slots[i] == CommercialGameState.HeroCardId &&
-                                             cardId != CommercialGameState.HeroCardId &&
-                                             !HasHeroRelocationSlot(cardId, i);
-                image.color = invalidHeroReplacement
-                    ? new Color(.30f, .08f, .09f, 1f)
-                    : new Color(.08f, .32f, .34f, 1f);
+                image.color = new Color(.08f, .32f, .34f, 1f);
             }
         }
 
@@ -668,15 +742,7 @@ namespace CardAutobattle.Commercial
             var displaced = state.DraftFormation.Slots[target];
             if (existing == target) return false;
 
-            var heroRelocation = -1;
-            if (displaced == CommercialGameState.HeroCardId && cardId != CommercialGameState.HeroCardId)
-            {
-                heroRelocation = existing >= 0 ? existing : FirstEmptyFormationSlot(target);
-                if (heroRelocation < 0) return false;
-            }
-
             if (existing >= 0) state.DraftFormation.Slots[existing] = null;
-            if (heroRelocation >= 0) state.DraftFormation.Slots[heroRelocation] = CommercialGameState.HeroCardId;
             state.DraftFormation.Slots[target] = cardId;
             SaveFormationChange();
             return true;
@@ -808,6 +874,13 @@ namespace CardAutobattle.Commercial
             // Current session owns an immutable stat snapshot. Never restart it on a gear change.
             CommercialSaveService.Save(state);
             RefreshAllStaticUI();
+        }
+
+        public void NotifyCardProgressChanged()
+        {
+            CommercialSaveService.Save(state);
+            RefreshAllStaticUI();
+            GetComponent<CommercialGachaView>()?.Refresh();
         }
 
         private void RefreshTopAndQuest()

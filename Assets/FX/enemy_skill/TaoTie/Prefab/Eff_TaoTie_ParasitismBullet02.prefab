@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4837765886419797957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3334691400396530267}
+  m_Layer: 0
+  m_Name: Eff_TaoTie_ParasitismBullet02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3334691400396530267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837765886419797957}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2242000094324840080}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &3556184663585240267
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3334691400396530267}
+    m_Modifications:
+    - target: {fileID: 2787176473634117182, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2787176473634117182, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 999
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3459673558289682111, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837765886419797957, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_Name
+      value: Eff_TaoTie_ParasitismBullet01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5945595989535693033, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e918c6d929f20664d8e5fcd6fc7200d9, type: 2}
+    - target: {fileID: 7262741535030709825, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6e4d25eafbdf8a54a8d46b6b8be61398, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a, type: 3}
+--- !u!4 &2242000094324840080 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3334691400396530267, guid: d9ebd262f1eb9b540a96a6a9cf5ebc9a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3556184663585240267}
+  m_PrefabAsset: {fileID: 0}
